@@ -3,7 +3,7 @@
 -   Brief brainstorming
 -   Create GitHub repository
 -   Create Figma and FigBoard
--   Create Figboard templamte for ideation
+-   Create Figboard template for ideation
 -   Add Trello cards and assign members for tutorials
 -   Fill in 01a hand-in template
 
