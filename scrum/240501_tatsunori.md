@@ -1,4 +1,4 @@
-# What I did yesterday (April 30th)
+# What I did yesterday (May 1st)
 
 -   Evaluated top three ideas using matrix
 -   Decide the product to create
@@ -7,7 +7,7 @@
 -   Made red routine matrix
 -   Made user story
 
-# What incomplete or left over from yesterday (April 30th) you have
+# What incomplete or left over from yesterday (May 1st) you have
 
 -   Finish TypeScript, React, and Next js tutorial
 -   Complete hand-in template 01b
@@ -16,7 +16,7 @@
 
 -   N/A
 
-# What I will work on today (May 1st)
+# What I will work on today (May 2nd)
 
 -   Take pitch video
 -   Complete hand-in template 01b
