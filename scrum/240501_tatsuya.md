@@ -17,6 +17,7 @@
 
 ## What to do today (on May 2nd):
 - (In team)
+    - Create survey and post it on slack
     - Work on 01c (pitch video) as far as possible
     - Prepare for the meeting with the customer on Friday
 - (By myself)
