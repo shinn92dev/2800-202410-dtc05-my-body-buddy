@@ -1,8 +1,8 @@
-# What I did yesterday (May 1st)
+# What I did yesterday (May 2nd)
 
 -   Took a pitch video
 
-# What incomplete or left over from yesterday (May 1st) you have
+# What incomplete or left over from yesterday (May 2nd) you have
 
 -   Finish TypeScript, React, and Next js tutorial
 
@@ -10,7 +10,7 @@
 
 -   N/A
 
-# What I will work on today (May 2nd)
+# What I will work on today (May 3rd)
 
 -   Create another persona
 -   Conduct a survey
