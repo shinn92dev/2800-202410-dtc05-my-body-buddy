@@ -10,10 +10,10 @@
     - Add results of UCD research to FigJam
     - Retrospective
 
-## What incomplete or left over from yesterday (May 6th) you have
+## What incomplete or left over from yesterday (May 3rd) you have
 - Tutorials on the technology stack we will be using
 
-## What to do today (on May 3rd):
+## What to do today (on May 6th):
 - (In team)
     - Plan for the week
     - Complete assignments due on Monday
