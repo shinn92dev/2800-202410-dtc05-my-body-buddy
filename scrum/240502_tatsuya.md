@@ -22,5 +22,5 @@
 - (By myself)
     - Proceed with the tutorials
 
-## Concerns
+## Others
 N/A
