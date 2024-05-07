@@ -18,8 +18,6 @@
 
 -   Start 02c
 -   Complete Git quiz
--   Create wirefram for login and signup page
+-   Create wireframe for login and signup page
 
 # Anything special I want to share
-
--   Good work everyone!! Have a great weekend!❤
