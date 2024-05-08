@@ -1,4 +1,4 @@
-# What I did yesterday (May 6rd)
+# What I did yesterday (May 6th)
 
 - Finished hand-in template 02a, b
 - Wrote core features for user story
