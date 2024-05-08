@@ -1,6 +1,6 @@
-# About Us
+## About Us
 
-## Team Name: DTC-10
+Team Name: DTC-10
 Team Members: \
 Person 1: Anthony Shin \
 Person 2: Saeyoung Park \
