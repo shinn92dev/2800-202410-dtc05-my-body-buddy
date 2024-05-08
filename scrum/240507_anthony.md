@@ -1,4 +1,4 @@
-# What I did yesterday (May 6th)
+# What I did yesterday (May 7th)
 
 -   Started 02c got workflow document
 -   Created wireframe for login page
@@ -12,7 +12,7 @@
 
 -   N/A
 
-# What I will work on today (May 7th)
+# What I will work on today (May 8th)
 
 -   Complete Git quiz
 -   Discuss the wireframe with team members and decide designs
