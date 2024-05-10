@@ -30,4 +30,4 @@
     - Watch tutorials for Typescript
 
 # Anything special I want to share
-- Double check your commit with your teammates before important merge😭
+- Please double check your commit with your teammates before important merge😭
