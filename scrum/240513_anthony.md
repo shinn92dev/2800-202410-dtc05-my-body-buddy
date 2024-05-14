@@ -26,9 +26,9 @@
     -   Continue watching Typescript tutorial videos
     -   Complete i04 Discussions (My SMART Tasks for Sprint 3) part 1 (adding tasks)
 
-# Rate myself for May 10th on a scale of 0 to 4 (0 being bad and 4 being excellent)
+# Rate myself for May 13th on a scale of 0 to 4 (0 being bad and 4 being excellent)
 
--   Rating: 2
-    -   Some tasks took too much time and couldn't complete all tasks I planned for the day.
+-   Rating: 5
+    -   Finished all tasks!🎉
 
 # Anything special I want to share
