@@ -33,7 +33,7 @@
 
 # Rate myself for May 13th on a scale of 0 to 4 (0 being bad and 4 being excellent)
 
--   Rating: 5
+-   Rating: 4
     -   Finished all tasks!🎉
 
 # Anything special I want to share
