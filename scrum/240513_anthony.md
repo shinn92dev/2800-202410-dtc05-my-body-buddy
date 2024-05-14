@@ -21,10 +21,15 @@
 -   (In team)
     -   Attend Scrum meeting
     -   Start 3b Surprise Challenge #2
--   (Individuals)
-    -   Complete Agile Project Management Quiz (0.5h)
-    -   Continue watching Typescript tutorial videos
-    -   Complete i04 Discussions (My SMART Tasks for Sprint 3) part 1 (adding tasks)
+-   (Individual)
+    -   Implement routing logic to landing page using NextJS
+    -   Implement routing log to login page using NextJS
+    -   Implement routing logic to signup page using NextJS
+    -   Implement routing logic to work out summary page using NextJS
+    -   Implement routing logic to diet summary page using NextJS
+    -   Implement routing logic to work out page using NextJS
+    -   Implement routing logic to diet page using NextJS
+    -   Connect MongoDB to NextJS server
 
 # Rate myself for May 13th on a scale of 0 to 4 (0 being bad and 4 being excellent)
 
