@@ -10,7 +10,7 @@
 - Finish watching React tutorial
 
 ## Rate myself for May 9 on a scale of 0 to 4 (0 being bad and 4 being excellent)
-- Rating: 3
+- Rating: 3.5
     - Could not start creating components
 
 # Any problem(s) you might have or any help you might need
