@@ -1,5 +1,5 @@
 export const metadata = {
-    title: "User",
+    title: "Edit",
 };
 
 export default function UserEdit({ params }: { params: { id: string } }) {
