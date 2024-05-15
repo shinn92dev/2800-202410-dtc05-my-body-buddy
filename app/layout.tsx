@@ -1,4 +1,4 @@
-import Navigation from "@/components/Navigation";
+import Navigation from "@/components/global/Navigation";
 import type { Metadata } from "next";
 import "./globals.css";
 
