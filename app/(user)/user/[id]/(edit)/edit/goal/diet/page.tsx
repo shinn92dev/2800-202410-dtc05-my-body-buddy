@@ -1,8 +1,8 @@
 export const metadata = {
-    title: "Workout Goal Edit",
+    title: "Diet Goal Edit",
 };
 
-export default function UserWorkoutGoalEdit({
+export default function UserDietGoalEdit({
     params,
 }: {
     params: { id: string };
@@ -10,7 +10,7 @@ export default function UserWorkoutGoalEdit({
     const { id } = params;
     return (
         <div>
-            <h1>This is My Body Buddy User ({id}) Workout Goal Edit page</h1>
+            <h1>This is My Body Buddy User ({id}) Diet Goal Edit page</h1>
         </div>
     );
 }
