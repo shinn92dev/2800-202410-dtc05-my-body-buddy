@@ -2,17 +2,12 @@
 
 import { useState } from "react";
 
-const defaultTags = [
-    "Looks too hard",
-    "Getting bored",
-    "Want to feel outside",
-    "Prefer to stay inside",
-    "I don’t have equipment",
-];
+type TagsWithAddingFieldProps = {
+    defaultTags: string[];
+    inputFieldPlaceHolder: string;
+};
 
-const inputFieldPlaceHolder = "Add another reason";
-
-export default function WorkoutAiSupportTags() {
+export default function TagsWithAddingField({defaultTags, inputFieldPlaceHolder}: TagsWithAddingFieldProps) {
     const [tags, setTags] = useState(defaultTags);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [newTag, setNewTag] = useState("");
