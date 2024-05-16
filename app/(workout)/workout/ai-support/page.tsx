@@ -1,22 +1,10 @@
-import AiLines from "@/components/global/AiLines";
-import WorkoutAiSupportInput from "@/components/workout_ai_support/WorkoutAiSupportInput";
+import AiSupportWrapper from "@/components/workout_ai_support/AiSupportWrapper";
 
 export const metadata = {
     title: "Workout AI Support",
 };
 
-const initialMessageTitle = "Hi! I'm BODY BUDDY AI.";
-const initialMessageBody = "I'll suggest alternatives of your menu.\n\nPlease tell me which items you would like to exchange and why in the form below.";
-
-export default function AiSupport() {
-    return (
-        <div>
-            <AiLines
-                messageTitle={initialMessageTitle}
-                messageBody={initialMessageBody}
-            />
-            <WorkoutAiSupportInput />
-            {/* Other contents go here */}
-        </div>
-    );
+// サーバーコンポーネントでクライアントコンポーネントをレンダリング
+export default function AiSupportPage() {
+    return <AiSupportWrapper />;
 }

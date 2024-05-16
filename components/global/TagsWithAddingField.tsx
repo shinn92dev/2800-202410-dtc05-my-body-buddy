@@ -30,6 +30,7 @@ export default function TagsWithAddingField({defaultTags, inputFieldPlaceHolder}
 
     return (
         <div className="p-4">
+            {/* Tags */}
             <div className="flex flex-wrap gap-2 mb-4">
                 {tags.map((tag, index) => (
                     <button
@@ -45,6 +46,8 @@ export default function TagsWithAddingField({defaultTags, inputFieldPlaceHolder}
                     </button>
                 ))}
             </div>
+
+            {/* Input field to add new tag */}
             <div className="flex gap-2">
                 <input
                     type="text"
