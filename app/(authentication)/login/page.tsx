@@ -1,6 +1,7 @@
 import InputBox from "@/components/global/InputBox";
 import GoogleIcon from "@/components/global/icons/GoogleIcon";
 import SignUpAndInIcon from "@/components/global/icons/SignUpAndInIcon";
+import Image from "next/image";
 
 export const metadata = {
     title: "Log In",
@@ -16,11 +17,14 @@ export default function LogIn() {
                 <div className="max-w-screen-xl m-0 sm:m-20 bg-white shadow sm:rounded-lg flex justify-center flex-1">
                     <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
                         <div>
-                            <img
+                            <Image
                                 src="/images/logo/my_body_buddy_logo.png"
-                                className="w-32 mx-auto"
                                 alt="My Body Buddy Logo"
-                            />
+                                width={32}
+                                height={32}
+                                quality={100}
+                                className="w-32 mx-auto"
+                            ></Image>
                         </div>
                         <div className="mt-12 flex flex-col items-center">
                             <h1 className="text-2xl xl:text-3xl font-extrabold">
