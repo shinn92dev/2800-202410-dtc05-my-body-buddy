@@ -36,36 +36,24 @@ export default function SignUp() {
                                         placeholder="Email"
                                         isTop={true}
                                     />
-
                                     {/* Username */}
-                                    <div className="mt-2">
-                                        <label
-                                            htmlFor="username"
-                                            className="hidden"
-                                        >
-                                            Username
-                                        </label>
-                                        <input
-                                            className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                                            type="text"
-                                            placeholder="Username"
-                                            id="username"
-                                        />
-                                    </div>
-                                    <div className="mt-2">
-                                        <label
-                                            htmlFor="password"
-                                            className="hidden"
-                                        >
-                                            Password
-                                        </label>
-                                        <input
-                                            className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                                            type="password"
-                                            placeholder="Password"
-                                            id="password"
-                                        />
-                                    </div>
+                                    <InputBox
+                                        labelText="Username"
+                                        id="username"
+                                        hidden={true}
+                                        type="text"
+                                        placeholder="Username"
+                                        isTop={false}
+                                    />
+                                    {/* Password */}
+                                    <InputBox
+                                        labelText="Password"
+                                        id="password"
+                                        hidden={true}
+                                        type="password"
+                                        placeholder="Password"
+                                        isTop={false}
+                                    />
                                     <p className="mt-6 text-xs text-gray-600 text-center">
                                         I agree to abide by My Body
                                         Buddy's&nbsp;
@@ -107,7 +95,7 @@ export default function SignUp() {
                                 </div>
                                 {/* Google Button */}
                                 <div className="flex flex-col items-center">
-                                    <button className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline">
+                                    <button className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 hover:bg-indigo-200 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none focus:shadow-sm focus:shadow-outline">
                                         <div className="bg-white p-2 rounded-full">
                                             <svg
                                                 className="w-4"
