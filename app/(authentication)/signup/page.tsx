@@ -61,7 +61,7 @@ export default function SignUp() {
                                     />
                                     <p className="mt-6 text-xs text-gray-600 text-center">
                                         I agree to abide by My Body
-                                        Buddy's&nbsp;
+                                        Buddy&apos;s&nbsp;
                                         <a
                                             href="#"
                                             className="border-b border-gray-500 border-dotted"
