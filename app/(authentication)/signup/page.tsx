@@ -1,4 +1,4 @@
-import InputBox from "@/components/global/Input";
+import InputBox from "@/components/global/InputBox";
 import Image from "next/image";
 
 export const metadata = {
