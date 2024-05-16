@@ -1,5 +1,5 @@
 <div align="center">
-<img src="/assets/my_body_buddy_logo.png" width="200px" />
+<img src="/public/images/logo/my_body_buddy_logo.png" width="200px" />
 </div>
 
 # My Body Buddy
@@ -29,25 +29,25 @@ TBD
     <tr>
       <td align="center" width="150px" width="130px">
       <a href="https://github.com/shinn92dev" target="_blank">
-      <img src="/assets/team_member/anthony.jpg" width="100px;" alt="Anthony photo"/><br /><sub><b>Product Owner: <br />Anthony Shin</b></sub></a><br /></td>
+      <img src="/public/images/our_team/anthony.jpg" width="100px;" alt="Anthony photo"/><br /><sub><b>Product Owner: <br />Anthony Shin</b></sub></a><br /></td>
       <td>Hello everyone!👋 I'm Anthony Shin from South Korea🎎 living in Vancouver!🍁 Vancouver stole my heart with its endless hiking spots.⛺ Why don't you start your journey to a healthier lifestyle with My Body Buddy?! Need some workout plans, diet tips, or just a boost of motivation? I'll get you covered!👊 Need a hand with any projects? Don't hesitate to reach out! 🚀
 </td>
     </tr>
     <tr>
-      <td align="center" width="150px"><a href=""><img src="/assets/team_member/saeyoung.jpg" width="100px;" alt="Saeyoung photo"/><br /><sub><b>Current Scrum Master: 
+      <td align="center" width="150px"><a href=""><img src="/public/images/our_team/saeyoung.jpg" width="100px;" alt="Saeyoung photo"/><br /><sub><b>Current Scrum Master: 
       <br />Saeyoung Park</b></sub></a><br /></td>
       <td>Add your introduction here!</td>
     </tr>
     <tr>
-      <td align="center" width="150px"><a href=""><img src="/assets/team_member/momo.jpeg" width="100px" alt=""/><br /><sub><b>Developer: <br />Momona Wada</b></sub></a><br /></td>
+      <td align="center" width="150px"><a href=""><img src="/public/images/our_team/momo.jpeg" width="100px" alt=""/><br /><sub><b>Developer: <br />Momona Wada</b></sub></a><br /></td>
       <td>Add your introduction here!</td>
     </tr>
     <tr>
-      <td align="center" width="150px"><a href=""><img src="/assets/team_member/tatsunori.jpg" width="100px" alt=""/><br /><sub><b>Developer: <br />Tatsunori Marumo</b></sub></a><br /></td>
+      <td align="center" width="150px"><a href=""><img src="/public/images/our_team/tatsunori.jpg" width="100px" alt=""/><br /><sub><b>Developer: <br />Tatsunori Marumo</b></sub></a><br /></td>
       <td>Add your introduction here!</td>
     </tr>
     <tr>
-      <td align="center" width="150px"><a href=""><img src="/assets/team_member/tatsuya.png" width="100px" alt=""/><br /><sub><b>Developer: <br />Tatsuya Yoshida</b></sub></a><br /></td>
+      <td align="center" width="150px"><a href=""><img src="/public/images/our_team/tatsuya.png" width="100px" alt=""/><br /><sub><b>Developer: <br />Tatsuya Yoshida</b></sub></a><br /></td>
       <td>Add your introduction here!</td>
     </tr>
   </tbody>
