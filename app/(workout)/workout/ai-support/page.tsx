@@ -5,6 +5,6 @@ export const metadata = {
 };
 
 // サーバーコンポーネントでクライアントコンポーネントをレンダリング
-export default function AiSupportPage() {
+export default function WorkoutAiSupportPage() {
     return <AiSupportWrapper />;
 }

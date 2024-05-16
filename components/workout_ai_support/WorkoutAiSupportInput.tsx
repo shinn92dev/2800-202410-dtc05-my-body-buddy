@@ -7,7 +7,7 @@ import TagsWithAddingField from "@/components/global/TagsWithAddingField";
 import "@/components/workout_ai_support/WorkoutAiSupportInput.scss";
 
 const workoutMenuItems = [
-    { "title": "Crunches", "quantity": 50, "unit": "crunches", "kcalPerUnit": 4.92 },
+    { "title": "Crunches", "quantity": 50, "unit": "reps", "kcalPerUnit": 4.92 },
     { "title": "Cycling", "quantity": 4, "unit": "km", "kcalPerUnit": 30 }
 ];
 
