@@ -9,6 +9,7 @@ Individually
 - Worked on layout tsx with React/Typescript
 - Re-setup a feature branch: profile_page
 - Wrote scrum log
+- Add favicon to app in layout.tsx (next.js)
 
 # What incomplete or left over on (May 15th) you have
 
@@ -23,7 +24,7 @@ Individually
 
 ## Rate myself for May 9 on a scale of 0 to 4 (0 being bad and 4 being excellent)
 
-Rating: 2
+Rating: 3
 
 # Any problem(s) you might have or any help you might need
 
