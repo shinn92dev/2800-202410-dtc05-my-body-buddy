@@ -5,6 +5,13 @@ export default function InputBox({
     type,
     placeholder,
     isTop,
+}: {
+    labelText: string;
+    id: string;
+    hidden: boolean;
+    type: string;
+    placeholder: string;
+    isTop: boolean;
 }) {
     return (
         <div className={isTop ? "" : "mt-2"}>
