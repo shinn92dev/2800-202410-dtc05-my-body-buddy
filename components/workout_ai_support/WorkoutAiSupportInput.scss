@@ -1,13 +1,15 @@
-.speech-bubble-ai {
+.speech-bubble-user {
   position: relative;
-  background: #f5f5dc; /* ベージュ色 */
+  background: #d2fdff; /* light blue */
   border-radius: .4em;
   padding: 10px;
-  max-width: 300px;
+  width: 300px;
   font-size: 0.9rem;
+  margin-left: auto;
+  margin-right: 10px;
 }
 
-.speech-bubble-ai:after {
+.speech-bubble-user:after {
   content: '';
   position: absolute;
   top: 10px;
