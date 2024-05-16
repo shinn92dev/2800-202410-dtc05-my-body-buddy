@@ -41,7 +41,7 @@ export default function SignUp() {
                                         />
                                     </div>
                                     {/* Username */}
-                                    <div className="mt-5">
+                                    <div className="mt-2">
                                         <label
                                             htmlFor="username"
                                             className="hidden"
@@ -55,7 +55,7 @@ export default function SignUp() {
                                             id="username"
                                         />
                                     </div>
-                                    <div className="mt-5">
+                                    <div className="mt-2">
                                         <label
                                             htmlFor="password"
                                             className="hidden"
@@ -69,7 +69,24 @@ export default function SignUp() {
                                             id="password"
                                         />
                                     </div>
-                                    <button className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
+                                    <p className="mt-6 text-xs text-gray-600 text-center">
+                                        I agree to abide by My Body
+                                        Buddy's&nbsp;
+                                        <a
+                                            href="#"
+                                            className="border-b border-gray-500 border-dotted"
+                                        >
+                                            Terms of Service
+                                        </a>
+                                        &nbsp; and its&nbsp;
+                                        <a
+                                            href="#"
+                                            className="border-b border-gray-500 border-dotted"
+                                        >
+                                            Privacy Policy
+                                        </a>
+                                    </p>
+                                    <button className="mt-2 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
                                         <svg
                                             className="w-6 h-6 -ml-2"
                                             fill="none"
@@ -84,25 +101,9 @@ export default function SignUp() {
                                         </svg>
                                         <span className="ml-3">Sign Up</span>
                                     </button>
-                                    <p className="mt-6 text-xs text-gray-600 text-center">
-                                        I agree to abide by My Body Buddy's
-                                        <a
-                                            href="#"
-                                            className="border-b border-gray-500 border-dotted"
-                                        >
-                                            Terms of Service
-                                        </a>
-                                        and its
-                                        <a
-                                            href="#"
-                                            className="border-b border-gray-500 border-dotted"
-                                        >
-                                            Privacy Policy
-                                        </a>
-                                    </p>
                                 </form>
                                 {/* Divide bar */}
-                                <div className="my-12 border-b text-center">
+                                <div className="my-7 border-b text-center">
                                     <div className="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">
                                         Or sign up with Google
                                     </div>
