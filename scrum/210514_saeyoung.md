@@ -17,7 +17,7 @@ Rating: 4
 # Any problem(s) you might have or any help you might need
 N/A
 
-# What I will work on today (May 14th)
+# What I will work on today (May 15th)
 In team
 - Submit assignment 03b (git tag)
 

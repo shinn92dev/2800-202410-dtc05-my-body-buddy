@@ -1,4 +1,4 @@
-# What I did yesterday (May 10th)
+# What I did yesterday (May 9th)
 In team
 - Submit team assignments (wire frame, git workflow, retrospective)
 - Prepare client meeting
@@ -15,7 +15,7 @@ Rating: 3
 # Any problem(s) you might have or any help you might need
 N/A
 
-# What I will work on today (May 13th)
+# What I will work on today (May 10th)
 - Task planning for sprint# 3
 - Submit assignment (task planning, agile project management quiz, SMART task discussion post)
 
