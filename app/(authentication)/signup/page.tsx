@@ -1,3 +1,4 @@
+import InputBox from "@/components/global/Input";
 import Image from "next/image";
 
 export const metadata = {
@@ -17,6 +18,7 @@ export default function SignUp() {
                             <img
                                 src="/images/logo/my_body_buddy_logo.png"
                                 className="w-32 mx-auto"
+                                alt="My Body Buddy Logo"
                             />
                         </div>
                         <div className="mt-12 flex flex-col items-center">
@@ -26,20 +28,15 @@ export default function SignUp() {
                             <div className="w-full flex-1 mt-8">
                                 {/* Signup form */}
                                 <form className="mx-auto max-w-xs">
-                                    <div>
-                                        <label
-                                            htmlFor="email"
-                                            className="hidden"
-                                        >
-                                            Email
-                                        </label>
-                                        <input
-                                            className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                                            type="email"
-                                            placeholder="Email"
-                                            id="email"
-                                        />
-                                    </div>
+                                    <InputBox
+                                        labelText="Email"
+                                        id="email"
+                                        hidden={true}
+                                        type="email"
+                                        placeholder="Email"
+                                        isTop={true}
+                                    />
+
                                     {/* Username */}
                                     <div className="mt-2">
                                         <label
