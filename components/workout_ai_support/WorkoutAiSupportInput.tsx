@@ -1,4 +1,5 @@
 import WorkoutAiSupportInputCheckbox from "@/components/workout_ai_support/WorkoutAiSupportInputCheckbox";
+import WorkoutAiSupportTags from "@/components/workout_ai_support/WorkoutAiSupportTags";
 import "@/components/workout_ai_support/WorkoutAiSupportInput.scss";
 
 export default function WorkoutAiSupportInput() {
@@ -9,7 +10,7 @@ export default function WorkoutAiSupportInput() {
     return (
         <div className="flex flex-col items-end p-2">
             <div className="relative speech-bubble-user bg-beige rounded-lg">
-                <h1 className="text-xl font-bold">Which items to replace?</h1>
+                <h2 className="text-lg font-bold">Which items to replace?</h2>
                 {/* display Checkboxes based on workout menu items, passing title, quantity, unit, and kcalPerUnit of each item */}
                 {workoutMenuItems.map((item, index) => (
                     <WorkoutAiSupportInputCheckbox
@@ -20,6 +21,12 @@ export default function WorkoutAiSupportInput() {
                         kcalPerUnit={item.kcalPerUnit}
                     />
                 ))}
+                <h2 className="text-lg font-bold border-t mt-2">Why would you like to replace?</h2>
+                {/* display Tags and an input form to add tags */}
+                <WorkoutAiSupportTags />
+                <div className="flex justify-center border-t pt-2">
+                    <button className="px-4 py-2 bg-gray-500 text-white rounded-full">Generate Alternative</button>
+                </div>
             </div>
         </div>
     );
