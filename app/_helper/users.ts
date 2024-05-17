@@ -5,7 +5,9 @@ export const GetCurrentUsersFromMongoDB = async () => {
         const testUser = {
             username: "shinn92dev",
             email: "shinn92dev@gmail.com",
-            fullname: "Anthony Shin",
+            password: "1234",
+            securityQuestion: "aaa",
+            securityAnswer: "bbb",
         };
         const user = await UsersModel.findOne({ email: testUser.email });
         if (user) {
@@ -25,7 +27,7 @@ export const GetCurrentUsersFromMongoDB = async () => {
         return {
             success: false,
             error: error,
-            messege: "Error while fetching user data from MongoDB",
+            message: "Error while fetching user data from MongoDB",
         };
     }
 };
