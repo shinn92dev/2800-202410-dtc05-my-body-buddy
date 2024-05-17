@@ -6,11 +6,46 @@ import { useState } from "react";
 
 export default function Navigation() {
   const path = usePathname();
+
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleHBGmenu = () => setIsOpen(!isOpen);
+
   const tempUserId: string = "Anthony";
   console.log(path);
+
   return (
     <nav>
-      <ul className="flex flex-wrap">
+      <button
+        className="block lg:hidden"
+        onClick={toggleHBGmenu}
+        aria-label="Toggle menu"
+      >
+        <svg
+          className="h-10 w-10 fill-current"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fillRule="evenodd"
+            d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"
+            clipRule="evenodd"
+          />
+        </svg>
+      </button>
+
+      <ul
+        className={`flex-col flex-wrap ${isOpen ? "block" : "hidden"} lg:flex`}
+      >
+        <li
+          className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
+            path === "/"
+              ? "bg-blue-500 hover:bg-blue-700"
+              : "bg-gray-500 hover:bg-gray-700"
+          }`}
+        >
+          <Link href="/">Home</Link>
+        </li>
+
         <li
           className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
             path === "/"
@@ -94,6 +129,8 @@ export default function Navigation() {
           <Link href={`/user/${tempUserId}/edit`}>User Edit</Link>
         </li>
       </ul>
+
+      <ul className="flex flex-wrap"></ul>
     </nav>
   );
 }

@@ -1,21 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { ObjectId } from "mongodb";
+// import clientPromise from "util/mongodb";
 
 export default function User({ params }: { params: { id: string } }) {
   const { id } = params;
 
   // dummy data; TODO: fetch user data from db
-  const [userData, setUserData] = useState({
-    name: "Anthony",
-    age: 300,
-    gender: "Male",
-    height: 180,
-    weight: 80,
-    goalWight: 70,
-    goalDay: "2024-12-31",
-  });
+  // const [userData, setUserData] = useState({
+  //   name: "Anthony",
+  //   age: 300,
+  //   gender: "Male",
+  //   height: 180,
+  //   weight: 80,
+  //   goalWight: 70,
+  //   goalDay: "2024-12-31",
+  // });
 
   {
     /*
@@ -38,6 +40,40 @@ export default function User({ params }: { params: { id: string } }) {
 2. full name?
 */
   }
+
+  const [userData, setUserData] = useState<any>(null);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const client = await clientPromise;
+        const db = client.db();
+        const collection = db.collection("users");
+
+        // const user = await collection.findOne({ _id: new ObjectId(id) });
+        const user = await collection.findOne({ username: "shinn92dev" }); // mock data
+
+        if (user) {
+          setUserData(user);
+        } else {
+          console.log("User not found");
+        }
+      } catch (error) {
+        console.error("Fetching not possible:", error);
+      }
+    };
+
+    fetchUserData();
+  }, ["shinn92dev"]);
+
+  if (!userData) {
+    return <div>Loading...</div>;
+  }
+
+  //   const response = await db
+  //     .collection("users")
+  //     .findOne({ _id: new ObjectId(id) });
+  //   setUserData(response);
+  // }
 
   return (
     <div className="justify-center">
