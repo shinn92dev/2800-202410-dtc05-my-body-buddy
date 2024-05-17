@@ -37,36 +37,36 @@ export default function Navigation() {
         className={`flex-col flex-wrap ${isOpen ? "block" : "hidden"} lg:flex`}
       >
         <li
-          className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
+          className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
             path === "/"
-              ? "bg-blue-500 hover:bg-blue-700"
+              ? "bg-dark-blue hover:bg-dark-blue"
               : "bg-gray-500 hover:bg-gray-700"
           }`}
         >
           <Link href="/">Home</Link>
         </li>
         <li
-          className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
+          className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
             path === "/login"
-              ? "bg-blue-500 hover:bg-blue-700"
+              ? "bg-dark-blue hover:bg-dark-blue"
               : "bg-gray-500 hover:bg-gray-700"
           }`}
         >
           <Link href="/login">login</Link>
         </li>
         <li
-          className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
+          className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
             path === "/signup"
-              ? "bg-blue-500 hover:bg-blue-700"
+              ? "bg-dark-blue hover:bg-dark-blue"
               : "bg-gray-500 hover:bg-gray-700"
           }`}
         >
           <Link href="/signup">signup</Link>
         </li>
         <li
-          className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
+          className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
             path === "/diet"
-              ? "bg-blue-500 hover:bg-blue-700"
+              ? "bg-dark-blue hover:bg-dark-blue"
               : "bg-gray-500 hover:bg-gray-700"
           }`}
         >
@@ -74,45 +74,45 @@ export default function Navigation() {
         </li>
 
         <li
-          className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
+          className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
             path === "/plan/workout"
-              ? "bg-blue-500 hover:bg-blue-700"
+              ? "bg-dark-blue hover:bg-dark-blue"
               : "bg-gray-500 hover:bg-gray-700"
           }`}
         >
           <Link href="/plan/workout">Workout Plan</Link>
         </li>
         <li
-          className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
+          className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
             path === "/summary/diet"
-              ? "bg-blue-500 hover:bg-blue-700"
+              ? "bg-dark-blue hover:bg-dark-blue"
               : "bg-gray-500 hover:bg-gray-700"
           }`}
         >
           <Link href="/summary/diet">Diet Summary</Link>
         </li>
         <li
-          className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
+          className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
             path === "/summary/workout"
-              ? "bg-blue-500 hover:bg-blue-700"
+              ? "bg-dark-blue hover:bg-dark-blue"
               : "bg-gray-500 hover:bg-gray-700"
           }`}
         >
           <Link href="/summary/workout">Workout Summary</Link>
         </li>
         <li
-          className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
+          className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
             path === `/user/${tempUserId}`
-              ? "bg-blue-500 hover:bg-blue-700"
+              ? "bg-dark-blue hover:bg-dark-blue"
               : "bg-gray-500 hover:bg-gray-700"
           }`}
         >
           <Link href={`/user/${tempUserId}`}>User</Link>
         </li>
         <li
-          className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
+          className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
             path === `/user/${tempUserId}/edit`
-              ? "bg-blue-500 hover:bg-blue-700"
+              ? "bg-dark-blue hover:bg-dark-blue"
               : "bg-gray-500 hover:bg-gray-700"
           }`}
         >
