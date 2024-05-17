@@ -40,12 +40,12 @@ export default function Navigation() {
                 </li>
                 <li
                     className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
-                        path === "/plan/diet"
+                        path === "/diet"
                             ? "bg-blue-500 hover:bg-blue-700"
                             : "bg-gray-500 hover:bg-gray-700"
                     }`}
                 >
-                    <Link href="/plan/diet">Diet Plan</Link>
+                    <Link href="/diet">Diet Plan</Link>
                 </li>
 
                 <li
