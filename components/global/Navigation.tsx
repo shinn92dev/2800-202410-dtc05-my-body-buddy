@@ -21,21 +21,21 @@ export default function Navigation() {
                 </li>
                 <li
                     className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
-                        path === "/login"
+                        path === "/sign-in"
                             ? "bg-blue-500 hover:bg-blue-700"
                             : "bg-gray-500 hover:bg-gray-700"
                     }`}
                 >
-                    <Link href="/login">login</Link>
+                    <Link href="/sign-in">login</Link>
                 </li>
                 <li
                     className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
-                        path === "/signup"
+                        path === "/sign-up"
                             ? "bg-blue-500 hover:bg-blue-700"
                             : "bg-gray-500 hover:bg-gray-700"
                     }`}
                 >
-                    <Link href="/signup">signup</Link>
+                    <Link href="/sign-up">signup</Link>
                 </li>
                 <li
                     className={`text-white font-bold py-2 px-4 rounded-full m-2 ${

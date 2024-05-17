@@ -1,6 +1,14 @@
 import Navigation from "@/components/global/Navigation";
 import type { Metadata } from "next";
 import "./globals.css";
+import {
+    ClerkProvider,
+    SignInButton,
+    SignedIn,
+    SignedOut,
+    UserButton,
+} from "@clerk/nextjs";
+import NavigationBeforeAuth from "@/components/global/NavigationBeforeAuth";
 
 export const metadata: Metadata = {
     title: {
@@ -16,11 +24,21 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
-            <body>
-                <Navigation />
-                {children}
-            </body>
-        </html>
+        <ClerkProvider>
+            <html lang="en">
+                <body>
+                    <header>
+                        <SignedOut>
+                            <NavigationBeforeAuth />
+                        </SignedOut>
+                    </header>
+                    <SignedIn>
+                        <Navigation />
+                        <UserButton />
+                    </SignedIn>
+                    <main>{children}</main>
+                </body>
+            </html>
+        </ClerkProvider>
     );
 }

@@ -1,13 +1,46 @@
-import InputBox from "@/components/global/InputBox";
-import GoogleIcon from "@/components/global/icons/GoogleIcon";
-import SignUpAndInIcon from "@/components/global/icons/SignUpAndInIcon";
-import Image from "next/image";
+"use client";
+import { useRouter } from "next/navigation";
 
-export const metadata = {
-    title: "Sign Up",
+import Modal from "@/components/global/Modal";
+import PolicyContent from "@/components/global/PolicyContent";
+import GoogleIcon from "@/components/global/icons/GoogleIcon";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import getTestUser from "@/app/_helper/testUser";
+import SignupForm from "@/app/ui/signup-form";
+
+const createNewUser = async (email: string, username: string) => {
+    try {
+        const response = await fetch("/api/signup/route", {
+            method: "POST",
+            body: JSON.stringify({ email, username }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        if (!response.ok) {
+            throw new Error("Not OK");
+        }
+        const data = await response.json();
+        console.log(data);
+        return data;
+    } catch (error) {
+        console.error(error);
+    }
 };
 
 export default function SignUp() {
+    const [showModal, setShowModal] = useState(false);
+    const emailInputRef = useRef<HTMLInputElement | null>(null);
+    const usernameInputRef = useRef<HTMLInputElement | null>(null);
+    const testUsers = getTestUser();
+
+    const handlePolicyClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        setShowModal((prev) => !prev);
+        console.log(showModal);
+    };
+
     return (
         <div className="min-h-screen">
             <h1 className="text-2xl font-bold p-2 m-2">
@@ -32,55 +65,8 @@ export default function SignUp() {
                             </h1>
                             <div className="w-full flex-1 mt-8">
                                 {/* Signup form */}
-                                <form className="mx-auto max-w-xs">
-                                    <InputBox
-                                        labelText="Email"
-                                        id="email"
-                                        hidden={true}
-                                        type="email"
-                                        placeholder="Email"
-                                        isTop={true}
-                                    />
-                                    {/* Username */}
-                                    <InputBox
-                                        labelText="Username"
-                                        id="username"
-                                        hidden={true}
-                                        type="text"
-                                        placeholder="Username"
-                                        isTop={false}
-                                    />
-                                    {/* Password */}
-                                    <InputBox
-                                        labelText="Password"
-                                        id="password"
-                                        hidden={true}
-                                        type="password"
-                                        placeholder="Password"
-                                        isTop={false}
-                                    />
-                                    <p className="mt-6 text-xs text-gray-600 text-center">
-                                        I agree to abide by My Body
-                                        Buddy&apos;s&nbsp;
-                                        <a
-                                            href="#"
-                                            className="border-b border-gray-500 border-dotted"
-                                        >
-                                            Terms of Service
-                                        </a>
-                                        &nbsp; and its&nbsp;
-                                        <a
-                                            href="#"
-                                            className="border-b border-gray-500 border-dotted"
-                                        >
-                                            Privacy Policy
-                                        </a>
-                                    </p>
-                                    <button className="mt-2 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
-                                        <SignUpAndInIcon width={6} />
-                                        <span className="ml-3">Sign Up</span>
-                                    </button>
-                                </form>
+                                <SignupForm />
+
                                 {/* Divide bar */}
                                 <div className="my-7 border-b text-center">
                                     <div className="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">
@@ -115,6 +101,11 @@ export default function SignUp() {
                     </div>
                 </div>
             </div>
+            <Modal
+                title="Term of Policy"
+                modalContent={<PolicyContent />}
+                showModal={showModal}
+            />
         </div>
     );
 }
