@@ -17,10 +17,8 @@ export default function User({ params }: { params: { id: string } }) {
     goalDay: "2024-12-31",
   });
 
-  return (
-    <div className="justify-center">
-      {/* username = id */}
-      {/*
+  {
+    /*
       interface userData {
       username: string
       age: number
@@ -30,7 +28,19 @@ export default function User({ params }: { params: { id: string } }) {
       goalWight: number
       goalDay: string
       }
-      */}
+      */
+  }
+
+  {
+    /* 
+  QUESTIONS:
+1. username = id 
+2. full name?
+*/
+  }
+
+  return (
+    <div className="justify-center">
       <h2 className="font-bold text-2xl tracking-wide text-center">
         My Profile
       </h2>
