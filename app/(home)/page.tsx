@@ -1,5 +1,6 @@
 import { connectMongoDB } from "@/config/db";
 import { GetCurrentUsersFromMongoDB } from "../_helper/users";
+import Introduction from "./introduction";
 
 connectMongoDB();
 
@@ -10,10 +11,12 @@ export const metadata = {
 export default async function Home() {
     await GetCurrentUsersFromMongoDB();
     return (
-        <div>
-            <h1 className="text-2xl font-bold p-2 m-2">
-                This is My Body Buddy Home page
-            </h1>
+        <div className="bg-cover bg-center bg-no-repeat min-w-full flex flex-col items-center justify-center" style={{ 
+            backgroundImage: "url('/healthy_people_temporal_image.png')",
+            backgroundSize: "cover", // fit the image to the container
+            color: "black",
+        }}>
+            <Introduction />
         </div>
     );
 }
