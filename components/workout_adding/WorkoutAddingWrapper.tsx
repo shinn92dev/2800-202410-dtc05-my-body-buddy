@@ -14,9 +14,9 @@ const categories = [
 ];
 
 const workoutItemOptions = [
-    { category: "Walking", name: "Walking", recordOptions: [{ unit: "min", kcalPerUnit: 3.5 }, { unit: "km", kcalPerUnit: 70}] },
-    { category: "Running", name: "Running", recordOptions: [{ unit: "min", kcalPerUnit: 7.5 }, { unit: "km", kcalPerUnit: 100}] },
-    { category: "Cycling", name: "Cycling", recordOptions: [{ unit: "min", kcalPerUnit: 4.5 }, { unit: "km", kcalPerUnit: 30}] },
+    { category: "Walking", name: "Walking", recordOptions: [{ unit: "min", kcalPerUnit: 3.5 }, { unit: "km", kcalPerUnit: 70 }] },
+    { category: "Running", name: "Running", recordOptions: [{ unit: "min", kcalPerUnit: 7.5 }, { unit: "km", kcalPerUnit: 100 }] },
+    { category: "Cycling", name: "Cycling", recordOptions: [{ unit: "min", kcalPerUnit: 4.5 }, { unit: "km", kcalPerUnit: 30 }] },
     { category: "Gym training", name: "Push-ups", recordOptions: [{ unit: "min", kcalPerUnit: 1.6 }, { unit: "reps", kcalPerUnit: 0.32 }] },
     { category: "Gym training", name: "Crunches", recordOptions: [{ unit: "min", kcalPerUnit: 0.8 }, { unit: "reps", kcalPerUnit: 0.16 }] },
     { category: "Other sports", name: "Swimming", recordOptions: [{ unit: "min", kcalPerUnit: 2.4 }, { unit: "m", kcalPerUnit: 0.08 }] },
@@ -44,7 +44,7 @@ export default function WorkoutAddingWrapper() {
         if (categoryName === "Walking" || categoryName === "Running" || categoryName === "Cycling") {
             const item = workoutItemOptions.find(option => option.category === categoryName);
             if (item) {
-                setSelectedItems([...selectedItems, { ...item, selectedOption: item.recordOptions[0] }]);
+                setSelectedItems([...selectedItems, { ...item, selectedOption: item.recordOptions[0], quantity: 10 }]);
             }
         }
     };
@@ -56,13 +56,19 @@ export default function WorkoutAddingWrapper() {
     const handleItemClick = (itemName: string) => {
         const item = workoutItemOptions.find(option => option.name === itemName);
         if (item) {
-            setSelectedItems([...selectedItems, { ...item, selectedOption: item.recordOptions[0] }]);
+            setSelectedItems([...selectedItems, { ...item, selectedOption: item.recordOptions[0], quantity: 10 }]);
         }
     };
 
     const handleOptionChange = (index: number, selectedOption: any) => {
         const updatedItems = [...selectedItems];
         updatedItems[index].selectedOption = selectedOption;
+        setSelectedItems(updatedItems);
+    };
+
+    const handleQuantityChange = (index: number, optionIndex: number, newQuantity: number) => {
+        const updatedItems = [...selectedItems];
+        updatedItems[index].recordOptions[optionIndex].quantity = newQuantity;
         setSelectedItems(updatedItems);
     };
 
@@ -88,7 +94,7 @@ export default function WorkoutAddingWrapper() {
                         <button
                             key={index}
                             onClick={() => handleCategoryClick(category.name)}
-                            className={`relative border border-black ${selectedCategory === category.name ? "bg-gray-700" : "bg-white"} w-20 h-auto`}
+                            className={`relative border border-gray-500 ${selectedCategory === category.name ? "bg-gray-500" : "bg-white"} h-auto`}
                         >
                             <Image
                                 src={selectedCategory === category.name ? category.image_selected : category.image}
@@ -136,11 +142,12 @@ export default function WorkoutAddingWrapper() {
                 </div>
             )}
 
+            {/* Display selected items */}
             {selectedItems.map((item, index) => (
-                <div key={index} className="mb-4 p-2 border border-gray-300 rounded">
+                <div key={index} className="p-2 border-y border-gray-300">
                     <div className="flex justify-between items-center mb-2">
                         <h2 className="font-bold">{item.name}</h2>
-                        <button onClick={() => handleRemoveItem(index)} className="text-red-500">×</button>
+                        <button onClick={() => handleRemoveItem(index)} className="text-red-500 text-2xl">×</button>
                     </div>
                     {item.recordOptions.map((option: any, i: number) => (
                         <div key={i} className="flex items-center mb-2">
@@ -154,11 +161,13 @@ export default function WorkoutAddingWrapper() {
                             <span className="mr-2">{option.unit}</span>
                             <input
                                 type="number"
-                                defaultValue={10}
-                                className="mr-2 p-1 border border-gray-300 rounded w-16"
+                                value={option.quantity ?? 10}
+                                onChange={(e) => handleQuantityChange(index, i, parseInt(e.target.value))}
+                                className={`mr-2 p-1 border border-gray-300 rounded w-16 ${option.unit !== item.selectedOption.unit ? "text-gray-400" : ""}`}
+                                disabled={option.unit !== item.selectedOption.unit}
                             />
-                            <span>{option.unit}</span>
-                            <span className="ml-auto">{(10 * option.kcalPerUnit).toFixed(1)} kcal</span>
+                            <span className={`${option.unit !== item.selectedOption.unit ? "text-gray-400" : ""}`}>{option.unit}</span>
+                            <span className={`ml-auto ${option.unit !== item.selectedOption.unit ? "text-gray-400" : ""}`}>{((option.quantity ?? 10) * option.kcalPerUnit).toFixed(1)} kcal</span>
                         </div>
                     ))}
                 </div>
