@@ -19,10 +19,6 @@ export default function User({ params }: { params: { id: string } }) {
 
   return (
     <div className="justify-center">
-      <h1 className="text-2xl font-bold p-2 m-2 text-dark-blue">
-        This is My Body Buddy User ({id}) page
-      </h1>
-
       {/* username = id */}
       {/*
       interface userData {
@@ -40,7 +36,7 @@ export default function User({ params }: { params: { id: string } }) {
       </h2>
       <div
         id="basic-info"
-        className="m-10 tracking-wide leading-8 font-semibold text-center justify-center"
+        className="m-5 tracking-wide leading-8 font-semibold text-center justify-center"
       >
         👤
         <div>Name: {userData.name}</div>
