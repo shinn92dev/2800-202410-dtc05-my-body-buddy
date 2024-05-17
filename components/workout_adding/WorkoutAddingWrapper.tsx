@@ -3,8 +3,9 @@
 import { useState, ChangeEvent } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import SearchWindow from "@/components/global/SearchWindow"; // 新しいSearchFieldコンポーネントをインポート
+import SearchWindow from "@/components/global/SearchWindow"; // Importing the new SearchWindow component
 
+// Categories data
 const categories = [
     { name: "Walking", image: "/workout_category/walking.png", image_selected: "/workout_category/walking_selected.png" },
     { name: "Running", image: "/workout_category/running.png", image_selected: "/workout_category/running_selected.png" },
@@ -13,6 +14,7 @@ const categories = [
     { name: "Other sports", image: "/workout_category/other_sports.png", image_selected: "/workout_category/other_sports_selected.png" }
 ];
 
+// Workout item options data
 const workoutItemOptions = [
     { category: "Walking", name: "Walking", recordOptions: [{ unit: "min", kcalPerUnit: 3.5 }, { unit: "km", kcalPerUnit: 70 }] },
     { category: "Running", name: "Running", recordOptions: [{ unit: "min", kcalPerUnit: 7.5 }, { unit: "km", kcalPerUnit: 100 }] },
@@ -30,11 +32,12 @@ const workoutItemOptions = [
 ];
 
 export default function WorkoutAddingWrapper() {
-    const [selectedCategory, setSelectedCategory] = useState<string>("");
-    const [searchQuery, setSearchQuery] = useState<string>("");
-    const [selectedItems, setSelectedItems] = useState<any[]>([]);
-    const router = useRouter();
+    const [selectedCategory, setSelectedCategory] = useState<string>(""); // State to track selected category
+    const [searchQuery, setSearchQuery] = useState<string>(""); // State to track search query
+    const [selectedItems, setSelectedItems] = useState<any[]>([]); // State to track selected items
+    const router = useRouter(); // Router for navigation
 
+    // Handle category click event
     const handleCategoryClick = (categoryName: string) => {
         setSelectedCategory(categoryName);
         setSearchQuery(""); // Clear search query when a new category is selected
@@ -48,10 +51,12 @@ export default function WorkoutAddingWrapper() {
         }
     };
 
+    // Handle search input change event
     const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(event.target.value);
     };
 
+    // Handle item click event
     const handleItemClick = (itemName: string) => {
         const item = workoutItemOptions.find(option => option.name === itemName);
         if (item) {
@@ -59,23 +64,27 @@ export default function WorkoutAddingWrapper() {
         }
     };
 
+    // Handle option change event
     const handleOptionChange = (index: number, selectedOption: any) => {
         const updatedItems = [...selectedItems];
         updatedItems[index].selectedOption = selectedOption;
         setSelectedItems(updatedItems);
     };
 
+    // Handle quantity change event
     const handleQuantityChange = (index: number, optionIndex: number, newQuantity: number) => {
         const updatedItems = [...selectedItems];
         updatedItems[index].recordOptions[optionIndex].quantity = newQuantity;
         setSelectedItems(updatedItems);
     };
 
+    // Handle remove item event
     const handleRemoveItem = (index: number) => {
         const updatedItems = selectedItems.filter((_, i) => i !== index);
         setSelectedItems(updatedItems);
     };
 
+    // Handle add selected items event
     const handleAddSelectedItems = () => {
         router.push("/workout");
     };
