@@ -3,6 +3,7 @@ import { GetCurrentUsersFromMongoDB } from "../_helper/users";
 import Introduction from "./introduction";
 import Logo from "./logo";
 import Encourage from "./encourage";
+import Button from "./button";
 
 connectMongoDB();
 
@@ -23,6 +24,7 @@ export default async function Home() {
             </div>
             <Logo />
             <Encourage />
+            <Button />
         </div>
     );
 }
