@@ -4,7 +4,7 @@ export const metadata = {
     title: "Workout Adding",
 };
 
-// サーバーコンポーネントでクライアントコンポーネントをレンダリング
+// Rendering client components with server components
 export default function WorkoutAddingPage() {
     return <WorkoutAddingWrapper />;
 }

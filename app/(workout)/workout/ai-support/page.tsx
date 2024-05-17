@@ -4,7 +4,7 @@ export const metadata = {
     title: "Workout AI Support",
 };
 
-// サーバーコンポーネントでクライアントコンポーネントをレンダリング
+// Rendering client components with server components
 export default function WorkoutAiSupportPage() {
     return <AiSupportWrapper />;
 }

@@ -1,9 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import AiLines from "@/components/global/AiLines";
 import WorkoutAiSupportInput from "@/components/workout_ai_support/WorkoutAiSupportInput";
+import "@/components/global/AiLines.scss";
+import "@/components/workout_ai_support/WorkoutAiSupportInput.scss";
 
+// Initial messages
 const initialMessageTitle = "Hi! I'm BODY BUDDY AI.";
 const initialMessageBody = "I'll suggest alternatives of your menu.\n\nPlease tell me which items you would like to exchange and why in the form below.";
 
@@ -13,7 +17,7 @@ const generatedMessageBody = "Here's an alternative indoor exercise that approxi
     "\n" +
     "Indoor Exercise Option: Jump Rope\n" +
     "\n" +
-    "Exercise: Jump Rope Duration: 10-15 minutes Estimated Calorie Burn: Approximately 115 kcal\n" +
+    "Exercise: Jump Rope\nDuration: 10-15 minutes\nEstimated Calorie Burn: Approximately 115 kcal\n" +
     "\n" +
     "Description: \n" +
     "Jumping rope is an effective, equipment-minimal exercise that can be done indoors. It improves your cardiovascular fitness, coordination, and agility.\n" +
@@ -34,11 +38,17 @@ const generatedMessageBody = "Here's an alternative indoor exercise that approxi
     "\n" +
     "This option should serve as a good alternative to cycling if you're looking to stay indoors and don't have specific equipment for cycling.\n";
 
+// AiSupportWrapper component
 export default function AiSupportWrapper() {
-    const [generated, SetGenerated] = useState(false);
+    const [generated, setGenerated] = useState(false); // State to track if alternative suggestions are generated
+    const [selectedItems, setSelectedItems] = useState<any[]>([]); // State to store selected workout items
+    const [selectedTags, setSelectedTags] = useState<string[]>([]); // State to store selected tags
 
-    const setGeneratedTrue = () => {
-        SetGenerated(true);
+    // Function to update states and mark suggestions as generated
+    const setGeneratedTrue = (selectedItems: any[], selectedTags: string[]) => {
+        setSelectedItems(selectedItems);
+        setSelectedTags(selectedTags);
+        setGenerated(true);
     };
 
     return (

@@ -1,13 +1,15 @@
 import Image from "next/image";
 import "@/components/global/AiLines.scss";
 
+// Type definition for AiLines props
 type AiLinesProps = {
-    messageTitle?: string; // オプショナルにする
-    messageBody: string;
+    messageTitle?: string; // Optional message title
+    messageBody: string;   // Required message body
 };
 
+// AiLines component
 export default function AiLines({ messageTitle, messageBody }: AiLinesProps) {
-    // '\n' を <br> タグに変換
+    // Convert '\n' to <br> tags for line breaks
     const formattedMessageBody = messageBody.split('\n').map((line, index) => (
         <span key={index}>
             {line}
