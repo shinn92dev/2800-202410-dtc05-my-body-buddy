@@ -76,12 +76,12 @@ export default function WorkoutAddingWrapper() {
     };
 
     const filteredItems = workoutItemOptions.filter(item =>
-        item.category === selectedCategory && item.name.toLowerCase().includes(searchQuery.toLowerCase())
+        item.category === selectedCategory && item.name?.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     return (
         <div className="p-4">
-            <h1 className="text-lg font-bold mb-4">Category</h1>
+            <h1 className="text-lg font-bold mb-1">Category</h1>
             <div className="flex justify-center mb-4">
                 <div className="grid grid-cols-5 gap-0">
                     {categories.map((category, index) => (
@@ -121,13 +121,15 @@ export default function WorkoutAddingWrapper() {
                     {searchFocused && filteredItems.length > 0 && (
                         <ul className="absolute w-full border border-gray-300 rounded bg-white z-10">
                             {filteredItems.map((item, index) => (
-                                <li
-                                    key={index}
-                                    onClick={() => handleItemClick(item.name)}
-                                    className="p-2 hover:bg-gray-100 cursor-pointer border-t"
-                                >
-                                    {item.name}
-                                </li>
+                                item.name && (
+                                    <li
+                                        key={index}
+                                        onClick={() => handleItemClick(item.name)}
+                                        className="p-2 hover:bg-gray-100 cursor-pointer border-t"
+                                    >
+                                        {item.name}
+                                    </li>
+                                )
                             ))}
                         </ul>
                     )}
