@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import magnifyingGlassIcon from "@/public/magnifying_glass.svg";
+import SearchWindow from "@/components/global/SearchWindow"; // 新しいSearchFieldコンポーネントをインポート
 
 const categories = [
     { name: "Walking", image: "/workout_category/walking.png", image_selected: "/workout_category/walking_selected.png" },
@@ -33,7 +33,6 @@ export default function WorkoutAddingWrapper() {
     const [selectedCategory, setSelectedCategory] = useState<string>("");
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [selectedItems, setSelectedItems] = useState<any[]>([]);
-    const [searchFocused, setSearchFocused] = useState<boolean>(false);
     const router = useRouter();
 
     const handleCategoryClick = (categoryName: string) => {
@@ -49,7 +48,7 @@ export default function WorkoutAddingWrapper() {
         }
     };
 
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(event.target.value);
     };
 
@@ -81,10 +80,6 @@ export default function WorkoutAddingWrapper() {
         router.push("/workout");
     };
 
-    const filteredItems = workoutItemOptions.filter(item =>
-        item.category === selectedCategory && item.name?.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
     return (
         <div className="p-4">
             <h1 className="text-lg font-bold mb-1">Category</h1>
@@ -113,33 +108,13 @@ export default function WorkoutAddingWrapper() {
 
             {/* Display search field when "Gym training" or "Other sports" is selected */}
             {(selectedCategory == "Gym training" || selectedCategory == "Other sports") && (
-                <div className="mb-4 relative">
-                    <input
-                        type="text"
-                        placeholder="Enter item to add"
-                        value={searchQuery}
-                        onChange={handleSearchChange}
-                        onFocus={() => setSearchFocused(true)}
-                        onBlur={() => setTimeout(() => setSearchFocused(false), 100)} // setTimeoutでblurイベントを遅らせる
-                        className="w-full p-2 border border-gray-300 rounded pl-10"
-                    />
-                    <Image src={magnifyingGlassIcon} alt="Search" className="absolute left-3 top-2.5 w-5 h-5"/>
-                    {searchFocused && filteredItems.length > 0 && (
-                        <ul className="absolute w-full border border-gray-300 rounded bg-white z-10">
-                            {filteredItems.map((item, index) => (
-                                item.name && (
-                                    <li
-                                        key={index}
-                                        onClick={() => handleItemClick(item.name)}
-                                        className="p-2 hover:bg-gray-100 cursor-pointer border-t"
-                                    >
-                                        {item.name}
-                                    </li>
-                                )
-                            ))}
-                        </ul>
-                    )}
-                </div>
+                <SearchWindow
+                    searchQuery={searchQuery}
+                    handleSearchChange={handleSearchChange}
+                    handleItemClick={handleItemClick}
+                    selectedCategory={selectedCategory}
+                    workoutItemOptions={workoutItemOptions}
+                />
             )}
 
             {/* Display selected items */}
