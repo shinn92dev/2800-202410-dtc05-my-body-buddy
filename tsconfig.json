@@ -12,6 +12,7 @@
         "isolatedModules": true,
         "jsx": "preserve",
         "incremental": true,
+        "strictNullChecks": true,
         "plugins": [
             {
                 "name": "next"
@@ -26,19 +27,7 @@
         "**/*.ts",
         "**/*.tsx",
         ".next/types/**/*.ts",
-        "app/api/db.js",
-        "app/api/auth/signup.PartOnetsx"
+        "app/api/db.js"
     ],
-    "paths": {
-      "@/*": ["./*"]
-    }
-  },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "app/api/db.js"
-  ],
-  "exclude": ["node_modules"]
+    "exclude": ["node_modules"]
 }
