@@ -39,6 +39,10 @@ export default function DietHomeWrapper() {
         window.location.href = `diet/add-items?mealType=${mealType}`;
     };
 
+    const handleAskAi = () => {
+        // Handle Ask AI logic here
+    };
+
     return (
         <div>
             <h1 className="text-2xl font-bold p-2 m-2">
@@ -76,7 +80,7 @@ export default function DietHomeWrapper() {
             </div>
             <div className="p-4">
                 <h1 className="text-2xl font-bold mb-4">Ask AI for Menu</h1>
-                <AskAiButton forText="Menu" />
+                <AskAiButton forText="Menu" onClick={handleAskAi} />
             </div>
         </div>
     );
