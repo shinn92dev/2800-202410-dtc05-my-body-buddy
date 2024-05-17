@@ -7,35 +7,55 @@ export default function User({ params }: { params: { id: string } }) {
 
   // dummy data; TODO: fetch user data from db
   const [userData, setUserData] = useState({
-    name: "Anthony Shin",
+    name: "Anthony",
     age: 300,
     gender: "Male",
     height: 180,
     weight: 80,
     goalWight: 70,
-    goalDday: "2024-12-31",
+    goalDay: "2024-12-31",
   });
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold p-2 m-2">
+    <div className="justify-center">
+      <h1 className="text-2xl font-bold p-2 m-2 text-dark-blue">
         This is My Body Buddy User ({id}) page
       </h1>
-      <div className="p-2 m-2 border rounded-md">
-        <h2 className="font-bold text-2xl tracking-wide">Basic info</h2>
+
+      {/* username = id */}
+      {/*
+      interface userData {
+      username: string
+      age: number
+      gender: string
+      height: number
+      weight: number
+      goalWight: number
+      goalDay: string
+      }
+      */}
+      <h2 className="font-bold text-2xl tracking-wide text-center">
+        My Profile
+      </h2>
+      <div
+        id="basic-info"
+        className="m-10 tracking-wide leading-8 font-semibold text-center justify-center"
+      >
+        👤
         <div>Name: {userData.name}</div>
         <div>Age: {userData.age}</div>
         <div>Gender: {userData.gender}</div>
         <div>Height: {userData.height} cm</div>
         <div>Weight: {userData.weight} kg</div>
+        <br />
+        🙌
+        <div>Target Date: {userData.goalDay}</div>
+        <div>Target Weight: {userData.goalWight} kg</div>
       </div>
-
-      <div className="p-2 m-2 border rounded-md">
-        <h2 className="font-bold text-2xl tracking-wide">My Goal</h2>
-        <div>
-          🙌 Untill {userData.goalDday}, I will be {userData.goalWight} kg to be
-          strong and healthy! 🙌
-        </div>
+      <div className="flex justify-center">
+        <button className="bg-dark-blue rounded-md px-3 py-2 text-beige">
+          Edit
+        </button>
       </div>
     </div>
   );
