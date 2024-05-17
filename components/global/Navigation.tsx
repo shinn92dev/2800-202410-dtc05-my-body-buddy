@@ -14,9 +14,9 @@ export default function Navigation() {
   console.log(path);
 
   return (
-    <nav>
+    <nav className="flex items-center">
       <button
-        className="block lg:hidden"
+        className="block lg:hidden ml-4"
         onClick={toggleHBGmenu}
         aria-label="Toggle menu"
       >
@@ -130,7 +130,13 @@ export default function Navigation() {
         </li>
       </ul>
 
-      <ul className="flex flex-wrap"></ul>
+      <div className="flex justify-center items-center">
+        <img
+          src="/my_body_buddy_logo_transparent.png"
+          alt="logo"
+          className="h-20 w-20"
+        />
+      </div>
     </nav>
   );
 }
