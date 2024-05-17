@@ -4,26 +4,39 @@ import React, { useState } from 'react';
 import Board from "@/components/global/Board";
 import AskAiButton from "@/components/global/AskAiButton";
 
-// export const metadata = {
-//     title: "Diet Plan",
-// };
 export default function DietPlan() {
-    const [items, setItems] = useState([
+    const [breakfasts, setBreakfasts] = useState([
         { name: 'Boiled egg', amount: '1 egg', calories: 150 },
         { name: 'Corn soup', amount: '1 cup (180ml)', calories: 343 },
     ]);
 
-    const handleEdit = (index: number) => {
+    const [lunches, setLunches] = useState([
+        { name: 'Grilled chicken', amount: '200g', calories: 400 },
+        { name: 'Salad', amount: '1 bowl', calories: 150 },
+    ]);
+
+    const [dinners, setDinners] = useState([
+        { name: 'Steak', amount: '300g', calories: 700 },
+        { name: 'Mashed potatoes', amount: '1 cup', calories: 250 },
+    ]);
+
+    const handleEdit = (mealType: string, index: number) => {
         // Handle edit logic here
     };
 
-    const handleDelete = (index: number) => {
-        setItems(items.filter((_, i) => i !== index));
+    const handleDelete = (mealType: string, index: number) => {
+        if (mealType === 'breakfast') {
+            setBreakfasts(breakfasts.filter((_, i) => i !== index));
+        } else if (mealType === 'lunch') {
+            setLunches(lunches.filter((_, i) => i !== index));
+        } else if (mealType === 'dinner') {
+            setDinners(dinners.filter((_, i) => i !== index));
+        }
     };
 
-    const handleAdd = () => {
+    const handleAdd = (mealType: string) => {
         // Navigate to AddingItems page
-        window.location.href = 'diet/add-items';
+        window.location.href = `diet/add-items?mealType=${mealType}`;
     };
 
     return (
@@ -35,16 +48,36 @@ export default function DietPlan() {
                 <Board
                     icon={<span>🌅</span>}
                     title="Breakfast"
-                    items={items}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                    onAdd={handleAdd}
+                    items={breakfasts}
+                    onEdit={(index) => handleEdit('breakfast', index)}
+                    onDelete={(index) => handleDelete('breakfast', index)}
+                    onAdd={() => handleAdd('breakfast')}
                 />
             </div>
             <div className="p-4">
-            <h1 className="text-2xl font-bold mb-4">Ask AI for Menu</h1>
-            <AskAiButton forText="Menu" />
-        </div>
+                <Board
+                    icon={<span>🌞</span>}
+                    title="Lunch"
+                    items={lunches}
+                    onEdit={(index) => handleEdit('lunch', index)}
+                    onDelete={(index) => handleDelete('lunch', index)}
+                    onAdd={() => handleAdd('lunch')}
+                />
+            </div>
+            <div className="p-4">
+                <Board
+                    icon={<span>🌜</span>}
+                    title="Dinner"
+                    items={dinners}
+                    onEdit={(index) => handleEdit('dinner', index)}
+                    onDelete={(index) => handleDelete('dinner', index)}
+                    onAdd={() => handleAdd('dinner')}
+                />
+            </div>
+            <div className="p-4">
+                <h1 className="text-2xl font-bold mb-4">Ask AI for Menu</h1>
+                <AskAiButton forText="Menu" />
+            </div>
         </div>
     );
 }
