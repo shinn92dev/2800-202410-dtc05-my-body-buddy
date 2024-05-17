@@ -2,6 +2,7 @@ import { connectMongoDB } from "@/config/db";
 import { GetCurrentUsersFromMongoDB } from "../_helper/users";
 import Introduction from "./introduction";
 import Logo from "./logo";
+import Encourage from "./encourage";
 
 connectMongoDB();
 
@@ -21,6 +22,7 @@ export default async function Home() {
                 <Introduction />
             </div>
             <Logo />
+            <Encourage />
         </div>
     );
 }
