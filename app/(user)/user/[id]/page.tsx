@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 export default function User({ params }: { params: { id: string } }) {
   const { id } = params;
@@ -53,9 +54,12 @@ export default function User({ params }: { params: { id: string } }) {
         <div>Target Weight: {userData.goalWight} kg</div>
       </div>
       <div className="flex justify-center">
-        <button className="bg-dark-blue rounded-md px-3 py-2 text-beige">
+        <Link
+          href={`/user/${userData.name}/edit`}
+          className="bg-dark-blue rounded-md px-3 py-2 text-beige"
+        >
           Edit
-        </button>
+        </Link>
       </div>
     </div>
   );
