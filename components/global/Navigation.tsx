@@ -21,7 +21,7 @@ export default function Navigation() {
         aria-label="Toggle menu"
       >
         <svg
-          className="h-10 w-10 fill-current"
+          className="h-10 w-10 fill-current text-logo-pumpkin"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
         >
@@ -36,16 +36,6 @@ export default function Navigation() {
       <ul
         className={`flex-col flex-wrap ${isOpen ? "block" : "hidden"} lg:flex`}
       >
-        <li
-          className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
-            path === "/"
-              ? "bg-blue-500 hover:bg-blue-700"
-              : "bg-gray-500 hover:bg-gray-700"
-          }`}
-        >
-          <Link href="/">Home</Link>
-        </li>
-
         <li
           className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
             path === "/"
