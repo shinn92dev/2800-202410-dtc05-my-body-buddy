@@ -1,17 +1,19 @@
 import { useState } from "react";
-import WorkoutAiSupportInputCheckbox from "@/components/workout_ai_support/WorkoutAiSupportInputCheckbox";
 import TagsWithAddingField from "@/components/global/TagsWithAddingField";
 import "@/components/workout_ai_support/WorkoutAiSupportInput.scss";
 
+// Type definition for WorkoutAiSupportInput props
 type WorkoutAiSupportInputProps = {
     onGenerateAlternative: (selectedItems: any[], selectedTags: string[]) => void;
 };
 
+// Sample workout menu items
 const workoutMenuItems = [
     { "title": "Crunches", "quantity": 50, "unit": "reps", "kcalPerUnit": 4.92 },
     { "title": "Cycling", "quantity": 4, "unit": "km", "kcalPerUnit": 30 }
 ];
 
+// Default tags for reasons to replace workout items
 const defaultTags = [
     "Looks too hard",
     "Getting bored",
@@ -22,11 +24,13 @@ const defaultTags = [
 
 const inputFieldPlaceHolder = "Add another reason";
 
+// WorkoutAiSupportInput component
 export default function WorkoutAiSupportInput({ onGenerateAlternative }: WorkoutAiSupportInputProps) {
-    const [selectedItemTitles, setSelectedItemTitles] = useState<string[]>([]);
-    const [selectedTagTitles, setSelectedTagTitles] = useState<string[]>([]);
-    const [generated, setGenerated] = useState(false);
+    const [selectedItemTitles, setSelectedItemTitles] = useState<string[]>([]); // State to track selected item titles
+    const [selectedTagTitles, setSelectedTagTitles] = useState<string[]>([]);   // State to track selected tag titles
+    const [generated, setGenerated] = useState(false);                          // State to track if suggestions are generated
 
+    // Handle click event for generating alternative suggestions
     const handleGenerateAlternative = () => {
         const selectedItems = workoutMenuItems.filter(item => selectedItemTitles.includes(item.title));
         const selectedTags = defaultTags.filter(tag => selectedTagTitles.includes(tag));
@@ -34,6 +38,7 @@ export default function WorkoutAiSupportInput({ onGenerateAlternative }: Workout
         setGenerated(true);
     };
 
+    // Toggle selection state for a workout item
     const toggleItem = (title: string) => {
         if (selectedItemTitles.includes(title)) {
             setSelectedItemTitles(selectedItemTitles.filter((t) => t !== title));
@@ -42,6 +47,7 @@ export default function WorkoutAiSupportInput({ onGenerateAlternative }: Workout
         }
     };
 
+    // Toggle selection state for a tag
     const toggleTag = (tag: string) => {
         if (selectedTagTitles.includes(tag)) {
             setSelectedTagTitles(selectedTagTitles.filter((t) => t !== tag));

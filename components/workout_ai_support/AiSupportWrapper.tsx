@@ -7,7 +7,7 @@ import WorkoutAiSupportInput from "@/components/workout_ai_support/WorkoutAiSupp
 import "@/components/global/AiLines.scss";
 import "@/components/workout_ai_support/WorkoutAiSupportInput.scss";
 
-// initial messages
+// Initial messages
 const initialMessageTitle = "Hi! I'm BODY BUDDY AI.";
 const initialMessageBody = "I'll suggest alternatives of your menu.\n\nPlease tell me which items you would like to exchange and why in the form below.";
 
@@ -38,12 +38,13 @@ const generatedMessageBody = "Here's an alternative indoor exercise that approxi
     "\n" +
     "This option should serve as a good alternative to cycling if you're looking to stay indoors and don't have specific equipment for cycling.\n";
 
-// AiSupportWrapper
+// AiSupportWrapper component
 export default function AiSupportWrapper() {
-    const [generated, setGenerated] = useState(false);
-    const [selectedItems, setSelectedItems] = useState<any[]>([]);
-    const [selectedTags, setSelectedTags] = useState<string[]>([]);
+    const [generated, setGenerated] = useState(false); // State to track if alternative suggestions are generated
+    const [selectedItems, setSelectedItems] = useState<any[]>([]); // State to store selected workout items
+    const [selectedTags, setSelectedTags] = useState<string[]>([]); // State to store selected tags
 
+    // Function to update states and mark suggestions as generated
     const setGeneratedTrue = (selectedItems: any[], selectedTags: string[]) => {
         setSelectedItems(selectedItems);
         setSelectedTags(selectedTags);
