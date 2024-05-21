@@ -33,71 +33,80 @@ export default function Navigation() {
         </svg>
       </button>
 
-      <ul className={`flex-col flex-wrap ${isOpen ? "block" : "hidden"}`}>
-        <li
-          className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
-            path === "/login"
-              ? "bg-blue-500 hover:bg-blue-700"
-              : "bg-gray-500 hover:bg-gray-700"
-          }`}
-        >
-          <Link href="/login">login</Link>
-        </li>
-        <li
-          className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
-            path === "/signup"
-              ? "bg-blue-500 hover:bg-blue-700"
-              : "bg-gray-500 hover:bg-gray-700"
-          }`}
-        >
-          <Link href="/signup">signup</Link>
-        </li>
-        <li
-          className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
-            path === `/user/${tempUserId}`
-              ? "bg-blue-500 hover:bg-blue-700"
-              : "bg-gray-500 hover:bg-gray-700"
-          }`}
-        >
-          <Link href={`/user/${tempUserId}`}>User</Link>
-        </li>
-        <li
-          className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
-            path === "/plan/diet"
-              ? "bg-blue-500 hover:bg-blue-700"
-              : "bg-gray-500 hover:bg-gray-700"
-          }`}
-        >
-          <Link href="/plan/diet">Diet Plan</Link>
-        </li>
+      <ul
+        className={`absolute left-1 top-1 w-1/3 bg-white border border-gray-200 shadow-lg rounded-md ${
+          isOpen ? "block" : "hidden"
+        }`}
+      >
+        <button onClick={toggleHBGmenu}>
+          <svg
+            className="mt-3 h-10 w-10 fill-current text-logo-pumpkin"
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#e8eaed"
+          >
+            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+          </svg>
+        </button>
 
-        <li
-          className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
-            path === "/plan/workout"
-              ? "bg-blue-500 hover:bg-blue-700"
-              : "bg-gray-500 hover:bg-gray-700"
-          }`}
-        >
-          <Link href="/plan/workout">Workout Plan</Link>
-        </li>
-        <li
-          className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
-            path === "/summary/diet"
-              ? "bg-blue-500 hover:bg-blue-700"
-              : "bg-gray-500 hover:bg-gray-700"
-          }`}
-        >
-          <Link href="/summary/diet">Diet Summary</Link>
-        </li>
-        <li
-          className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
-            path === "/summary/workout"
-              ? "bg-blue-500 hover:bg-blue-700"
-              : "bg-gray-500 hover:bg-gray-700"
-          }`}
-        >
-          <Link href="/summary/workout">Workout Summary</Link>
-        </li>
+        <Link href={`/user/${tempUserId}`}>
+          <li
+            className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
+              path === `/user/${tempUserId}`
+                ? "bg-blue-500 hover:bg-blue-700"
+                : "bg-gray-500 hover:bg-gray-700"
+            }`}
+          >
+            User
+          </li>
+        </Link>
+        <Link href="/plan/diet">
+          <li
+            className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
+              path === "/plan/diet"
+                ? "bg-blue-500 hover:bg-blue-700"
+                : "bg-gray-500 hover:bg-gray-700"
+            }`}
+          >
+            Diet Plan
+          </li>
+        </Link>
+
+        <Link href="/plan/workout">
+          <li
+            className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
+              path === "/plan/workout"
+                ? "bg-blue-500 hover:bg-blue-700"
+                : "bg-gray-500 hover:bg-gray-700"
+            }`}
+          >
+            Workout Plan
+          </li>
+        </Link>
+        <Link href="/summary/diet">
+          <li
+            className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
+              path === "/summary/diet"
+                ? "bg-blue-500 hover:bg-blue-700"
+                : "bg-gray-500 hover:bg-gray-700"
+            }`}
+          >
+            Diet Summary
+          </li>
+        </Link>
+        <Link href="/summary/workout">
+          <li
+            className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
+              path === "/summary/workout"
+                ? "bg-blue-500 hover:bg-blue-700"
+                : "bg-gray-500 hover:bg-gray-700"
+            }`}
+          >
+            Workout Summary
+          </li>
+        </Link>
       </ul>
 
       <div className="flex justify-center items-center">

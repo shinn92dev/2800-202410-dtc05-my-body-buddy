@@ -49,24 +49,28 @@ export default function NavigationBeforeAuth() {
             <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
           </svg>
         </button>
-        <li
-          className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
-            path === "/login"
-              ? "bg-dark-blue hover:bg-dark-blue"
-              : "bg-gray-500 hover:bg-gray-700"
-          }`}
-        >
-          <Link href="/login">login</Link>
-        </li>
-        <li
-          className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
-            path === "/signup"
-              ? "bg-dark-blue hover:bg-dark-blue"
-              : "bg-gray-500 hover:bg-gray-700"
-          }`}
-        >
-          <Link href="/signup">signup</Link>
-        </li>
+        <Link href="/login">
+          <li
+            className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
+              path === "/login"
+                ? "bg-dark-blue hover:bg-dark-blue"
+                : "bg-gray-500 hover:bg-gray-700"
+            }`}
+          >
+            login
+          </li>
+        </Link>
+        <Link href="/signup">
+          <li
+            className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
+              path === "/signup"
+                ? "bg-dark-blue hover:bg-dark-blue"
+                : "bg-gray-500 hover:bg-gray-700"
+            }`}
+          >
+            signup
+          </li>
+        </Link>
       </ul>
 
       <div className="flex justify-center items-center">
