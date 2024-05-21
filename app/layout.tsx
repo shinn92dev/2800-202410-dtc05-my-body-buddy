@@ -1,5 +1,5 @@
-import Navigation from "@/components/global/Navigation";
 import type { Metadata } from "next";
+import Navigation from "@/components/global/Navigation";
 import "./globals.css";
 import {
     ClerkProvider,
