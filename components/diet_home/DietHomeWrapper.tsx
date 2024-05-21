@@ -20,6 +20,11 @@ export default function DietHomeWrapper() {
         { name: 'Mashed potatoes', amount: '1 cup', calories: 250 },
     ]);
 
+    const [snacks, setSnacks] = useState([
+        { name: 'Apple', amount: '1 medium', calories: 95 },
+        { name: 'Yogurt', amount: '1 cup', calories: 100 },
+    ]);
+
     const handleEdit = (mealType: string, index: number) => {
         // Handle edit logic here
     };
@@ -31,6 +36,8 @@ export default function DietHomeWrapper() {
             setLunches(lunches.filter((_, i) => i !== index));
         } else if (mealType === 'dinner') {
             setDinners(dinners.filter((_, i) => i !== index));
+        } else if (mealType === 'snack') {
+            setSnacks(snacks.filter((_, i) => i !== index));
         }
     };
 
@@ -72,6 +79,16 @@ export default function DietHomeWrapper() {
                     onEdit={(index) => handleEdit('dinner', index)}
                     onDelete={(index) => handleDelete('dinner', index)}
                     onAdd={() => handleAdd('dinner')}
+                />
+            </div>
+            <div className="p-4">
+                <Board
+                    icon={<span>🍪</span>}
+                    title="Snacks"
+                    items={snacks}
+                    onEdit={(index) => handleEdit('snack', index)}
+                    onDelete={(index) => handleDelete('snack', index)}
+                    onAdd={() => handleAdd('snack')}
                 />
             </div>
             <div className="p-4">
