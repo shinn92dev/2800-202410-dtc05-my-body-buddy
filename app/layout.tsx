@@ -4,10 +4,8 @@ import NavigationFooter from "@/components/global/NavigationFooter";
 import "./globals.css";
 import {
   ClerkProvider,
-  SignInButton,
   SignedIn,
   SignedOut,
-  UserButton,
 } from "@clerk/nextjs";
 import Head from "next/head";
 import NavigationBeforeAuth from "@/components/global/NavigationBeforeAuth";
@@ -36,7 +34,6 @@ export default function RootLayout({
             </SignedOut>
             <SignedIn>
               <Navigation />
-              <UserButton />
             </SignedIn>
           </header>
 

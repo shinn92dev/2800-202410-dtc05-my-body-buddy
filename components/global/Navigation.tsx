@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { UserButton } from "@clerk/nextjs";
 
 export default function Navigation() {
   const path = usePathname();
@@ -14,7 +15,7 @@ export default function Navigation() {
   console.log(path);
 
   return (
-    <nav className="flex items-center">
+    <nav className="flex items-center justify-between">
       <button
         className="block ml-4"
         onClick={toggleHBGmenu}
@@ -62,10 +63,8 @@ export default function Navigation() {
             User
           </li>
         </Link>
-
       </ul>
 
-      <div className="flex justify-center items-center">
         <Link href="/" onClick={toggleHBGmenu}>
           <img
             src="/my_body_buddy_logo_transparent.png"
@@ -73,7 +72,8 @@ export default function Navigation() {
             className="h-20 w-20"
           />
         </Link>
-      </div>
+
+      <div className="mr-5"><UserButton /></div>
     </nav>
   );
 }
