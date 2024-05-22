@@ -1,5 +1,5 @@
 import WorkoutHomeWrapper from "@/components/workout_home/WorkoutHomeWrapper";
-import CalendarNavBar from "@/components/top_calendar/TopCalendar";
+import TopCalendar from "@/components/top_calendar/TopCalendar";
 
 export const metadata = {
     title: "Workout Home",
@@ -9,7 +9,7 @@ export const metadata = {
 export default function WorkoutPage() {
     return (
         <div className="flex flex-col w-full">
-            <CalendarNavBar />
+            <TopCalendar />
             <WorkoutHomeWrapper />
         </div>
     );
