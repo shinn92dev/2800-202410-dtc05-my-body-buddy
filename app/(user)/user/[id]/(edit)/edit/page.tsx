@@ -8,40 +8,8 @@ import { ObjectId } from "mongodb";
 export default function User({ params }: { params: { id: string } }) {
   const { id } = params;
 
-  // dummy data; TODO: fetch user data from db
-  // const [userData, setUserData] = useState({
-  //   name: "Anthony",
-  //   age: 300,
-  //   gender: "Male",
-  //   height: 180,
-  //   weight: 80,
-  //   goalWight: 70,
-  //   goalDay: "2024-12-31",
-  // });
-
-  {
-    /*
-      interface userData {
-      username: string
-      age: number
-      gender: string
-      height: number
-      weight: number
-      goalWight: number
-      goalDay: string
-      }
-      */
-  }
-
-  {
-    /* 
-  QUESTIONS:
-1. username = id 
-2. full name?
-*/
-  }
-
   const [userData, setUserData] = useState<any>(null);
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -98,7 +66,7 @@ export default function User({ params }: { params: { id: string } }) {
       <div className="flex justify-center">
         <Link
           href={`/user/${userData.name}`}
-          className="bg-dark-blue rounded-md px-3 py-2 text-beige"
+          className="bg-dark-blue rounded-md px-3 py-2 text-beige m-10"
         >
           Done
         </Link>

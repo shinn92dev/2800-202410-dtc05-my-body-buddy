@@ -37,7 +37,7 @@ export default function User({ params }: { params: { id: string } }) {
         <div>Target Date: {userData.goalDay}</div>
         <div>Target Weight: {userData.goalWight} kg</div>
       </div>
-      <div className="flex justify-center">
+      <div className="flex justify-center m-10">
         <Link
           href={`/user/${userData.name}/edit`}
           className="bg-dark-blue rounded-md px-3 py-2 text-beige"
