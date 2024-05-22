@@ -4,10 +4,8 @@ import NavigationFooter from "@/components/global/NavigationFooter";
 import "./globals.css";
 import {
   ClerkProvider,
-  SignInButton,
   SignedIn,
   SignedOut,
-  UserButton,
 } from "@clerk/nextjs";
 import Head from "next/head";
 import NavigationBeforeAuth from "@/components/global/NavigationBeforeAuth";
@@ -25,31 +23,25 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-    let userId = "";
-    let userName = "";
-    let email = "";
-    return (
-        <ClerkProvider>
-            <html lang="en">
-                <link rel="icon" href="/favicon.ico" />
-                <body>
-                    <header>
-                        <SignedOut>
-                            <NavigationBeforeAuth />
-                        </SignedOut>
-                        <SignedIn>
-                            <div className="flex justify-evenly">
-                                <Navigation />
-                                <UserButton afterSignOutUrl="/" />
-                            </div>
-                        </SignedIn>
-                    </header>
+  return (
+    <ClerkProvider>
+      <html lang="en">
+        <link rel="icon" href="/favicon.ico" />
+        <body>
+          <header>
+            <SignedOut>
+              <NavigationBeforeAuth />
+            </SignedOut>
+            <SignedIn>
+              <Navigation />
+            </SignedIn>
+          </header>
 
-          <main>{children}</main>
+          <main className="pb-20">{children}</main>
 
-          <footer>
+          <SignedIn>
             <NavigationFooter />
-          </footer>
+          </SignedIn>
         </body>
       </html>
     </ClerkProvider>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SignOutButton from "./signOutButton";
 import { useState } from "react";
+import { UserButton } from "@clerk/nextjs";
 
 export default function Navigation() {
   const path = usePathname();
@@ -15,7 +16,7 @@ export default function Navigation() {
   console.log(path);
 
   return (
-    <nav className="flex items-center">
+    <nav className="flex items-center justify-between">
       <button
         className="block ml-4"
         onClick={toggleHBGmenu}
@@ -52,70 +53,19 @@ export default function Navigation() {
           </svg>
         </button>
 
-                <li
-                    className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
-                        path === "/plan/workout"
-                            ? "bg-dark-blue hover:bg-dark-blue"
-                            : "bg-gray-500 hover:bg-gray-700"
-                    }`}
-                >
-                    <Link href="/plan/workout">Workout Plan</Link>
-                </li>
-                <li
-                    className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
-                        path === "/summary/diet"
-                            ? "bg-dark-blue hover:bg-dark-blue"
-                            : "bg-gray-500 hover:bg-gray-700"
-                    }`}
-                >
-                    <Link href="/summary/diet">Diet Summary</Link>
-                </li>
-                <li
-                    className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
-                        path === "/summary/workout"
-                            ? "bg-dark-blue hover:bg-dark-blue"
-                            : "bg-gray-500 hover:bg-gray-700"
-                    }`}
-                >
-                    <Link href="/summary/workout">Workout Summary</Link>
-                </li>
-                <li
-                    className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
-                        path === `/user/${tempUserId}`
-                            ? "bg-dark-blue hover:bg-dark-blue"
-                            : "bg-gray-500 hover:bg-gray-700"
-                    }`}
-                >
-                    <Link href={`/user/${tempUserId}`}>User</Link>
-                </li>
-                <li
-                    className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
-                        path === `/user/${tempUserId}/edit`
-                            ? "bg-dark-blue hover:bg-dark-blue"
-                            : "bg-gray-500 hover:bg-gray-700"
-                    }`}
-                >
-                    <Link href={`/user/${tempUserId}/edit`}>User Edit</Link>
-                </li>
-                <li>
-                    <SignOutButton />
-                </li>
-            </ul>
-      <ul>
-        <Link href="/workout" onClick={toggleHBGmenu}>
+        <Link href={`/user/${tempUserId}`} onClick={toggleHBGmenu}>
           <li
             className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
-              path === "/plan/workout"
+              path === `/user/${tempUserId}`
                 ? "bg-blue-500 hover:bg-blue-700"
                 : "bg-gray-500 hover:bg-gray-700"
             }`}
           >
-            Workout plan
+            User
           </li>
         </Link>
       </ul>
 
-      <div className="flex justify-center items-center">
         <Link href="/" onClick={toggleHBGmenu}>
           <img
             src="/my_body_buddy_logo_transparent.png"
@@ -123,7 +73,8 @@ export default function Navigation() {
             className="h-20 w-20"
           />
         </Link>
-      </div>
+
+      <div className="mr-5"><UserButton /></div>
     </nav>
   );
 }
