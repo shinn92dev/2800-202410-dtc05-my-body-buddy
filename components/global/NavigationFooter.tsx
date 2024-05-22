@@ -18,9 +18,7 @@ export default function NavigationFooter() {
         bg-logo-pumpkin text-beige text-center"
       >
         <Link
-          className={`grid justify-items-center ${getButtonClasses(
-            "/summary/diet"
-          )}`}
+          className={`grid justify-items-center ${getButtonClasses("/diet")}`}
           href="/summary/diet"
         >
           <div className="content-center">
@@ -56,7 +54,7 @@ export default function NavigationFooter() {
         <Link
           href="/summary/workout"
           className={`grid justify-items-center ${getButtonClasses(
-            "/summary/workout"
+            "/workout"
           )}`}
         >
           <div className="content-center">

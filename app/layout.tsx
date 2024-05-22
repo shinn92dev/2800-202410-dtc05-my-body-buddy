@@ -42,9 +42,11 @@ export default function RootLayout({
 
           <main>{children}</main>
 
-          <footer>
-            <NavigationFooter />
-          </footer>
+          <SignedIn>
+            <footer>
+              <NavigationFooter />
+            </footer>
+          </SignedIn>
         </body>
       </html>
     </ClerkProvider>
