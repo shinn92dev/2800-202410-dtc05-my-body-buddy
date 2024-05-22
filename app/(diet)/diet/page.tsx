@@ -1,4 +1,5 @@
 import DietHomeWrapper from "@/components/diet_home/DietHomeWrapper";
+import CalendarNavbar from "@/components/top_calendar/TopCalendar";
 
 export const metadata = {
     title: "Diet Home",
@@ -6,6 +7,9 @@ export const metadata = {
 
 export default function DietHome() {
     return (
-        <DietHomeWrapper />
+        <div className="flex flex-col w-full">
+            <CalendarNavbar/>
+            <DietHomeWrapper />
+        </div>
     );
 }
