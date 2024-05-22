@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Board from "@/components/global/Board";
 import AskAiButton from "@/components/global/AskAiButton";
 import axios from 'axios';
+import Image from 'next/image';
 
 interface Meal {
     name: string;
@@ -17,6 +18,8 @@ const DietHomeWrapper: React.FC = () => {
     const [dinners, setDinners] = useState<Meal[]>([]);
     const [snacks, setSnacks] = useState<Meal[]>([]);
     const [userId, setUserId] = useState<string>(''); 
+
+    const icon = <Image src="/my_boddy_buddy_support_ai_logo.jpg" alt="support AI logo" width={30} height={30} />
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -81,6 +84,10 @@ const DietHomeWrapper: React.FC = () => {
         window.location.href = `/diet/add-meals?mealType=${mealType}`;
     };
 
+    const handleOnClick = () => {
+        // Handle onClick logic here
+    };
+
     return (
         <div>
             <h1 className="text-2xl font-bold p-2 m-2">
@@ -127,8 +134,7 @@ const DietHomeWrapper: React.FC = () => {
                 />
             </div>
             <div className="p-4">
-                <h1 className="text-2xl font-bold mb-4">Ask AI for Menu</h1>
-                <AskAiButton forText="Menu" />
+                <AskAiButton forText="Menu" icon={icon} onClick={handleOnClick} />
             </div>
         </div>
     );

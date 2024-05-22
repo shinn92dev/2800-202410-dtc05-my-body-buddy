@@ -3,23 +3,20 @@ import { useRouter } from 'next/navigation';
 
 interface AskAiButtonProps {
     forText: string;
+    icon: React.ReactNode;
+    onClick: () => void;
 }
 
-const AskAiButton: React.FC<AskAiButtonProps> = ({ forText }) => {
+const AskAiButton: React.FC<AskAiButtonProps> = ({ forText, icon, onClick }) => {
     const router = useRouter();
-
-    const handleClick = () => {
-        // Navigate to the AskAiFor<forText> page
-        router.push(`/AskAiFor${forText}`);
-    };
 
     return (
         <button
-            onClick={handleClick}
+            onClick={ onClick }
             className="flex items-center bg-gray-600 text-white py-2 px-4 rounded-full hover:bg-gray-700"
         >
-            <span className="mr-1">Ask AI for {forText}</span>
-            <span className="text-2xl">🤖</span>
+            <span className="mr-2 text-2xl font-semibold">Ask AI for {forText}</span>
+            <span>{icon}</span>
         </button>
     );
 };
