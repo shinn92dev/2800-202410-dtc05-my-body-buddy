@@ -12,9 +12,9 @@ export default function NavigationFooter() {
   };
 
   return (
-    <div className="relative">
+    <div className="">
       <div
-        className="grid grid-flow-col justify-stretch absolute inset-x-0 bottom-0 h-20
+        className="grid grid-flow-col justify-stretch sticky bottom-0 h-20
         bg-logo-pumpkin text-beige text-center"
       >
         <Link
