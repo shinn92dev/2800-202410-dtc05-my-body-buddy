@@ -2,18 +2,15 @@ import { useState } from "react";
 import TagsWithAddingField from "@/components/global/TagsWithAddingField";
 import "@/components/workout_ai_support/WorkoutAiSupportInput.scss";
 
-// Type definition for WorkoutAiSupportInput props
 type WorkoutAiSupportInputProps = {
-    onGenerateAlternative: (selectedItems: any[], selectedTags: string[]) => void;
+    onGenerateAlternative: (selectedItems: any[], selectedTags: string[], result: string) => void;
 };
 
-// Sample workout menu items
 const workoutMenuItems = [
     { "title": "Crunches", "quantity": 50, "unit": "reps", "kcalPerUnit": 4.92 },
     { "title": "Cycling", "quantity": 4, "unit": "km", "kcalPerUnit": 30 }
 ];
 
-// Default tags for reasons to replace workout items
 const defaultTags = [
     "Looks too hard",
     "Getting bored",
@@ -24,21 +21,37 @@ const defaultTags = [
 
 const inputFieldPlaceHolder = "Add another reason";
 
-// WorkoutAiSupportInput component
 export default function WorkoutAiSupportInput({ onGenerateAlternative }: WorkoutAiSupportInputProps) {
-    const [selectedItemTitles, setSelectedItemTitles] = useState<string[]>([]); // State to track selected item titles
-    const [selectedTagTitles, setSelectedTagTitles] = useState<string[]>([]);   // State to track selected tag titles
-    const [generated, setGenerated] = useState(false);                          // State to track if suggestions are generated
+    const [selectedItemTitles, setSelectedItemTitles] = useState<string[]>([]);
+    const [selectedTagTitles, setSelectedTagTitles] = useState<string[]>([]);
+    const [generated, setGenerated] = useState(false);
 
-    // Handle click event for generating alternative suggestions
-    const handleGenerateAlternative = () => {
+    const handleGenerateAlternative = async () => {
         const selectedItems = workoutMenuItems.filter(item => selectedItemTitles.includes(item.title));
         const selectedTags = defaultTags.filter(tag => selectedTagTitles.includes(tag));
-        onGenerateAlternative(selectedItems, selectedTags);
-        setGenerated(true);
+        const prompt = `Please generate alternative exercise menu for ${selectedItems.map(item => `${item.title} (${item.kcalPerUnit * item.quantity} kcal)`).join(', ')}. The alternative must be same estimated calorie consume. The reason I want to replace: ${selectedTags.join(', ')}`;
+
+        try {
+            const response = await fetch('/api/generate-alternative', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ prompt }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to generate alternative.');
+            }
+
+            const data = await response.json();
+            onGenerateAlternative(selectedItems, selectedTags, data.result);
+            setGenerated(true);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
-    // Toggle selection state for a workout item
     const toggleItem = (title: string) => {
         if (selectedItemTitles.includes(title)) {
             setSelectedItemTitles(selectedItemTitles.filter((t) => t !== title));
@@ -47,7 +60,6 @@ export default function WorkoutAiSupportInput({ onGenerateAlternative }: Workout
         }
     };
 
-    // Toggle selection state for a tag
     const toggleTag = (tag: string) => {
         if (selectedTagTitles.includes(tag)) {
             setSelectedTagTitles(selectedTagTitles.filter((t) => t !== tag));
