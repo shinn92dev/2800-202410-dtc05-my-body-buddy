@@ -24,7 +24,7 @@ const Board: React.FC<BoardProps> = ({ icon, title, items, onEdit, onDelete, onA
             </div>
             <BoardContent items={items} onEdit={onEdit} onDelete={onDelete} />
             <div className="flex justify-center mt-4">
-                <button onClick={onAdd} className="text-2xl text-gray-500 hover:text-gray-700">
+                <button onClick={onAdd} className="text-2xl text-gray-500 hover:text-gray-700 font-semibold">
                     +
                 </button>
             </div>
