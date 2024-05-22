@@ -1,22 +1,33 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { connectMongoDB } from '@/config/db';
 import Meal from '@/models/Meal';
 import MealItem from '@/models/MealItem';
 
-export async function POST(req: Request) {
-  const { userId, date, mealType, item } = await req.json();
-
+export async function POST(req: NextRequest) {
   await connectMongoDB();
 
-  const newItem = new MealItem(item);
-  await newItem.save();
+  try {
+    const { userId, date, meals, mealType } = await req.json();
 
-  let meal = await Meal.findOne({ userId, date });
-  if (!meal) {
-    meal = new Meal({ userId, date, breakfast: [], lunch: [], dinner: [], snacks: [] });
+    if (!userId || !date || !meals || !mealType) {
+      return NextResponse.json({ message: 'Missing required parameters' }, { status: 400 });
+    }
+
+    const mealItems = await MealItem.insertMany(meals.map((meal: any) => ({
+      name: meal.name,
+      amount: meal.amount,
+      calories: meal.calories,
+    })));
+
+    await Meal.updateOne(
+      { userId, date: new Date(date) },
+      { $push: { [mealType]: { $each: mealItems.map(item => item._id) } } },
+      { upsert: true }
+    );
+
+    return NextResponse.json({ message: 'Meals added successfully' }, { status: 201 });
+  } catch (error) {
+    console.error('Error adding meals:', error);
+    return NextResponse.json({ message: 'Error adding meals' }, { status: 500 });
   }
-  meal[mealType].push(newItem._id);
-  await meal.save();
-
-  return NextResponse.json(meal, { status: 201 });
 }

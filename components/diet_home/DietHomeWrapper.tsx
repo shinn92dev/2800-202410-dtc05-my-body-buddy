@@ -4,24 +4,42 @@ import React, { useState, useEffect } from 'react';
 import Board from "@/components/global/Board";
 import AskAiButton from "@/components/global/AskAiButton";
 import axios from 'axios';
-import { date } from 'zod';
 
-export default function DietHomeWrapper() {
-    const [breakfasts, setBreakfasts] = useState([]);
-    const [lunches, setLunches] = useState([]);
-    const [dinners, setDinners] = useState([]);
-    const [snacks, setSnacks] = useState([]);
-    const [userId, setUserId] = useState(''); 
+interface Meal {
+    name: string;
+    amount: string;
+    calories: number;
+}
+
+const DietHomeWrapper: React.FC = () => {
+    const [breakfasts, setBreakfasts] = useState<Meal[]>([]);
+    const [lunches, setLunches] = useState<Meal[]>([]);
+    const [dinners, setDinners] = useState<Meal[]>([]);
+    const [snacks, setSnacks] = useState<Meal[]>([]);
+    const [userId, setUserId] = useState<string>(''); 
+
+    useEffect(() => {
+        const fetchUserId = async () => {
+            const fetchedUserId = "664719634ee345ddb6962d13"; // temporary user ID 
+            setUserId(fetchedUserId);
+        };
+
+        fetchUserId();
+    }, []);
 
     useEffect(() => {
         const fetchMeals = async () => {
-            const date = new Date().toISOString().split('T')[0]; // Get today's date
-            const response = await axios.get(`@/api/getMeals?userId=${userId}&date=${date}`);
-            const data = response.data;
-            setBreakfasts(data?.breakfast || []);
-            setLunches(data?.lunch || []);
-            setDinners(data?.dinner || []);
-            setSnacks(data?.snacks || []);
+            try {
+                const date = new Date().toISOString().split('T')[0]; // Get today's date
+                const response = await axios.get(`/api/get-meals?userId=${userId}&date=${date}`);
+                const data = response.data;
+                setBreakfasts(data?.breakfast || []);
+                setLunches(data?.lunch || []);
+                setDinners(data?.dinner || []);
+                setSnacks(data?.snacks || []);
+            } catch (error) {
+                console.error('Error fetching meals:', error);
+            }
         };
 
         if (userId) {
@@ -47,7 +65,7 @@ export default function DietHomeWrapper() {
 
     const handleAdd = (mealType: string) => {
         // Navigate to AddingItems page
-        window.location.href = `diet/add-meals?mealType=${mealType}`;
+        window.location.href = `/diet/add-meals?mealType=${mealType}`;
     };
 
     return (
@@ -101,4 +119,6 @@ export default function DietHomeWrapper() {
             </div>
         </div>
     );
-}
+};
+
+export default DietHomeWrapper;
