@@ -60,7 +60,7 @@ export default function NavigationBeforeAuth() {
             login
           </li>
         </Link>
-        <Link href="/signup">
+        <Link href="/sign-up">
           <li
             className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
               path === "/signup"
