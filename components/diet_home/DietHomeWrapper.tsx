@@ -97,7 +97,7 @@ const DietHomeWrapper: React.FC = () => {
             <h1 className="text-2xl font-bold p-2 m-2">
                 This is My Body Buddy Diet Plan page
             </h1>
-            <div className="p-4">
+            <div className="flex flex-col items-center p-4">
                 <CalorieDistributionChart
                     breakfastCalories={totalCalories(breakfasts)}
                     lunchCalories={totalCalories(lunches)}
@@ -146,7 +146,7 @@ const DietHomeWrapper: React.FC = () => {
                     onAdd={() => handleAdd('snacks')}
                 />
             </div>
-            <div className="p-4">
+            <div className="flex flex-col items-center p-4">
                 <AskAiButton forText="Menu" icon={icon} onClick={handleOnClick} />
             </div>
         </div>

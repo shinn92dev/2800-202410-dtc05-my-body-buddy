@@ -1,5 +1,3 @@
-// components/CalorieDistributionChart.tsx
-
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import {
@@ -31,14 +29,21 @@ const CalorieDistributionChart: React.FC<CalorieDistributionChartProps> = ({
     totalTargetCalories,
 }) => {
     const totalCalories = breakfastCalories + lunchCalories + dinnerCalories + snackCalories;
+    const remainingCalories = totalTargetCalories - totalCalories;
 
     const data: ChartData<'doughnut'> = {
-        labels: ['Breakfast', 'Lunch', 'Dinner', 'Snacks'],
+        labels: ['Breakfast', 'Lunch', 'Dinner', 'Snacks', 'Remaining'],
         datasets: [
             {
-                data: [breakfastCalories, lunchCalories, dinnerCalories, snackCalories],
-                backgroundColor: ['#525FE1', '#FFA41B', '#EE752F', '#F86F03'],
-                hoverBackgroundColor: ['#3B4CC0', '#FF8C00', '#CC5F23', '#D85D00'],
+                data: [
+                    breakfastCalories,
+                    lunchCalories,
+                    dinnerCalories,
+                    snackCalories,
+                    remainingCalories > 0 ? remainingCalories : 0,
+                ],
+                backgroundColor: ['#525FE1', '#FFA41B', '#EE752F', '#F86F03', '#FFFFFF'],
+                hoverBackgroundColor: ['#3B4CC0', '#FF8C00', '#CC5F23', '#D85D00', '#FFFFFF'],
                 borderColor: '#FFF6F4',
             },
         ],
@@ -58,13 +63,21 @@ const CalorieDistributionChart: React.FC<CalorieDistributionChartProps> = ({
                 },
             },
             datalabels: {
-                color: '#FFF6F4',
+                color: (context) => {
+                    const dataset = context.dataset;
+                    const backgroundColor = dataset.backgroundColor;
+                    return Array.isArray(backgroundColor) ? backgroundColor[context.dataIndex] : backgroundColor;
+                },
                 font: {
                     weight: 'bold',
                 },
                 formatter: (value, context) => {
-                    return context.chart.data.labels?.[context.dataIndex] || '';
+                    const label = context.chart.data.labels?.[context.dataIndex] || '';
+                    return value > 0 ? label : '';
                 },
+                anchor: 'end',
+                align: 'end',
+                offset: 10,
             },
         },
         cutout: '70%',
