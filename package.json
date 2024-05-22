@@ -11,8 +11,10 @@
     "dependencies": {
         "@clerk/nextjs": "^5.0.12",
         "@nextui-org/react": "^2.3.6",
+        "@types/date-fns": "^2.6.0",
         "bcrypt": "^5.1.1",
         "cookie": "^0.6.0",
+        "date-fns": "^3.6.0",
         "dotenv": "^16.4.5",
         "mongodb": "^6.6.2",
         "mongoose": "^8.3.4",
