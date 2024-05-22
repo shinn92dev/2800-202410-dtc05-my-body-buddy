@@ -60,7 +60,7 @@ export default function NavigationBeforeAuth() {
             login
           </li>
         </Link>
-        <Link href="/sign-up" onClick={toggleHBGmenu}>
+        <Link href="/signup" onClick={toggleHBGmenu}>
           <li
             className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
               path === "/signup"
