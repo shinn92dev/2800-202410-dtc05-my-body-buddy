@@ -8,7 +8,7 @@ export default function NavigationFooter() {
   console.log(path);
 
   const getButtonClasses = (buttonPath: string) => {
-    return path === buttonPath ? "text-white font-bold" : "text-gray-400";
+    return path.startsWith(buttonPath) ? "text-white font-bold" : "text-gray-400";
   };
 
   return (
