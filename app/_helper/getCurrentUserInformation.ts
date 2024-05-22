@@ -1,4 +1,4 @@
-import UsersModel from "@/models/Users";
+import UserModel from "@/models/User";
 import { currentUser } from "@clerk/nextjs/server";
 
 export async function getCurrentUserInformationFromClerk() {
@@ -14,7 +14,7 @@ export async function getCurrentUserInformationFromMondoDB() {
         console.log(clerkUser);
         if (clerkUser) {
             const username = clerkUser?.username;
-            const userDataMongo = await UsersModel.findOne({
+            const userDataMongo = await UserModel.findOne({
                 username: username,
             });
             return userDataMongo;

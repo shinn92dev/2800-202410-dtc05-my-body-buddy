@@ -1,4 +1,4 @@
-import UsersModel from "@/models/Users";
+import UserModel from "@/models/User";
 
 type newUserDataType = {
     email: string;
@@ -9,10 +9,10 @@ type newUserDataType = {
 const saveNewUserToMongoDB = async (newUserData: newUserDataType) => {
     if (newUserData) {
         try {
-            console.log("UsersModel:", UsersModel);
-            const newUser = new UsersModel(newUserData);
+            console.log("UserModel:", UserModel);
+            const newUser = new UserModel(newUserData);
             console.log(newUser);
-            console.log(newUser instanceof UsersModel);
+            console.log(newUser instanceof UserModel);
             await newUser.save();
             console.log("success");
         } catch (error) {

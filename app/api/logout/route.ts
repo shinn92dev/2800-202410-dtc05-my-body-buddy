@@ -1,7 +1,7 @@
 import { getCurrentUserInformationFromMondoDB } from "@/app/_helper/getCurrentUserInformation";
 import saveNewUserToMongoDB from "@/app/_helper/saveNewUserToMongoDB";
 import { connectMongoDB } from "@/config/db";
-import UsersModel from "@/models/Users";
+import UserModel from "@/models/User";
 import { NextResponse } from "next/server";
 
 export async function POST(req: any) {
@@ -9,7 +9,7 @@ export async function POST(req: any) {
         await connectMongoDB();
         const { email } = await req.json();
         console.log(email);
-        const user = await UsersModel.findOneAndUpdate(
+        const user = await UserModel.findOneAndUpdate(
             { email: email },
             { isLoggedIn: false },
             { new: true }
