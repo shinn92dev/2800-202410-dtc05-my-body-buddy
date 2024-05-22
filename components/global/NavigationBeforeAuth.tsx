@@ -48,21 +48,21 @@ export default function NavigationBeforeAuth() {
                 </li>
                 <li
                     className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
-                        path === "/sign-in"
+                        path === "/login"
                             ? "bg-dark-blue hover:bg-dark-blue"
                             : "bg-gray-500 hover:bg-gray-700"
                     }`}
                 >
-                    <Link href="/sign-in">Sign In</Link>
+                    <Link href="/login">Sign In</Link>
                 </li>
                 <li
                     className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
-                        path === "/sign-up"
+                        path === "/signup"
                             ? "bg-dark-blue hover:bg-dark-blue"
                             : "bg-gray-500 hover:bg-gray-700"
                     }`}
                 >
-                    <Link href="/sign-up">Sign Up</Link>
+                    <Link href="/signup">Sign Up</Link>
                 </li>
             </ul>
 
