@@ -1,5 +1,6 @@
 "use client";
-import { useRouter } from "next/navigation";
+
+import React, { useSignUp } from "@clerk/nextjs";
 
 import Modal from "@/components/global/Modal";
 import PolicyContent from "@/components/global/PolicyContent";
@@ -9,31 +10,22 @@ import { useEffect, useRef, useState } from "react";
 import getTestUser from "@/app/_helper/testUser";
 import SignupForm from "@/app/ui/signup-form";
 
-const createNewUser = async (email: string, username: string) => {
-    try {
-        const response = await fetch("/api/signup/route", {
-            method: "POST",
-            body: JSON.stringify({ email, username }),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        if (!response.ok) {
-            throw new Error("Not OK");
-        }
-        const data = await response.json();
-        console.log(data);
-        return data;
-    } catch (error) {
-        console.error(error);
-    }
-};
-
 export default function SignUp() {
     const [showModal, setShowModal] = useState(false);
-    const emailInputRef = useRef<HTMLInputElement | null>(null);
-    const usernameInputRef = useRef<HTMLInputElement | null>(null);
-    const testUsers = getTestUser();
+    const { signUp } = useSignUp();
+    const [emai, setEmail] = useState<string>("");
+    const [username, setUsername] = useState<string>("");
+    const [userInfo, setUserInfo] = useState<any>(null);
+
+    const handleSignUp = async (event: React.FormEvent) => {
+        event.preventDefault();
+        try {
+            await signUp.create({ email: email, username: username });
+            const user = await signUp.currentUser();
+        } catch (error) {
+            console.log("Sign up failed: ", error);
+        }
+    };
 
     const handlePolicyClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
