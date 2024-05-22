@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import React, { useState, useEffect } from 'react';
 import CircleBar from "@/components/global/CircleBar";
 import Board from "@/components/global/Board";
@@ -149,7 +150,7 @@ export default function WorkoutHomeWrapper() {
                         <button onClick={handleAskAI}
                                 className="px-4 py-2 bg-gray-500 text-white rounded-full flex items-center">
                             <span>Ask AI for Alternative</span>
-                            <img src="/my_boddy_buddy_support_ai_logo.jpg" alt="AI Logo" className="ml-2" width={24}
+                            <Image src="/my_boddy_buddy_support_ai_logo.jpg" alt="AI Logo" className="ml-2" width={24}
                                  height={24}/>
                         </button>
                     </div>
