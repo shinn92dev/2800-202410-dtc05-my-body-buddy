@@ -51,7 +51,7 @@ export default function Navigation() {
           </svg>
         </button>
 
-        <Link href={`/user/${tempUserId}`}>
+        <Link href={`/user/${tempUserId}`} onClick={toggleHBGmenu}>
           <li
             className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
               path === `/user/${tempUserId}`
@@ -62,7 +62,7 @@ export default function Navigation() {
             User
           </li>
         </Link>
-        <Link href="/plan/diet">
+        <Link href="/plan/diet" onClick={toggleHBGmenu}>
           <li
             className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
               path === "/plan/diet"
@@ -74,7 +74,7 @@ export default function Navigation() {
           </li>
         </Link>
 
-        <Link href="/plan/workout">
+        <Link href="/plan/workout" onClick={toggleHBGmenu}>
           <li
             className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
               path === "/plan/workout"
@@ -85,7 +85,7 @@ export default function Navigation() {
             Workout Plan
           </li>
         </Link>
-        <Link href="/summary/diet">
+        <Link href="/summary/diet" onClick={toggleHBGmenu}>
           <li
             className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
               path === "/summary/diet"
@@ -96,7 +96,7 @@ export default function Navigation() {
             Diet Summary
           </li>
         </Link>
-        <Link href="/summary/workout">
+        <Link href="/summary/workout" onClick={toggleHBGmenu}>
           <li
             className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
               path === "/summary/workout"
@@ -110,7 +110,7 @@ export default function Navigation() {
       </ul>
 
       <div className="flex justify-center items-center">
-        <Link href="/">
+        <Link href="/" onClick={toggleHBGmenu}>
           <img
             src="/my_body_buddy_logo_transparent.png"
             alt="logo"

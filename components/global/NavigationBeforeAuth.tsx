@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 
 export default function NavigationBeforeAuth() {
   const path = usePathname();
-  const tempUserId: string = "Anthony";
   console.log(path);
   const [isOpen, setIsOpen] = useState(false);
   const toggleHBGmenu = () => setIsOpen(!isOpen);
@@ -49,7 +48,8 @@ export default function NavigationBeforeAuth() {
             <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
           </svg>
         </button>
-        <Link href="/login">
+
+        <Link href="/login" onClick={toggleHBGmenu}>
           <li
             className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
               path === "/login"
@@ -60,7 +60,7 @@ export default function NavigationBeforeAuth() {
             login
           </li>
         </Link>
-        <Link href="/sign-up">
+        <Link href="/sign-up" onClick={toggleHBGmenu}>
           <li
             className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
               path === "/signup"
