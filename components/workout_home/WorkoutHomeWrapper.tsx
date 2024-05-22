@@ -45,7 +45,7 @@ export default function WorkoutHomeWrapper() {
         setTotalCaloriesOfAchieved(calculateTotalCalories(achieved));
         setAchievedItems(convertToItems(achieved));
         setMenuForTodayItems(convertToItems(menuForToday));
-    }, [menuForToday]);
+    }, [menuForToday, achieved]);
 
     const handleEditForAchieved = (index: number) => {
         // Handle edit logic here
