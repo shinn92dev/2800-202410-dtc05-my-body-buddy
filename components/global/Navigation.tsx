@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import SignOutButton from "./signOutButton";
 
 export default function Navigation() {
     const path = usePathname();
@@ -160,6 +161,9 @@ export default function Navigation() {
                     }`}
                 >
                     <Link href={`/user/${tempUserId}/edit`}>User Edit</Link>
+                </li>
+                <li>
+                    <SignOutButton />
                 </li>
             </ul>
 

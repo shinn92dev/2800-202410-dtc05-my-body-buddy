@@ -17,8 +17,9 @@ export async function getCurrentUserInformationFromMondoDB() {
             const userDataMongo = await UsersModel.findOne({
                 username: username,
             });
-            console.log(userDataMongo);
+            return userDataMongo;
         }
+        return;
     } catch (error) {
         console.log(error);
     }

@@ -3,17 +3,13 @@ import Introduction from "./introduction";
 import Logo from "./logo";
 import Encourage from "./encourage";
 import Button from "./button";
-import {
-    getCurrentUserInformationFromClerk,
-    getCurrentUserInformationFromMondoDB,
-} from "../_helper/getCurrentUserInformation";
+import { getCurrentUserInformationFromClerk } from "../_helper/getCurrentUserInformation";
 
 export const metadata = {
     title: "HOME",
 };
 
 export default async function Home() {
-    await getCurrentUserInformationFromMondoDB();
     // console.log(typeof user);
     return (
         <div>
