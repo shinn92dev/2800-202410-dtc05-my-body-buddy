@@ -23,12 +23,10 @@ const createNewUser = async (userData) => {
                 "Content-Type": "application/json",
             },
         });
-        console.log(response);
         if (!response.ok) {
             throw new Error("Not OK");
         }
         const data = await response.json();
-        console.log(data);
         window.location.href = "/";
         return data;
     } catch (error) {
@@ -73,7 +71,6 @@ export default function SignupForm() {
     const onSubmit: SubmitHandler<newUserInputs> = async (
         data: newUserInputs
     ) => {
-        console.log(data);
         try {
             const signUpResult = await signUp?.create({
                 emailAddress: data.email,
@@ -88,9 +85,6 @@ export default function SignupForm() {
             console.log("Error: ", error);
         }
     };
-
-    // console.log(watch("email"));
-    // console.log(watch("username"));
 
     return (
         <form

@@ -22,12 +22,10 @@ const routeLoginPostUser = async (userData) => {
                 "Content-Type": "application/json",
             },
         });
-        console.log(response);
         if (!response.ok) {
             throw new Error("Not OK");
         }
         const data = await response.json();
-        console.log(data);
         window.location.href = "/";
         return data;
     } catch (error) {
@@ -61,7 +59,6 @@ export default function LoginForm() {
     const onSubmit: SubmitHandler<userLoginInput> = async (
         data: userLoginInput
     ) => {
-        console.log(data);
         try {
             const logInResult = await signIn?.create({
                 identifier: data.email,
@@ -75,9 +72,6 @@ export default function LoginForm() {
             console.log("Error: ", error);
         }
     };
-
-    console.log(watch("email"));
-    console.log(watch("password"));
 
     return (
         <form
