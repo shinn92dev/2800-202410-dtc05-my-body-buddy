@@ -1,8 +1,8 @@
-import UsersModel from "@/models/Users";
+import UserModel from "@/models/User";
 
 const fetchAllUserEmailAndNames = async () => {
     try {
-        const usersInfo = await UsersModel.find({}, { username: 1, email: 1 });
+        const usersInfo = await UserModel.find({}, { username: 1, email: 1 });
         console.log(usersInfo);
         return usersInfo;
     } catch (error) {

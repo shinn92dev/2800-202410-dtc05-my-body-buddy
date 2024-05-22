@@ -1,4 +1,4 @@
-import UsersModel from "@/models/Users";
+import UserModel from "@/models/User";
 
 export const GetCurrentUsersFromMongoDB = async () => {
     try {
@@ -9,14 +9,14 @@ export const GetCurrentUsersFromMongoDB = async () => {
             securityQuestion: "aaa",
             securityAnswer: "bbb",
         };
-        const user = await UsersModel.findOne({ email: testUser.email });
+        const user = await UserModel.findOne({ email: testUser.email });
         if (user) {
             return {
                 success: true,
                 data: JSON.parse(JSON.stringify(user)),
             };
         }
-        const newUser = new UsersModel(testUser);
+        const newUser = new UserModel(testUser);
         await newUser.save();
         console.log("User Saved");
         return {
