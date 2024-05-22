@@ -1,15 +1,14 @@
 "use client";
 
 import React from "react";
-import InputBox from "@/components/global/InputBox";
 import SignUpAndInIcon from "@/components/global/icons/SignUpAndInIcon";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import * as yup from "yup";
-import { useSignUp } from "@clerk/nextjs";
+import { useSignIn } from "@clerk/nextjs";
 
-type newUserInputs = {
+type userLoginInput = {
     email: string;
     username: string;
     password: string;
@@ -19,44 +18,31 @@ const validationSchema = yup.object({
         .string()
         .email("Invalid email format")
         .required("Email is required"),
-    username: yup
-        .string()
-        .min(5, "Username must be at least 5 characters")
-        .max(20, "Username must be less than 20 characters")
-        .required("Username is required"),
-    password: yup
-        .string()
-        .min(6, "Password must be at least 6 characters")
-        .matches(
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-            "Password must contain uppercase, lowercase, number and special symbol"
-        ),
+    password: yup.string().required("Password is required"),
 });
 
-export default function SignupForm() {
-    // const [state, action] = useActionState(signup, undefined);
-    const { signUp } = useSignUp();
+export default function LoginForm() {
+    const { signIn } = useSignIn();
 
     const {
         register,
         handleSubmit,
         watch,
         formState: { errors },
-    } = useForm<newUserInputs>({ resolver: yupResolver(validationSchema) });
+    } = useForm<userLoginInput>({ resolver: yupResolver(validationSchema) });
 
-    const onSubmit: SubmitHandler<newUserInputs> = async (
-        data: newUserInputs
+    const onSubmit: SubmitHandler<userLoginInput> = async (
+        data: userLoginInput
     ) => {
         console.log(data);
         try {
-            const signUpResult = await signUp?.create({
-                emailAddress: data.email,
-                username: data.username,
+            const logInResult = await signIn?.create({
+                identifier: data.email,
                 password: data.password,
             });
-            if (signUpResult?.status === "complete") {
+            if (logInResult?.status === "complete") {
             }
-            console.log("User Info: ", signUpResult);
+            console.log("User Info: ", logInResult);
         } catch (error) {
             console.log("Error: ", error);
         }
@@ -85,23 +71,6 @@ export default function SignupForm() {
                 )}
             </div>
             <div className="mt-2">
-                <label htmlFor="username" className="hidden">
-                    Username
-                </label>
-                <input
-                    className="w-full px-8 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                    type="text"
-                    placeholder="Username"
-                    id="username"
-                    {...register("username", { required: true })}
-                />
-                {errors.username && (
-                    <span className="text-red-500 text-sm">
-                        {errors.username.message}
-                    </span>
-                )}
-            </div>
-            <div className="mt-2">
                 <label htmlFor="password" className="hidden">
                     Password
                 </label>
@@ -124,18 +93,6 @@ export default function SignupForm() {
                 type="submit"
             >
                 <SignUpAndInIcon width={6} />
-                {/* <svg
-                                                className={`w-6 h-6 -ml-2`}
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                            >
-                                                <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                                                <circle cx="8.5" cy="7" r="4" />
-                                                <path d="M20 8v6M23 11h-6" />
-                                            </svg> */}
                 <span className="ml-3">Submit</span>
             </button>
         </form>

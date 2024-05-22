@@ -1,3 +1,4 @@
+import LoginForm from "@/app/ui/login-form";
 import InputBox from "@/components/global/InputBox";
 import GoogleIcon from "@/components/global/icons/GoogleIcon";
 import SignUpAndInIcon from "@/components/global/icons/SignUpAndInIcon";
@@ -32,43 +33,7 @@ export default function LogIn() {
                             </h1>
                             <div className="w-full flex-1 mt-8">
                                 {/* Login form */}
-                                <form className="mx-auto max-w-xs">
-                                    {/* Email */}
-                                    <InputBox
-                                        labelText="Email"
-                                        id="email"
-                                        hidden={true}
-                                        type="email"
-                                        placeholder="Email"
-                                        isTop={true}
-                                    />
-                                    {/* Password */}
-                                    <InputBox
-                                        labelText="Password"
-                                        id="password"
-                                        hidden={true}
-                                        type="password"
-                                        placeholder="Password"
-                                        isTop={false}
-                                    />
-                                    <button className="mt-2 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
-                                        <SignUpAndInIcon width={6} />
-                                        {/* <svg
-                                            className={`w-6 h-6 -ml-2`}
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeWidth="2"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                        >
-                                            <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                                            <circle cx="8.5" cy="7" r="4" />
-                                            <path d="M20 8v6M23 11h-6" />
-                                        </svg> */}
-
-                                        <span className="ml-3">Log In</span>
-                                    </button>
-                                </form>
+                                <LoginForm />
                                 {/* Divide bar */}
                                 <div className="my-7 border-b text-center">
                                     <div className="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">
