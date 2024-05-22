@@ -4,6 +4,7 @@ import Image from "next/image";
 import React, { useState, useEffect } from 'react';
 import CircleBar from "@/components/global/CircleBar";
 import Board from "@/components/global/Board";
+import AskAiButton from "@/components/global/AskAiButton";
 
 const defaultMenuForToday = [
     { "title": "Walking", "quantity": 45, "unit": "min", "kcalPerUnit": 3.5, "isCompleted": true },
@@ -147,12 +148,8 @@ export default function WorkoutHomeWrapper() {
                         ))}
                     </div>
                     <div className="flex justify-center mt-4">
-                        <button onClick={handleAskAI}
-                                className="px-4 py-2 bg-gray-500 text-white rounded-full flex items-center">
-                            <span>Ask AI for Alternative</span>
-                            <Image src="/my_boddy_buddy_support_ai_logo.jpg" alt="AI Logo" className="ml-2" width={24}
-                                 height={24}/>
-                        </button>
+                        <AskAiButton forText={"Alternative"} icon={<Image src="/my_boddy_buddy_support_ai_logo.jpg" alt="AI Logo" className="ml-2" width={24}
+                                                                          height={24}/>} onClick={handleAskAI}/>
                     </div>
                 </div>
             </div>
