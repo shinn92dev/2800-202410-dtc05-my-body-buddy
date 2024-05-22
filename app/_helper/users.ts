@@ -1,6 +1,6 @@
 import UsersModel from "@/models/Users";
 
-export const GetCurrentUsersFromMongoDB = async () => {
+export const getAllFromMongoDB = async () => {
     try {
         const testUser = {
             username: "shinn92dev",
@@ -9,7 +9,7 @@ export const GetCurrentUsersFromMongoDB = async () => {
             securityQuestion: "aaa",
             securityAnswer: "bbb",
         };
-        const user = await UsersModel.findOne({ email: testUser.email });
+        const user = await UsersModel.find({});
         if (user) {
             return {
                 success: true,

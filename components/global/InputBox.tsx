@@ -17,7 +17,6 @@ export default function InputBox({
     type,
     placeholder,
     isTop,
-    onChangeFn,
 }: InputBoxProps) {
     return (
         <div className={isTop ? "" : "mt-2"}>

@@ -1,13 +1,39 @@
 "use client";
 
 import React from "react";
-import InputBox from "@/components/global/InputBox";
 import SignUpAndInIcon from "@/components/global/icons/SignUpAndInIcon";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import * as yup from "yup";
 import { useSignUp } from "@clerk/nextjs";
+import { connectMongoDB } from "@/config/db";
+
+const createNewUser = async (userData) => {
+    try {
+        const newUserData = {
+            email: userData.email,
+            username: userData.username,
+            isLoggedIn: true,
+        };
+        const response = await fetch("/api/signup", {
+            method: "POST",
+            body: JSON.stringify(newUserData),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        console.log(response);
+        if (!response.ok) {
+            throw new Error("Not OK");
+        }
+        const data = await response.json();
+        console.log(data);
+        return data;
+    } catch (error) {
+        console.error(error);
+    }
+};
 
 type newUserInputs = {
     email: string;
@@ -34,7 +60,6 @@ const validationSchema = yup.object({
 });
 
 export default function SignupForm() {
-    // const [state, action] = useActionState(signup, undefined);
     const { signUp } = useSignUp();
 
     const {
@@ -55,18 +80,23 @@ export default function SignupForm() {
                 password: data.password,
             });
             if (signUpResult?.status === "complete") {
+                console.log("User Info: ", signUpResult);
+                createNewUser(data);
             }
-            console.log("User Info: ", signUpResult);
         } catch (error) {
             console.log("Error: ", error);
         }
     };
 
-    console.log(watch("email"));
-    console.log(watch("username"));
+    // console.log(watch("email"));
+    // console.log(watch("username"));
 
     return (
-        <form className="mx-auto max-w-xs" onSubmit={handleSubmit(onSubmit)}>
+        <form
+            className="mx-auto max-w-xs"
+            onSubmit={handleSubmit(onSubmit)}
+            method="post"
+        >
             <div className="">
                 <label htmlFor="email" className="hidden">
                     Email

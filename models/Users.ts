@@ -11,16 +11,8 @@ const usersSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    password: {
-        type: String,
-        required: true,
-    },
-    securityQuestion: {
-        type: String,
-        required: true,
-    },
-    securityAnswer: {
-        type: String,
+    isLoggedIn: {
+        type: Boolean,
         required: true,
     },
 });
