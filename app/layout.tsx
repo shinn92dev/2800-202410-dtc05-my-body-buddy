@@ -40,12 +40,10 @@ export default function RootLayout({
             </SignedIn>
           </header>
 
-          <main>{children}</main>
+          <main className="pb-20">{children}</main>
 
           <SignedIn>
-            <footer>
-              <NavigationFooter />
-            </footer>
+            <NavigationFooter />
           </SignedIn>
         </body>
       </html>
