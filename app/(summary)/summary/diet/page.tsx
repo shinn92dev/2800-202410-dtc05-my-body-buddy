@@ -2,6 +2,7 @@ import React from "react";
 import TopCalendar from "@/components/top_calendar/TopCalendar";
 import ScoreCircleBarWrapper from "@/components/summary_score_circle_bar/ScoreCircleBarWrapper";
 import BarGraph from "@/components/global/BarGraph";
+import WorkoutDietLink from "@/components/workout_diet_link/WorkoutDietLink";
 
 export const metadata = {
     title: "Diet Summary",
@@ -19,6 +20,12 @@ export default function DietSummary() {
     return (
         <div>
             <TopCalendar/>
+            <WorkoutDietLink
+                workoutLink="/summary/workout"
+                dietLink="/summary/diet"
+                workoutText="Workout"
+                dietText="Diet"
+            />
             <div className="text-center">
                 <ScoreCircleBarWrapper score={score} percent={percent} />
                 <div className='text-xl font-semibold p-4'>Calorie Took</div>
@@ -31,4 +38,3 @@ export default function DietSummary() {
         </div>
     );
 }
-
