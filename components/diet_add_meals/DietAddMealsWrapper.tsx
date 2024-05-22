@@ -31,9 +31,11 @@ const DietAddMealsWrapper: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const mealTypeParam = searchParams.get('mealType');
-    if (mealTypeParam) {
-      setMealType(mealTypeParam);
+    if (searchParams) {
+      const mealTypeParam = searchParams.get('mealType');
+      if (mealTypeParam) {
+        setMealType(mealTypeParam);
+      }
     }
   }, [searchParams]);
 
@@ -111,7 +113,7 @@ const DietAddMealsWrapper: React.FC = () => {
           onClick={addMeal}
           className="bg-blue-500 text-white p-2 rounded w-full"
         >
-          Add Selected Items
+          Add Selected Meals
         </button>
       </div>
       <div>
