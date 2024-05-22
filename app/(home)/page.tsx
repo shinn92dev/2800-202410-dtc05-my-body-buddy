@@ -1,29 +1,20 @@
 import { connectMongoDB } from "@/config/db";
-// import { GetCurrentUsersFromMongoDB } from "../_helper/users";
 import Introduction from "./introduction";
 import Logo from "./logo";
 import Encourage from "./encourage";
 import Button from "./button";
+import {
+    getCurrentUserInformationFromClerk,
+    getCurrentUserInformationFromMondoDB,
+} from "../_helper/getCurrentUserInformation";
 
 export const metadata = {
     title: "HOME",
 };
 
 export default async function Home() {
-    connectMongoDB();
-    const fetchDataFromApi = async () => {
-        try {
-            const response = await fetch("/api", {
-                headers: {
-                    Accept: "application.json",
-                    method: "GET",
-                },
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    };
-    fetchDataFromApi();
+    await getCurrentUserInformationFromMondoDB();
+    // console.log(typeof user);
     return (
         <div>
             <div

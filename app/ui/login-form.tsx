@@ -8,6 +8,33 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useSignIn } from "@clerk/nextjs";
 
+const routeLoginPostUser = async (userData) => {
+    try {
+        const newUserData = {
+            email: userData.email,
+            username: userData.username,
+            isLoggedIn: true,
+        };
+        const response = await fetch("/api/login", {
+            method: "POST",
+            body: JSON.stringify(newUserData),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        console.log(response);
+        if (!response.ok) {
+            throw new Error("Not OK");
+        }
+        const data = await response.json();
+        console.log(data);
+        window.location.href = "/";
+        return data;
+    } catch (error) {
+        console.error(error);
+    }
+};
+
 type userLoginInput = {
     email: string;
     username: string;
@@ -41,6 +68,7 @@ export default function LoginForm() {
                 password: data.password,
             });
             if (logInResult?.status === "complete") {
+                routeLoginPostUser(data);
             }
             console.log("User Info: ", logInResult);
         } catch (error) {
@@ -49,10 +77,14 @@ export default function LoginForm() {
     };
 
     console.log(watch("email"));
-    console.log(watch("username"));
+    console.log(watch("password"));
 
     return (
-        <form className="mx-auto max-w-xs" onSubmit={handleSubmit(onSubmit)}>
+        <form
+            className="mx-auto max-w-xs"
+            onSubmit={handleSubmit(onSubmit)}
+            method="post"
+        >
             <div className="">
                 <label htmlFor="email" className="hidden">
                     Email
