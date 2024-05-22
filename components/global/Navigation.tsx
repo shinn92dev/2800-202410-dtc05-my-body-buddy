@@ -62,7 +62,7 @@ export default function Navigation() {
             User
           </li>
         </Link>
-        <Link href="/plan/diet" onClick={toggleHBGmenu}>
+        <Link href="/diet" onClick={toggleHBGmenu}>
           <li
             className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
               path === "/plan/diet"
@@ -70,11 +70,11 @@ export default function Navigation() {
                 : "bg-gray-500 hover:bg-gray-700"
             }`}
           >
-            Diet Plan
+            Diet plan
           </li>
         </Link>
 
-        <Link href="/plan/workout" onClick={toggleHBGmenu}>
+        <Link href="/workout" onClick={toggleHBGmenu}>
           <li
             className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
               path === "/plan/workout"
@@ -82,29 +82,7 @@ export default function Navigation() {
                 : "bg-gray-500 hover:bg-gray-700"
             }`}
           >
-            Workout Plan
-          </li>
-        </Link>
-        <Link href="/summary/diet" onClick={toggleHBGmenu}>
-          <li
-            className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
-              path === "/summary/diet"
-                ? "bg-blue-500 hover:bg-blue-700"
-                : "bg-gray-500 hover:bg-gray-700"
-            }`}
-          >
-            Diet Summary
-          </li>
-        </Link>
-        <Link href="/summary/workout" onClick={toggleHBGmenu}>
-          <li
-            className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
-              path === "/summary/workout"
-                ? "bg-blue-500 hover:bg-blue-700"
-                : "bg-gray-500 hover:bg-gray-700"
-            }`}
-          >
-            Workout Summary
+            Workout plan
           </li>
         </Link>
       </ul>
