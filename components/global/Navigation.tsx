@@ -34,7 +34,7 @@ export default function Navigation() {
       </button>
 
       <ul
-        className={`absolute left-1 top-1 w-1/3 bg-white border border-gray-200 shadow-lg rounded-md ${
+        className={`absolute left-1 top-1 w-1/3 bg-white border border-logo-pumpkin shadow-lg rounded-md ${
           isOpen ? "block" : "hidden"
         }`}
       >

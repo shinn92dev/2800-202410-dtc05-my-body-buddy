@@ -8,7 +8,7 @@ export default function User({ params }: { params: { id: string } }) {
 
   // dummy data; TODO: fetch user data from db
   const [userData, setUserData] = useState({
-    name: "Anthony",
+    name: "Domingo",
     age: 300,
     gender: "Male",
     height: 180,
@@ -16,28 +16,6 @@ export default function User({ params }: { params: { id: string } }) {
     goalWight: 70,
     goalDay: "2024-12-31",
   });
-
-  {
-    /*
-      interface userData {
-      username: string
-      age: number
-      gender: string
-      height: number
-      weight: number
-      goalWight: number
-      goalDay: string
-      }
-      */
-  }
-
-  {
-    /* 
-  QUESTIONS:
-1. username = id 
-2. full name?
-*/
-  }
 
   return (
     <div className="justify-center">
