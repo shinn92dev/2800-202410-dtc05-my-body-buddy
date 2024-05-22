@@ -31,11 +31,9 @@ const DietAddMealsWrapper: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (searchParams) {
-      const mealTypeParam = searchParams.get('mealType');
-      if (mealTypeParam) {
-        setMealType(mealTypeParam);
-      }
+    const mealTypeParam = searchParams?.get('mealType');
+    if (mealTypeParam) {
+      setMealType(mealTypeParam);
     }
   }, [searchParams]);
 
