@@ -1,14 +1,14 @@
 import { connectMongoDB } from "@/config/db";
-import UsersModel from "@/models/Users";
+import UserModel from "@/models/User";
 
 const checkDuplicatedUser = async (email: string, username: string) => {
     connectMongoDB();
-    const sameEmail = await UsersModel.findOne({ email: email });
-    const sameUsername = await UsersModel.findOne({ username: username });
+    const sameEmail = await UserModel.findOne({ email: email });
+    const sameUsername = await UserModel.findOne({ username: username });
     if (!sameEmail && !sameUsername) {
         return { isDuplicatedUser: false, errorMessages: {} };
     }
-    const errorMessages = {};
+    const errorMessages: { email?: string, username?: string } = {};
     if (sameEmail) {
         errorMessages.email =
             "Already registered email. Please use another one.";

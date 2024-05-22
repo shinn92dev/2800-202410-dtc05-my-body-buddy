@@ -1,29 +1,33 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Board from "@/components/global/Board";
 import AskAiButton from "@/components/global/AskAiButton";
+import axios from 'axios';
+import { date } from 'zod';
 
 export default function DietHomeWrapper() {
-    const [breakfasts, setBreakfasts] = useState([
-        { name: 'Boiled egg', amount: '1 egg', calories: 150 },
-        { name: 'Corn soup', amount: '1 cup (180ml)', calories: 343 },
-    ]);
+    const [breakfasts, setBreakfasts] = useState([]);
+    const [lunches, setLunches] = useState([]);
+    const [dinners, setDinners] = useState([]);
+    const [snacks, setSnacks] = useState([]);
+    const [userId, setUserId] = useState(''); 
 
-    const [lunches, setLunches] = useState([
-        { name: 'Grilled chicken', amount: '200g', calories: 400 },
-        { name: 'Salad', amount: '1 bowl', calories: 150 },
-    ]);
+    useEffect(() => {
+        const fetchMeals = async () => {
+            const date = new Date().toISOString().split('T')[0]; // Get today's date
+            const response = await axios.get(`@/api/getMeals?userId=${userId}&date=${date}`);
+            const data = response.data;
+            setBreakfasts(data?.breakfast || []);
+            setLunches(data?.lunch || []);
+            setDinners(data?.dinner || []);
+            setSnacks(data?.snacks || []);
+        };
 
-    const [dinners, setDinners] = useState([
-        { name: 'Steak', amount: '300g', calories: 700 },
-        { name: 'Mashed potatoes', amount: '1 cup', calories: 250 },
-    ]);
-
-    const [snacks, setSnacks] = useState([
-        { name: 'Apple', amount: '1 medium', calories: 95 },
-        { name: 'Yogurt', amount: '1 cup', calories: 100 },
-    ]);
+        if (userId) {
+            fetchMeals();
+        }
+    }, [userId]);
 
     const handleEdit = (mealType: string, index: number) => {
         // Handle edit logic here
@@ -43,7 +47,7 @@ export default function DietHomeWrapper() {
 
     const handleAdd = (mealType: string) => {
         // Navigate to AddingItems page
-        window.location.href = `diet/add-items?mealType=${mealType}`;
+        window.location.href = `diet/add-meals?mealType=${mealType}`;
     };
 
     return (

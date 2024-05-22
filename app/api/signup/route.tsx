@@ -1,10 +1,10 @@
 import checkDuplicatedUser from "@/app/_helper/checkDuplicateUser";
 import validateUserInformation from "@/app/_helper/validateSignupInput";
-import UsersModel from "@/models/Users";
+import UserModel from "@/models/User";
 import { NextResponse } from "next/server";
 import { SignJWT } from "jose";
 const bcrypt = require("bcrypt");
-import { setCookie } from "cookie";
+import { setCookie } from "cookies-next";
 
 const secretKey = "secret";
 const key = new TextEncoder().encode(secretKey);
@@ -42,7 +42,7 @@ export async function POST(req: any) {
                 { status: 409 }
             );
         }
-        const newUser = new UsersModel({
+        const newUser = new UserModel({
             username: username,
             email: email,
             password: await bcrypt.hashSync(password, 10),

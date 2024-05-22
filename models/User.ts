@@ -25,8 +25,8 @@ const usersSchema = new mongoose.Schema({
     },
 });
 
-if (mongoose.models && mongoose.models["Users"]) {
-    delete mongoose.models["Users"];
+if (mongoose.models && mongoose.models["User"]) {
+    delete mongoose.models["User"];
 }
-const UsersModel = mongoose.model("Users", usersSchema);
-export default UsersModel;
+const UserModel = mongoose.model("User", usersSchema);
+export default UserModel;
