@@ -1,8 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import React, { useState, useEffect } from 'react';
 import CircleBar from "@/components/global/CircleBar";
 import Board from "@/components/global/Board";
+import AskAiButton from "@/components/global/AskAiButton";
 
 const defaultMenuForToday = [
     { "title": "Walking", "quantity": 45, "unit": "min", "kcalPerUnit": 3.5, "isCompleted": true },
@@ -45,7 +47,7 @@ export default function WorkoutHomeWrapper() {
         setTotalCaloriesOfAchieved(calculateTotalCalories(achieved));
         setAchievedItems(convertToItems(achieved));
         setMenuForTodayItems(convertToItems(menuForToday));
-    }, [achieved, menuForToday]);
+    }, [menuForToday, achieved]);
 
     const handleEditForAchieved = (index: number) => {
         // Handle edit logic here
@@ -78,18 +80,25 @@ export default function WorkoutHomeWrapper() {
     const handleToggleComplete = (index: number) => {
         setMenuForToday(prevMenu => {
             const newMenu = [...prevMenu];
-            newMenu[index].isCompleted = !newMenu[index].isCompleted;
+            const item = { ...newMenu[index] };
+            item.isCompleted = !item.isCompleted;
 
-            if (!newMenu[index].isCompleted) {
-                setAchieved([...achieved, newMenu[index]]);
-            } else {
-                setAchieved(achieved.filter(item => item.title !== newMenu[index].title));
-            }
-
-            // console.log(newMenu[index].isCompleted, newMenu[index].title, achieved)
-            console.log("setMenuForToday is called")
+            // Update the new menu
+            newMenu[index] = item;
 
             return newMenu;
+        });
+
+        // Update achieved state based on item completion status
+        setAchieved(prevAchieved => {
+            const item = menuForToday[index];
+            if (item.isCompleted) {
+                // Remove from achieved
+                return prevAchieved.filter(achievedItem => achievedItem.title !== item.title);
+            } else {
+                // Add to achieved
+                return [...prevAchieved, item];
+            }
         });
     };
 
@@ -139,12 +148,8 @@ export default function WorkoutHomeWrapper() {
                         ))}
                     </div>
                     <div className="flex justify-center mt-4">
-                        <button onClick={handleAskAI}
-                                className="px-4 py-2 bg-gray-500 text-white rounded-full flex items-center">
-                            <span>Ask AI for Alternative</span>
-                            <img src="/my_boddy_buddy_support_ai_logo.jpg" alt="AI Logo" className="ml-2" width={24}
-                                 height={24}/>
-                        </button>
+                        <AskAiButton forText={"Alternative"} icon={<Image src="/my_boddy_buddy_support_ai_logo.jpg" alt="AI Logo" className="ml-2" width={24}
+                                                                          height={24}/>} onClick={handleAskAI}/>
                     </div>
                 </div>
             </div>

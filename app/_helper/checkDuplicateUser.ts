@@ -8,7 +8,7 @@ const checkDuplicatedUser = async (email: string, username: string) => {
     if (!sameEmail && !sameUsername) {
         return { isDuplicatedUser: false, errorMessages: {} };
     }
-    const errorMessages = {};
+    const errorMessages: { email?: string, username?: string } = {};
     if (sameEmail) {
         errorMessages.email =
             "Already registered email. Please use another one.";
