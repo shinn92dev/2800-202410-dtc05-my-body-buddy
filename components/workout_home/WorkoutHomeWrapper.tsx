@@ -45,7 +45,7 @@ export default function WorkoutHomeWrapper() {
         setTotalCaloriesOfAchieved(calculateTotalCalories(achieved));
         setAchievedItems(convertToItems(achieved));
         setMenuForTodayItems(convertToItems(menuForToday));
-    }, [achieved, menuForToday]);
+    }, [menuForToday]);
 
     const handleEditForAchieved = (index: number) => {
         // Handle edit logic here
@@ -78,18 +78,25 @@ export default function WorkoutHomeWrapper() {
     const handleToggleComplete = (index: number) => {
         setMenuForToday(prevMenu => {
             const newMenu = [...prevMenu];
-            newMenu[index].isCompleted = !newMenu[index].isCompleted;
+            const item = { ...newMenu[index] };
+            item.isCompleted = !item.isCompleted;
 
-            if (!newMenu[index].isCompleted) {
-                setAchieved([...achieved, newMenu[index]]);
-            } else {
-                setAchieved(achieved.filter(item => item.title !== newMenu[index].title));
-            }
-
-            // console.log(newMenu[index].isCompleted, newMenu[index].title, achieved)
-            console.log("setMenuForToday is called")
+            // Update the new menu
+            newMenu[index] = item;
 
             return newMenu;
+        });
+
+        // Update achieved state based on item completion status
+        setAchieved(prevAchieved => {
+            const item = menuForToday[index];
+            if (item.isCompleted) {
+                // Remove from achieved
+                return prevAchieved.filter(achievedItem => achievedItem.title !== item.title);
+            } else {
+                // Add to achieved
+                return [...prevAchieved, item];
+            }
         });
     };
 
