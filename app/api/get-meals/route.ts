@@ -14,11 +14,7 @@ export async function GET(req: NextRequest) {
   await connectMongoDB();
 
   try {
-    const meals = await Meal.findOne({ userId, date: new Date(date) })
-      .populate('breakfast')
-      .populate('lunch')
-      .populate('dinner')
-      .populate('snacks');
+    const meals = await Meal.findOne({ userId, date: new Date(date) });
 
     if (!meals) {
       return NextResponse.json({ message: 'No meals found for the specified date and user' }, { status: 404 });

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectMongoDB } from '@/config/db';
 import Meal from '@/models/Meal';
-import MealItem from '@/models/MealItem';
 
 export async function POST(req: NextRequest) {
   await connectMongoDB();
@@ -13,15 +12,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: 'Missing required parameters' }, { status: 400 });
     }
 
-    const mealItems = await MealItem.insertMany(meals.map((meal: any) => ({
-      name: meal.name,
-      amount: meal.amount,
-      calories: meal.calories,
-    })));
-
     await Meal.updateOne(
       { userId, date: new Date(date) },
-      { $push: { [mealType]: { $each: mealItems.map(item => item._id) } } },
+      { $push: { [mealType]: { $each: meals } } },
       { upsert: true }
     );
 

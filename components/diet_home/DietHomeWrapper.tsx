@@ -20,7 +20,7 @@ const DietHomeWrapper: React.FC = () => {
 
     useEffect(() => {
         const fetchUserId = async () => {
-            const fetchedUserId = "664719634ee345ddb6962d13"; // temporary user ID 
+            const fetchedUserId = "664719634ee345ddb6962d13"; // Temporary user ID
             setUserId(fetchedUserId);
         };
 
@@ -29,37 +29,50 @@ const DietHomeWrapper: React.FC = () => {
 
     useEffect(() => {
         const fetchMeals = async () => {
+            if (!userId) return;
+            const date = new Date().toISOString().split('T')[0];
             try {
-                const date = new Date().toISOString().split('T')[0]; // Get today's date
                 const response = await axios.get(`/api/get-meals?userId=${userId}&date=${date}`);
                 const data = response.data;
-                setBreakfasts(data?.breakfast || []);
-                setLunches(data?.lunch || []);
-                setDinners(data?.dinner || []);
-                setSnacks(data?.snacks || []);
+                setBreakfasts(data.breakfast || []);
+                setLunches(data.lunch || []);
+                setDinners(data.dinner || []);
+                setSnacks(data.snacks || []);
             } catch (error) {
                 console.error('Error fetching meals:', error);
             }
         };
 
-        if (userId) {
-            fetchMeals();
-        }
+        fetchMeals();
     }, [userId]);
 
     const handleEdit = (mealType: string, index: number) => {
         // Handle edit logic here
     };
 
-    const handleDelete = (mealType: string, index: number) => {
-        if (mealType === 'breakfast') {
-            setBreakfasts(breakfasts.filter((_, i) => i !== index));
-        } else if (mealType === 'lunch') {
-            setLunches(lunches.filter((_, i) => i !== index));
-        } else if (mealType === 'dinner') {
-            setDinners(dinners.filter((_, i) => i !== index));
-        } else if (mealType === 'snack') {
-            setSnacks(snacks.filter((_, i) => i !== index));
+    const handleDelete = async (mealType: string, index: number) => {
+        try {
+            const date = new Date().toISOString().split('T')[0];
+            await axios.delete('/api/delete-meal', {
+                data: {
+                    userId,
+                    date,
+                    mealType,
+                    mealIndex: index,
+                },
+            });
+
+            if (mealType === 'breakfast') {
+                setBreakfasts(breakfasts.filter((_, i) => i !== index));
+            } else if (mealType === 'lunch') {
+                setLunches(lunches.filter((_, i) => i !== index));
+            } else if (mealType === 'dinner') {
+                setDinners(dinners.filter((_, i) => i !== index));
+            } else if (mealType === 'snack') {
+                setSnacks(snacks.filter((_, i) => i !== index));
+            }
+        } catch (error) {
+            console.error('Error deleting meal item:', error);
         }
     };
 
