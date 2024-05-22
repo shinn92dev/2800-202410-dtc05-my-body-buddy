@@ -6,7 +6,7 @@ import Modal from "@/components/global/Modal";
 import PolicyContent from "@/components/global/PolicyContent";
 import GoogleIcon from "@/components/global/icons/GoogleIcon";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import getTestUser from "@/app/_helper/testUser";
 import SignupForm from "@/app/ui/signup-form";
 

@@ -3,155 +3,123 @@
 import React from "react";
 import InputBox from "@/components/global/InputBox";
 import SignUpAndInIcon from "@/components/global/icons/SignUpAndInIcon";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+import * as yup from "yup";
+import { useSignUp } from "@clerk/nextjs";
+
+type newUserInputs = {
+    email: string;
+    username: string;
+    password: string;
+};
+const validationSchema = yup.object({
+    email: yup
+        .string()
+        .email("Invalid email format")
+        .required("Email is required"),
+    username: yup
+        .string()
+        .min(5, "Username must be at least 5 characters")
+        .max(20, "Username must be less than 20 characters")
+        .required("Username is required"),
+    password: yup
+        .string()
+        .min(6, "Password must be at least 6 characters")
+        .matches(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+            "Password must contain uppercase, lowercase, number and special symbol"
+        ),
+});
 
 export default function SignupForm() {
     // const [state, action] = useActionState(signup, undefined);
-    const router = useRouter();
-    const [email, setEmail] = useState("");
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [securityQuestion, setSecurityQuestion] = useState("");
-    const [securityAnswer, setSecurityAnswer] = useState("");
-    const [errors, setErrors] = useState(null);
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const { signUp } = useSignUp();
+
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors },
+    } = useForm<newUserInputs>({ resolver: yupResolver(validationSchema) });
+
+    const onSubmit: SubmitHandler<newUserInputs> = async (
+        data: newUserInputs
+    ) => {
+        console.log(data);
+        // const { email, username, password } = data;
         try {
-            const res = await fetch("api/signup", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    email,
-                    username,
-                    password,
-                    securityQuestion,
-                    securityAnswer,
-                }),
+            const signUpResult = await signUp?.create({
+                emailAddress: data.email,
+                username: data.username,
+                password: data.password,
             });
-            if (res.ok) {
-                const form = e.target;
-                form.reset();
-                router.push("/");
-            } else {
-                const data = await res.json();
-                console.log(data.message.name);
-                if (data.message.name === "ZodError") {
-                    const newError = {};
-                    for (let i = 0; i < data.message.issues.length; i++) {
-                        const error = data.message.issues[i];
-                        const path = error.path[0];
-                        const message = error.message;
-                        if (!newError[path]) {
-                            newError[path] = message;
-                        } else {
-                            continue;
-                        }
-                    }
-                    console.log(newError);
-                    setErrors(newError);
-                } else {
-                    setErrors(data.message);
-                }
-                console.log(errors);
+            if (signUpResult.status === "complete") {
             }
+            console.log("User Info: ", signUpResult);
         } catch (error) {
-            console.error(error);
+            console.log("Error: ", error);
         }
     };
-    return (
-        <form
-            className="mx-auto max-w-xs"
-            onSubmit={handleSubmit}
-            method="post"
-        >
-            <InputBox
-                labelText="Email"
-                id="email"
-                hidden={true}
-                type="email"
-                placeholder="Email"
-                isTop={true}
-                onChangeFn={(e) => setEmail(e.target.value)}
-            />
-            {/* {state?.errors?.email && (
-                <p className="text-red-700">{`⚠️${state.errors.email}`}</p>
-            )} */}
-            {errors && (
-                <p className="text-red-700">
-                    {errors.email && `⚠️${errors.email}`}
-                </p>
-            )}
-            {/* Username */}
 
-            <InputBox
-                labelText="Username"
-                id="username"
-                hidden={true}
-                type="text"
-                placeholder="Username"
-                isTop={false}
-                onChangeFn={(e) => setUsername(e.target.value)}
-            />
-            {errors && (
-                <p className="text-red-700">
-                    {errors.username && `⚠️${errors.username}`}
-                </p>
-            )}
-            <InputBox
-                labelText="Password"
-                id="password"
-                hidden={true}
-                type="password"
-                placeholder="Password"
-                isTop={false}
-                onChangeFn={(e) => setPassword(e.target.value)}
-            />
-            {errors && (
-                <p className="text-red-700">
-                    {errors.password && `⚠️${errors.password}`}
-                </p>
-            )}
-            <InputBox
-                labelText="Security Question"
-                id="security-question"
-                hidden={true}
-                type="text"
-                placeholder="Your security question"
-                isTop={false}
-                onChangeFn={(e) => setSecurityQuestion(e.target.value)}
-            />
-            {errors && (
-                <p className="text-red-700">
-                    {errors.securityQuestion && `⚠️${errors.securityQuestion}`}
-                </p>
-            )}
-            <InputBox
-                labelText="Security Answer"
-                id="security-answer"
-                hidden={true}
-                type="text"
-                placeholder="answer"
-                isTop={false}
-                onChangeFn={(e) => setSecurityAnswer(e.target.value)}
-            />
-            {errors && (
-                <p className="text-red-700">
-                    {errors.securityAnswer && `⚠️${errors.securityAnswer}`}
-                </p>
-            )}
-            <p className="mt-6 text-xs text-gray-600 text-center">
-                I agree to abide by My Body Buddy&apos;s&nbsp;
-                <button
-                    className="border-b border-gray-500 border-dotted"
-                    type="button"
-                    // onClick={handlePolicyClick}
-                >
-                    Terms of Service and privacy Policy
-                </button>
-            </p>
+    console.log(watch("email"));
+    console.log(watch("username"));
+
+    return (
+        <form className="mx-auto max-w-xs" onSubmit={handleSubmit(onSubmit)}>
+            <div className="">
+                <label htmlFor="email" className="hidden">
+                    Email
+                </label>
+                <input
+                    className="w-full px-8 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    type="email"
+                    placeholder="Email"
+                    id="email"
+                    {...register("email", { required: true })}
+                />
+                {errors.email && (
+                    <span className="text-red-500 text-sm">
+                        {errors.email.message}
+                    </span>
+                )}
+            </div>
+            <div className="mt-2">
+                <label htmlFor="username" className="hidden">
+                    Username
+                </label>
+                <input
+                    className="w-full px-8 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    type="text"
+                    placeholder="Username"
+                    id="username"
+                    {...register("username", { required: true })}
+                />
+                {errors.username && (
+                    <span className="text-red-500 text-sm">
+                        {errors.username.message}
+                    </span>
+                )}
+            </div>
+            <div className="mt-2">
+                <label htmlFor="password" className="hidden">
+                    Password
+                </label>
+                <input
+                    className="w-full px-8 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    type="password"
+                    placeholder="Username"
+                    id="password"
+                    {...register("password", { required: true })}
+                />
+                {errors.password && (
+                    <span className="text-red-500 text-sm">
+                        {errors.password.message}
+                    </span>
+                )}
+            </div>
+
             <button
                 className="mt-2 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
                 type="submit"
@@ -169,16 +137,8 @@ export default function SignupForm() {
                                                 <circle cx="8.5" cy="7" r="4" />
                                                 <path d="M20 8v6M23 11h-6" />
                                             </svg> */}
-                <span className="ml-3">Go to Next Step</span>
+                <span className="ml-3">Submit</span>
             </button>
         </form>
-        // <form onSubmit={handleSubmit(onSubmit)}>
-        //     <input {...register("firstName", { required: true })} />
-        //     {errors.firstName && <span>This field is required</span>}
-
-        //     <input {...register("lastName")} />
-
-        //     <button type="submit">Submit</button>
-        // </form>
     );
 }
