@@ -39,7 +39,7 @@ const TopCalendar: React.FC<TopCalendarProps> = ({ onDateSelect }) => {
     };
 
     return (
-        <div className="bg-gray-200">
+        <div className="bg-orange">
             <div className="flex flex-col items-center">
                 <div className="text-base font-semibold text-gray-700">{currentMonth}</div>
                 <div className="flex items-center justify-between w-full px-2 py-2">
@@ -55,7 +55,7 @@ const TopCalendar: React.FC<TopCalendarProps> = ({ onDateSelect }) => {
                                 key={date.toISOString()}
                                 className={`flex flex-col items-center justify-center w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 rounded-full cursor-pointer
                                     ${selectedDate.toDateString() === date.toDateString()
-                                        ? 'bg-orange-500 text-white'
+                                        ? 'bg-dark-blue text-white'
                                         : 'bg-white text-gray-800 border border-gray-300'
                                     }`}
                                 onClick={() => handleDateClick(date)}
