@@ -3,13 +3,42 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SignOutButton from "./signOutButton";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 export default function Navigation() {
   const path = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const toggleHBGmenu = () => setIsOpen(!isOpen);
-  console.log(path);
+
+  const [isHide, setIsHide] = useState(false);
+  const [isDance, setIsDance] = useState(false);
+  const [isPing, setIsPing] = useState(false);
+  const [isBounce, setIsBounce] = useState(false);
+
+  const clickCountRef = useRef(0);
+  const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleLogoClick = () => {
+    clickCountRef.current += 1;
+
+    if (clickTimeoutRef.current) {
+      clearTimeout(clickTimeoutRef.current);
+    }
+
+    clickTimeoutRef.current = setTimeout(() => {
+      if (clickCountRef.current === 1) {
+        setIsBounce(true);
+        setIsHide(true);
+      } else if (clickCountRef.current === 2) {
+        setIsDance(true);
+        setIsHide(true);
+      } else if (clickCountRef.current === 3) {
+        setIsPing(true);
+        setIsHide(true);
+      }
+      clickCountRef.current = 0;
+    }, 250);
+  };
 
   const tempUserId = "domingo4";
 
@@ -71,7 +100,18 @@ export default function Navigation() {
           <img
             src="/my_body_buddy_logo_transparent.png"
             alt="logo"
-            className="h-20 w-20 mx-auto"
+            onClick={handleLogoClick}
+            className={`h-20 w-20 mx-auto ${isHide ? "hidden" : ""}`}
+          />
+          <img
+            src="/person_only_transparent.png"
+            alt="person only logo"
+            onClick={handleLogoClick}
+            className={`h-20 w-20 mx-auto ${isHide ? "block" : "hidden"} ${
+              isDance ? "animate-spin" : ""
+            } ${isPing ? "animate-ping" : ""} ${
+              isBounce ? "animate-bounce" : ""
+            }`}
           />
         </Link>
       </div>
