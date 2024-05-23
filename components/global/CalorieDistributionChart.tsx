@@ -42,7 +42,7 @@ const CalorieDistributionChart: React.FC<CalorieDistributionChartProps> = ({
                     snackCalories,
                     remainingCalories > 0 ? remainingCalories : 0,
                 ],
-                backgroundColor: ['#525FE1', '#FFA41B', '#EE752F', '#F86F03', 'darkgray'],
+                backgroundColor: ['#525FE1', '#FFA41B', '#EE752F', '#F86F03', 'lightgray'],
                 hoverBackgroundColor: ['#3B4CC0', '#FF8C00', '#CC5F23', '#D85D00', '#FFF6F4'],
                 borderColor: '#FFF6F4',
             },

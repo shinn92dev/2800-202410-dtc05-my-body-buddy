@@ -94,7 +94,7 @@ const DietHomeWrapper: React.FC = () => {
   const totalCalories = (meals: Meal[]) => meals.reduce((sum, meal) => sum + meal.calories, 0);
 
   return (
-    <div className="bg-beige min-h-screen p-4">
+    <div className="bg-white min-h-screen p-4">
       <h1 className="text-3xl font-bold flex flex-col items-center p-2 m-2">
         Diet Management Plan
       </h1>
