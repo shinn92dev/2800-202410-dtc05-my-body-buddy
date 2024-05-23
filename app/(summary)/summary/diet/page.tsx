@@ -27,6 +27,7 @@ export default function DietSummary() {
     const [meals, setMeals] = useState<MealsData | null>(null);
     const userId = "664719634ee345ddb6962d13"; // Replace with actual user ID
     const [date, setDate] = useState<string>("2024-05-23"); // Replace with actual date
+    const [errorStatus, setErrorStatus] = useState<number | null>(null); // Track error status
 
     useEffect(() => {
         const fetchMeals = async () => {
@@ -35,8 +36,14 @@ export default function DietSummary() {
                     params: { userId, date }
                 });
                 setMeals(response.data);
+                setErrorStatus(null);
             } catch (error) {
                 console.error("Error fetching meals:", error);
+                if (error.response) {
+                    setErrorStatus(error.response.status);
+                } else {
+                    setErrorStatus(500);
+                }
             }
         };
 
@@ -44,6 +51,9 @@ export default function DietSummary() {
     }, [userId, date]);
 
     const calculateCalories = (mealType: keyof MealsData) => {
+        if (errorStatus === 404) {
+            return 0;
+        }
         if (!meals || !meals[mealType]) return 0;
         return meals[mealType].reduce((total, item) => total + item.calories, 0);
     };

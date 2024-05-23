@@ -1,5 +1,5 @@
-// app/(summary)/summary/diet/layout.tsx
 import { ReactNode } from 'react';
+import Head from 'next/head'; 
 import { metadata } from './diet-metadata';
 
 interface DietLayoutProps {
@@ -8,13 +8,12 @@ interface DietLayoutProps {
 
 export default function DietLayout({ children }: DietLayoutProps) {
     return (
-        <html>
-            <head>
+        <div>
+            <Head>
                 <title>{metadata.title}</title>
-            </head>
-            <body>
-                {children}
-            </body>
-        </html>
+            </Head>
+            {children}
+        </div>
     );
 }
+
