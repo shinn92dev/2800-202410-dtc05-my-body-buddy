@@ -166,13 +166,15 @@ const PreferencesForm: React.FC<PreferencesFormProps> = ({ onSubmit }) => {
                     onToggleTag={handleTogglePreference}
                 />
             </div>
-            <button
-                onClick={handleSubmit}
-                className={`bg-orange text-white p-2 rounded w-full ${customServingsError ? 'opacity-50 cursor-not-allowed' : ''}`}
-                disabled={!!customServingsError}
-            >
-                Generate Menu
-            </button>
+            <div className="flex justify-center border-t pt-2">
+                <button
+                    onClick={handleSubmit}
+                    className={`px-4 py-2 bg-dark-blue text-white rounded-full ${customServingsError ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    disabled={!!customServingsError}
+                >
+                    Generate Menu
+                </button>
+            </div>
         </div>
     );
 };
