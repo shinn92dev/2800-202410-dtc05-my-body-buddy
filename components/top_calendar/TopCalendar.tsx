@@ -1,22 +1,33 @@
 "use client";
 
-import React, { useState } from 'react';
-import { format, addDays, startOfWeek, startOfMonth, getMonth, getYear } from 'date-fns';
+import React, { useState } from "react";
+import {
+    format,
+    addDays,
+    startOfWeek,
+    startOfMonth,
+    getMonth,
+    getYear,
+} from "date-fns";
 
-const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 // Define the top calendar component as a React functional component
 const TopCalendar: React.FC = () => {
     // Define the current week state and its setter
-    const [currentWeek, setCurrentWeek] = useState<Date>(startOfWeek(new Date()));
+    const [currentWeek, setCurrentWeek] = useState<Date>(
+        startOfWeek(new Date())
+    );
 
     // Generate an array of dates for the current week
     const getWeekDates = (): Date[] => {
-        return Array.from({ length: 7 }, (_, index) => addDays(currentWeek, index));
+        return Array.from({ length: 7 }, (_, index) =>
+            addDays(currentWeek, index)
+        );
     };
 
     // Get the current month and year
-    const currentMonth = format(startOfMonth(currentWeek), 'MMMM yyyy');
+    const currentMonth = format(startOfMonth(currentWeek), "MMMM yyyy");
 
     // Move to the previous week
     const handlePreviousWeek = (): void => {
@@ -34,11 +45,13 @@ const TopCalendar: React.FC = () => {
 
     // Define the selected date state and its setter
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-
+    console.log(selectedDate);
     return (
         <div className="bg-gray-200">
             <div className="flex flex-col items-center">
-                <div className="text-base font-semibold text-gray-700">{currentMonth}</div>
+                <div className="text-base font-semibold text-gray-700">
+                    {currentMonth}
+                </div>
                 <div className="flex items-center justify-between w-full px-2 py-2">
                     <button
                         onClick={handlePreviousWeek}
@@ -51,14 +64,20 @@ const TopCalendar: React.FC = () => {
                             <div
                                 key={date.toISOString()}
                                 className={`flex flex-col items-center justify-center w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 rounded-full cursor-pointer
-                                    ${selectedDate.toDateString() === date.toDateString()
-                                        ? 'bg-orange-500 text-white'
-                                        : 'bg-white text-gray-800 border border-gray-300'
+                                    ${
+                                        selectedDate.toDateString() ===
+                                        date.toDateString()
+                                            ? "bg-orange-500 text-white"
+                                            : "bg-white text-gray-800 border border-gray-300"
                                     }`}
                                 onClick={() => setSelectedDate(date)}
                             >
-                                <div className="text-sm sm:text-md lg:text-lg font-bold">{format(date, 'd')}</div>
-                                <div className="text-xs sm:text-sm">{daysOfWeek[date.getDay()].slice(0, 3)}</div>
+                                <div className="text-sm sm:text-md lg:text-lg font-bold">
+                                    {format(date, "d")}
+                                </div>
+                                <div className="text-xs sm:text-sm">
+                                    {daysOfWeek[date.getDay()].slice(0, 3)}
+                                </div>
                             </div>
                         ))}
                     </div>
