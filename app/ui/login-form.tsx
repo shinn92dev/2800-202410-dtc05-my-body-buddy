@@ -26,7 +26,7 @@ const routeLoginPostUser = async (userData) => {
             throw new Error("Not OK");
         }
         const data = await response.json();
-        window.location.href = "/";
+        window.location.href = "/summary/diet";
         return data;
     } catch (error) {
         console.error(error);
