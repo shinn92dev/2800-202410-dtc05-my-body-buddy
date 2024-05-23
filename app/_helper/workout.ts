@@ -36,3 +36,21 @@ export const saveWorkoutMongoDB = async (
         }
     }
 };
+
+export const retrieveWorkout = async (username: string) => {
+    try {
+        const workoutForCurrentUser = await WorkoutModel.findOne({
+            username: username,
+        });
+        console.log(
+            "Workout for current user retrieved successfully for ",
+            username,
+            ": "
+        );
+        console.log(workoutForCurrentUser);
+        return workoutForCurrentUser;
+    } catch (error) {
+        console.log("Error while retrieving workout");
+        return null;
+    }
+};
