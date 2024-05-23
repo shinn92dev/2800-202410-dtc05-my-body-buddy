@@ -15,7 +15,7 @@ const BarGraph: React.FC<BarGraphProps> = ({ label, value, maxValue }) => {
                 <span className="font-semibold">{value}kcal</span>
             </div>
             <div className="w-full bg-gray-300 h-6 rounded">
-                <div className="bg-orange-500 h-full rounded" style={{width: `${percentage}%`}}></div>
+                <div className="bg-orange h-full rounded" style={{width: `${percentage}%`}}></div>
             </div>
         </div>
     );
