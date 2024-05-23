@@ -27,7 +27,7 @@ const CircleBar: React.FC<CircleBarProps> = ({ title, subtitle, percent }) => {
                     cy="50%"
                 />
                 <circle
-                    className="text-black"
+                    className="text-dark-blue"
                     strokeWidth="10"
                     strokeLinecap="round"
                     stroke="currentColor"
