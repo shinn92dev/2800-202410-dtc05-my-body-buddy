@@ -13,13 +13,20 @@ export const metadata = {
 
 // Rendering client components with server components
 export default async function WorkoutPage() {
-    const data = await retrieveWorkout("johndoe123");
-    console.log("!!!", data);
-    console.log(filterWorkoutsByAchievement(new Date(), data?.workouts));
+    const data = await retrieveWorkout("john.doe");
+    const filteredData = filterWorkoutsByAchievement(
+        new Date(),
+        data?.workouts
+    );
+    const finalData = [...filteredData?.achieved, ...filteredData?.onGoing];
+
+    console.log("OUTPUT FROM PAGE: ", finalData);
+    const stringData = JSON.stringify(finalData);
+    // console.log(stringData);
     return (
         <div className="flex flex-col w-full">
             <TopCalendar />
-            <WorkoutHomeWrapper />
+            <WorkoutHomeWrapper data={stringData} />
         </div>
     );
 }

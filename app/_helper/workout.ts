@@ -6,6 +6,7 @@ type DetailedWorkoutDataType = {
     workoutDetail: [
         {
             title: string;
+            cals: number;
             unit: string;
             count: number;
             achieved: boolean;
@@ -61,9 +62,12 @@ export const updateWorkoutMongoDB = async (
 export const retrieveWorkout = async (username: string) => {
     try {
         await connectMongoDB();
-        const workoutForCurrentUser = await WorkoutModel.findOne({
-            username: username,
-        });
+        const workoutForCurrentUser = await WorkoutModel.findOne(
+            {
+                username: username,
+            },
+            { _id: 0 }
+        );
         console.log(
             "Workout for current user retrieved successfully for ",
             username,
@@ -99,7 +103,7 @@ export const filterWorkoutsByAchievement = (date: Date, workoutDetail: any) => {
     const filterYear = date.getFullYear();
     const filterMonth = date.getMonth();
     const filterDay = date.getDate();
-    console.log("CHECK HERE NOW:", specificDayWorkout);
+    console.log("OUTPUT FROM FILTER:", specificDayWorkout);
     const workoutYear = specificDayWorkout?.date.getFullYear();
     const workoutMonth = specificDayWorkout?.date.getMonth();
     const workoutDay = specificDayWorkout?.date.getDate();
@@ -121,6 +125,7 @@ export const filterWorkoutsByAchievement = (date: Date, workoutDetail: any) => {
         const onGoingWorkouts = specificDayWorkout.workoutDetail.filter(
             (workout) => !workout.achieved
         );
+        console.log("FILTER FUNCTION DONE!");
         return { achieved: achievedWorkouts, onGoing: onGoingWorkouts };
     } else {
         console.log(`Cannot find workout for ${date}`);

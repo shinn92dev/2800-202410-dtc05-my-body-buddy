@@ -18,6 +18,10 @@ const workoutSchema = new mongoose.Schema({
                         type: String,
                         required: true,
                     },
+                    cals: {
+                        type: Number,
+                        required: true,
+                    },
                     unit: {
                         type: String,
                         required: true,
