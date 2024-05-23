@@ -15,8 +15,20 @@ type WorkoutDataType = {
     workout: DetailedWorkoutDataType[];
 };
 
+export const saveNewUserWorkoutMongoDB = async (
+    workoutData: WorkoutDataType
+) => {
+    try {
+        const newUserWorkout = new WorkoutModel(workoutData);
+        await newUserWorkout.save();
+        console.log("WOrkout for new user saved successfully");
+    } catch (error) {
+        console.log("Error while saving new user workout data: ", error);
+    }
+};
+
 // newWorkoutData must be type of DetailedWorkoutDataType
-export const saveWorkoutMongoDB = async (
+export const updateWorkoutMongoDB = async (
     username: string,
     newWorkoutData: DetailedWorkoutDataType
 ) => {
@@ -29,7 +41,11 @@ export const saveWorkoutMongoDB = async (
                 },
                 { $push: { workout: newWorkoutData } }
             );
-            console.log("New workout saved successfully for ", username, ": ");
+            console.log(
+                "New workout updated successfully for ",
+                username,
+                ": "
+            );
             console.log(currentUser);
         } catch (error) {
             console.log("Error while saving workout data");
