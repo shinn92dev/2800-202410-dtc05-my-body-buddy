@@ -107,7 +107,7 @@ export default function WorkoutHomeWrapper() {
     };
 
     return (
-        <div className="p-4 items-center">
+        <div className="p-4 items-center bg-beige">
             <h1 className="text-center text-2xl font-bold">Your Progress</h1>
             <div className="flex justify-center mt-4">
                 <CircleBar title={totalCaloriesOfAchieved + " kcal"}

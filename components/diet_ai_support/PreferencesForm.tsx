@@ -68,7 +68,7 @@ const PreferencesForm: React.FC<PreferencesFormProps> = ({ onSubmit }) => {
     };
 
     return (
-        <div className="p-4 rounded-lg w-full max-w-lg mt-2" style={{background: '#d2fdff'}}>
+        <div className="p-4 rounded-lg w-full max-w-lg mt-2 bg-beige">
             <div className="mb-4">
                 <h2 className="text-lg font-bold py-1 mt-1">How Many Servings?</h2>
                 <div className="mb-2">
