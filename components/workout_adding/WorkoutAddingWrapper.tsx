@@ -99,7 +99,7 @@ export default function WorkoutAddingWrapper() {
                         <button
                             key={index}
                             onClick={() => handleCategoryClick(category.name)}
-                            className={`relative border border-gray-500 ${selectedCategory === category.name ? "bg-gray-500" : "bg-white"} h-auto`}
+                            className={`relative border border-gray-500 ${selectedCategory === category.name ? "bg-dark-blue" : "bg-white"} h-auto`}
                         >
                             <Image
                                 src={selectedCategory === category.name ? category.image_selected : category.image}
@@ -162,7 +162,7 @@ export default function WorkoutAddingWrapper() {
                 <div className="flex justify-center mt-4">
                     <button
                         onClick={handleAddSelectedItems}
-                        className={`px-4 py-2 ${selectedItems.length === 0 ? "bg-gray-500 text-white opacity-30" : "bg-gray-500 text-white"} rounded`}
+                        className={`px-4 py-2 bg-dark-blue text-white ${selectedItems.length === 0 ? "opacity-30" : ""} rounded`}
                         disabled={selectedItems.length === 0}
                     >
                         Add Selected Items

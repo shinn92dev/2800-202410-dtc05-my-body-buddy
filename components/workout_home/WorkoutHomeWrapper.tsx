@@ -140,7 +140,7 @@ export default function WorkoutHomeWrapper() {
                                 <div className="flex items-center">
                                     <span className="text-lg font-semibold mr-4">{item.calories} kcal</span>
                                     <button onClick={() => handleToggleComplete(index)}
-                                            className={`px-4 py-2 rounded-full ${item.isCompleted ? 'bg-white text-gray-500 border' : 'bg-gray-500 text-white'}`}>
+                                            className={`px-4 py-2 rounded-full ${item.isCompleted ? 'bg-white text-gray-500 border' : 'bg-dark-blue text-white'}`}>
                                         {item.isCompleted ? 'Undo' : 'Done'}
                                     </button>
                                 </div>
