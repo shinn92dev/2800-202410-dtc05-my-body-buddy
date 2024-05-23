@@ -12,8 +12,10 @@ export default function Navigation() {
   const toggleHBGmenu = () => setIsOpen(!isOpen);
   console.log(path);
 
+  const tempUserId = "domingo4";
+
   return (
-    <nav className="flex items-center justify-between">
+    <nav className="flex items-center justify-between px-4">
       <button
         className="block ml-4"
         onClick={toggleHBGmenu}
@@ -61,18 +63,18 @@ export default function Navigation() {
             Profile
           </li>
         </Link>
+
+        <SignOutButton />
       </ul>
 
-      <Link href="/">
-        <img
-          src="/my_body_buddy_logo_transparent.png"
-          alt="logo"
-          className="h-20 w-20"
-        />
-      </Link>
-
-      <div className="mr-5">
-        <UserButton />
+      <div className="flex-grow text-center">
+        <Link href="/">
+          <img
+            src="/my_body_buddy_logo_transparent.png"
+            alt="logo"
+            className="h-20 w-20 mx-auto"
+          />
+        </Link>
       </div>
     </nav>
   );

@@ -11,9 +11,9 @@ export default function NavigationBeforeAuth() {
   console.log(path);
 
   return (
-    <nav className="flex items-center">
+    <nav className="flex items-center justify-between px-4">
       <button
-        className="block ml-4"
+        className="block"
         onClick={toggleHBGmenu}
         aria-label="Toggle menu"
       >
@@ -71,13 +71,16 @@ export default function NavigationBeforeAuth() {
           </Link>
         </li>
       </ul>
-      <Link className="absolute right-1/2" href="/">
-        <img
-          src="/my_body_buddy_logo_transparent.png"
-          alt="logo"
-          className="h-20 w-20"
-        />
-      </Link>
+
+      <div className="flex-grow text-center">
+        <Link href="/">
+          <img
+            src="/my_body_buddy_logo_transparent.png"
+            alt="logo"
+            className="h-20 w-20 mx-auto"
+          />
+        </Link>
+      </div>
     </nav>
   );
 }
