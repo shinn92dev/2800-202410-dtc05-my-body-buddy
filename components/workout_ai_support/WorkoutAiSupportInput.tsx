@@ -114,7 +114,7 @@ export default function WorkoutAiSupportInput({ onGenerateAlternative }: Workout
                 {generated ? (
                     <div className="flex flex-wrap gap-2 mb-2">
                         {selectedTagTitles.map((tag, index) => (
-                            <span key={index} className="px-2 py-1 rounded border bg-gray-500 text-white">
+                            <span key={index} className="px-2 py-1 rounded border bg-dark-blue text-white">
                                 {tag}
                             </span>
                         ))}
