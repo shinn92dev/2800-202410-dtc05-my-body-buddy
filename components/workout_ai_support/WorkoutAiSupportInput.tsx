@@ -126,7 +126,7 @@ export default function WorkoutAiSupportInput({ onGenerateAlternative }: Workout
                     <div className="flex justify-center border-t pt-2">
                         <button
                             onClick={handleGenerateAlternative}
-                            className="px-4 py-2 bg-gray-500 text-white rounded-full"
+                            className="px-4 py-2 bg-dark-blue text-white rounded-full"
                         >
                             Generate Alternative
                         </button>

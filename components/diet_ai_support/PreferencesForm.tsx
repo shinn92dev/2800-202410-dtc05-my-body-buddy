@@ -68,9 +68,9 @@ const PreferencesForm: React.FC<PreferencesFormProps> = ({ onSubmit }) => {
     };
 
     return (
-        <div className="p-4 border rounded-lg w-full max-w-lg">
+        <div className="p-4 rounded-lg w-full max-w-lg mt-2" style={{background: '#d2fdff'}}>
             <div className="mb-4">
-                <label className="block mb-2 font-bold">How many servings?</label>
+                <h2 className="text-lg font-bold py-1 mt-1">How Many Servings?</h2>
                 <div className="mb-2">
                     <label className="block">
                         <input
@@ -126,7 +126,7 @@ const PreferencesForm: React.FC<PreferencesFormProps> = ({ onSubmit }) => {
                 </div>
             </div>
             <div className="mb-4">
-                <label className="block mb-2 font-bold">Ingredients to include</label>
+                <h2 className="text-lg font-bold border-t py-1 mt-1">Ingredients to Include:</h2>
                 <div className="flex mb-2">
                     <input
                         type="text"
@@ -158,7 +158,7 @@ const PreferencesForm: React.FC<PreferencesFormProps> = ({ onSubmit }) => {
                 </ul>
             </div>
             <div className="mb-4">
-                <label className="block mb-2 font-bold">Other Preferences</label>
+                <h2 className="text-lg font-bold border-t py-1 mt-1">Other Preferences:</h2>
                 <TagsWithAddingField
                     defaultTags={defaultPreferences}
                     inputFieldPlaceHolder="Add other preference"
