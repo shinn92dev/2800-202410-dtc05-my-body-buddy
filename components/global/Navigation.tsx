@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SignOutButton from "./signOutButton";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { getCurrentUserInformationFromMondoDB } from "@/app/_helper/getCurrentUserInformation";
 
 export default function Navigation() {
   const path = usePathname();
@@ -13,9 +14,22 @@ export default function Navigation() {
   const [isHide, setIsHide] = useState(false);
   const [isDance, setIsDance] = useState(false);
   const [isBounce, setIsBounce] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
   const clickCountRef = useRef(0);
   const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // const currentUserId = await getCurrentUserInformationFromMondoDB().username;
+
+  useEffect(() => {
+    async function fetchUser() {
+      const userData = await getCurrentUserInformationFromMondoDB();
+      if (userData) {
+        setCurrentUserId(userData.username);
+      }
+    }
+    fetchUser();
+  }, []);
 
   const handleLogoClick = () => {
     clickCountRef.current += 1;
@@ -43,8 +57,6 @@ export default function Navigation() {
       clickCountRef.current = 0;
     }, 250);
   };
-
-  const tempUserId = "domingo4";
 
   return (
     <nav className="flex items-center justify-between px-4">
@@ -84,10 +96,10 @@ export default function Navigation() {
           </svg>
         </button>
 
-        <Link href={`/user/${tempUserId}`} onClick={toggleHBGmenu}>
+        <Link href={`/user/${currentUserId}`} onClick={toggleHBGmenu}>
           <li
             className={`text-white text-center font-bold py-2 px-4 rounded-full m-2 ${
-              path === `/user/${tempUserId}`
+              path === `/user/${currentUserId}`
                 ? "bg-blue-500 hover:bg-blue-700"
                 : "bg-gray-500 hover:bg-gray-700"
             }`}
