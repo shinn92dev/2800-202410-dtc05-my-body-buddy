@@ -6,46 +6,22 @@ import CircleBar from "@/components/global/CircleBar";
 import Board from "@/components/global/Board";
 import AskAiButton from "@/components/global/AskAiButton";
 
-const defaultMenuForToday = [
-    {
-        title: "Walking",
-        quantity: 45,
-        unit: "min",
-        kcalPerUnit: 3.5,
-        isCompleted: true,
-    },
-    {
-        title: "Push-ups",
-        quantity: 50,
-        unit: "reps",
-        kcalPerUnit: 0.32,
-        isCompleted: true,
-    },
-    {
-        title: "Crunches",
-        quantity: 50,
-        unit: "reps",
-        kcalPerUnit: 0.16,
-        isCompleted: false,
-    },
-    {
-        title: "Cycling",
-        quantity: 4,
-        unit: "km",
-        kcalPerUnit: 30,
-        isCompleted: false,
-    },
-];
-
 const defaultAchieved = [
     { title: "Walking", quantity: 45, unit: "min", kcalPerUnit: 3.5 },
     { title: "Push-ups", quantity: 50, unit: "reps", kcalPerUnit: 0.32 },
 ];
 
-export default function WorkoutHomeWrapper({ data }: { data: any }) {
-    const parsedData = JSON.parse(data);
-    const [menuForToday, setMenuForToday] = useState(parsedData);
-    const [achieved, setAchieved] = useState(defaultAchieved);
+export default function WorkoutHomeWrapper({
+    totalWorkoutData,
+    achievedWorkoutData,
+}: {
+    totalWorkoutData: any;
+    achievedWorkoutData: any;
+}) {
+    const parsedTotalWorkoutData = JSON.parse(totalWorkoutData);
+    const parsedAchievedWorkoutData = JSON.parse(achievedWorkoutData);
+    const [menuForToday, setMenuForToday] = useState(parsedTotalWorkoutData);
+    const [achieved, setAchieved] = useState(parsedAchievedWorkoutData);
 
     const calculateTotalCalories = (
         items: { quantity: number; kcalPerUnit: number }[]
@@ -64,10 +40,10 @@ export default function WorkoutHomeWrapper({ data }: { data: any }) {
     const convertToItems = (
         items: {
             title: string;
-            quantity: number;
+            count: number;
             unit: string;
-            kcalPerUnit: number;
-            isCompleted?: boolean;
+            cals: number;
+            achieved?: boolean;
         }[]
     ) => {
         return items.map((item) => {
@@ -75,8 +51,8 @@ export default function WorkoutHomeWrapper({ data }: { data: any }) {
                 name: item.title,
                 amount: item.count + " " + item.unit,
                 calories: item.count * item.cals,
-                ...(item.isCompleted !== undefined && {
-                    isCompleted: item.isCompleted,
+                ...(item.achieved !== undefined && {
+                    isCompleted: item.achieved,
                 }),
             };
         });

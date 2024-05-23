@@ -21,12 +21,16 @@ export default async function WorkoutPage() {
     const finalData = [...filteredData?.achieved, ...filteredData?.onGoing];
 
     console.log("OUTPUT FROM PAGE: ", finalData);
-    const stringData = JSON.stringify(finalData);
-    // console.log(stringData);
+    const totalStringWorkoutData = JSON.stringify(finalData);
+    const achievedStringData = JSON.stringify(filteredData?.achieved);
+    // console.log(totalStringWorkoutData);
     return (
         <div className="flex flex-col w-full">
             <TopCalendar />
-            <WorkoutHomeWrapper data={stringData} />
+            <WorkoutHomeWrapper
+                totalWorkoutData={totalStringWorkoutData}
+                achievedWorkoutData={achievedStringData}
+            />
         </div>
     );
 }
