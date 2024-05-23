@@ -8,11 +8,8 @@ import { UserButton } from "@clerk/nextjs";
 
 export default function Navigation() {
   const path = usePathname();
-
   const [isOpen, setIsOpen] = useState(false);
   const toggleHBGmenu = () => setIsOpen(!isOpen);
-
-  const tempUserId: string = "Anthony";
   console.log(path);
 
   return (
@@ -61,20 +58,22 @@ export default function Navigation() {
                 : "bg-gray-500 hover:bg-gray-700"
             }`}
           >
-            User
+            Profile
           </li>
         </Link>
       </ul>
 
-        <Link href="/" onClick={toggleHBGmenu}>
-          <img
-            src="/my_body_buddy_logo_transparent.png"
-            alt="logo"
-            className="h-20 w-20"
-          />
-        </Link>
+      <Link href="/">
+        <img
+          src="/my_body_buddy_logo_transparent.png"
+          alt="logo"
+          className="h-20 w-20"
+        />
+      </Link>
 
-      <div className="mr-5"><UserButton /></div>
+      <div className="mr-5">
+        <UserButton />
+      </div>
     </nav>
   );
 }
