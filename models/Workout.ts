@@ -6,30 +6,32 @@ const workoutSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    workout: [
+    workouts: [
         {
             date: {
                 type: Date,
                 required: true,
             },
-            workout: {
-                title: {
-                    type: String,
-                    required: true,
+            workoutDetail: [
+                {
+                    title: {
+                        type: String,
+                        required: true,
+                    },
+                    unit: {
+                        type: String,
+                        required: true,
+                    },
+                    count: {
+                        type: Number,
+                        required: true,
+                    },
+                    achieved: {
+                        type: Boolean,
+                        required: true,
+                    },
                 },
-                unit: {
-                    type: String,
-                    required: true,
-                },
-                count: {
-                    type: Number,
-                    required: true,
-                },
-                achieved: {
-                    type: Boolean,
-                    required: true,
-                },
-            },
+            ],
         },
     ],
 });
