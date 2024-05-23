@@ -19,11 +19,20 @@ const config: Config = {
         "logo-pumpkin": "#F86F03",
         "dark-blue": "#525FE1",
       },
+      keyframes: {
+        flash: {
+          '0%, 100%': { color: 'black' },
+          '50%': { color: 'gold' },
+        },
+      },
       animation: {
-                'spin-fast': 'spin 0.1s linear 10',
-            },
+        flash: 'flash 0.5s ease-in-out 3',
+        'spin-fast': 'spin 0.1s linear 10',
+        
+      },
     },
   },
   plugins: [],
 };
+
 export default config;
