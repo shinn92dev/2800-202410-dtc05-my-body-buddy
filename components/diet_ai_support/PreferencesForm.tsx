@@ -151,9 +151,9 @@ const PreferencesForm: React.FC<PreferencesFormProps> = ({ onSubmit }) => {
                 </div>
                 <ul>
                     {ingredients.map((ingredient, index) => (
-                        <li key={index} className="flex justify-between">
-                            {ingredient.name} {ingredient.quantity ? ingredient.quantity : ''}
-                        </li>
+                        <h2 key={index} className="flex justify-between font-bold">
+                            ・{ingredient.name} - {ingredient.quantity ? ingredient.quantity : ''}
+                        </h2>
                     ))}
                 </ul>
             </div>
