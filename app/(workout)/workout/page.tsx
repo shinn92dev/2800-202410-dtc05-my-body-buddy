@@ -14,8 +14,8 @@ export const metadata = {
 // Rendering client components with server components
 export default async function WorkoutPage() {
     const data = await retrieveWorkout("johndoe123");
-    console.log("!!!", data?.workouts);
-    console.log(filterWorkoutsByAchievement(new Date(), data.workouts[0]));
+    console.log("!!!", data);
+    console.log(filterWorkoutsByAchievement(new Date(), data?.workouts));
     return (
         <div className="flex flex-col w-full">
             <TopCalendar />

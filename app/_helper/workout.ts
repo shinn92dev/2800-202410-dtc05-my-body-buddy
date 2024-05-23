@@ -77,17 +77,32 @@ export const retrieveWorkout = async (username: string) => {
     }
 };
 
-export const filterWorkoutsByAchievement = (
-    date: Date,
-    workoutDetail: DetailedWorkoutDataType
-) => {
+export const filterSpecificDayWorkout = (date: Date, workouts: any) => {
+    console.log("CHECK THIS OUTPUT:", workouts);
+    if (!Array.isArray(workouts)) {
+        return null;
+    }
+    const specificDayWorkout = workouts.filter(
+        (workout: DetailedWorkoutDataType) => {
+            return (
+                workout.date.getFullYear() === date.getFullYear() &&
+                workout.date.getMonth() === date.getMonth() &&
+                workout.date.getDate() === date.getDate()
+            );
+        }
+    );
+    return specificDayWorkout[0];
+};
+
+export const filterWorkoutsByAchievement = (date: Date, workoutDetail: any) => {
+    const specificDayWorkout = filterSpecificDayWorkout(date, workoutDetail);
     const filterYear = date.getFullYear();
     const filterMonth = date.getMonth();
     const filterDay = date.getDate();
-
-    const workoutYear = workoutDetail.date.getFullYear();
-    const workoutMonth = workoutDetail.date.getMonth();
-    const workoutDay = workoutDetail.date.getDate();
+    console.log("CHECK HERE NOW:", specificDayWorkout);
+    const workoutYear = specificDayWorkout?.date.getFullYear();
+    const workoutMonth = specificDayWorkout?.date.getMonth();
+    const workoutDay = specificDayWorkout?.date.getDate();
     // Compare year, month, and day for equality
     if (
         filterYear !== workoutYear ||
@@ -99,12 +114,11 @@ export const filterWorkoutsByAchievement = (
         );
         return null;
     }
-    const todaysWorkout = workoutDetail.workoutDetail;
-    if (todaysWorkout) {
-        const achievedWorkouts = todaysWorkout.filter(
+    if (specificDayWorkout) {
+        const achievedWorkouts = specificDayWorkout.workoutDetail.filter(
             (workout) => workout.achieved
         );
-        const onGoingWorkouts = todaysWorkout.filter(
+        const onGoingWorkouts = specificDayWorkout.workoutDetail.filter(
             (workout) => !workout.achieved
         );
         return { achieved: achievedWorkouts, onGoing: onGoingWorkouts };
