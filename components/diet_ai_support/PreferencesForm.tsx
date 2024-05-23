@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import TagsWithAddingField from '@/components/global/TagsWithAddingField'; // Import the TagsWithAddingField component
 
 type PreferencesFormProps = {
     onSubmit: (preferences: any) => void;
@@ -9,17 +10,18 @@ type Ingredient = {
     quantity?: string;
 };
 
+const defaultPreferences = [
+    'Halal', 'Vegetarian', 'No cooking required',
+    'Something I haven’t eaten recently', 'Easy to prepare', 'Minimal washing up'
+];
+
 const PreferencesForm: React.FC<PreferencesFormProps> = ({ onSubmit }) => {
     const [servings, setServings] = useState<string>('1');
     const [customServings, setCustomServings] = useState<string>('5');
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
     const [currentIngredient, setCurrentIngredient] = useState<string>('');
     const [currentQuantity, setCurrentQuantity] = useState<string>('');
-    const [preferences, setPreferences] = useState<string[]>([
-        'Halal', 'Vegetarian', 'No cooking required',
-        'Something I haven’t eaten recently', 'Easy to prepare', 'Minimal washing up'
-    ]);
-    const [currentPreference, setCurrentPreference] = useState<string>('');
+    const [selectedPreferences, setSelectedPreferences] = useState<string[]>([]);
     const [customServingsError, setCustomServingsError] = useState<string>('');
     const [isCustomSelected, setIsCustomSelected] = useState<boolean>(false);
 
@@ -33,17 +35,6 @@ const PreferencesForm: React.FC<PreferencesFormProps> = ({ onSubmit }) => {
         }
     };
 
-    const handleAddPreference = () => {
-        if (currentPreference && !preferences.includes(currentPreference)) {
-            setPreferences([...preferences, currentPreference]);
-            setCurrentPreference('');
-        }
-    };
-
-    const handleRemovePreference = (preference: string) => {
-        setPreferences(preferences.filter(p => p !== preference));
-    };
-
     const handleCustomServingsChange = (value: string) => {
         setCustomServings(value);
         if (/^\d+$/.test(value) && parseInt(value) > 0) {
@@ -52,6 +43,14 @@ const PreferencesForm: React.FC<PreferencesFormProps> = ({ onSubmit }) => {
         } else {
             setCustomServingsError('Please enter a positive integer');
         }
+    };
+
+    const handleTogglePreference = (preference: string) => {
+        setSelectedPreferences(prev =>
+            prev.includes(preference)
+                ? prev.filter(p => p !== preference)
+                : [...prev, preference]
+        );
     };
 
     const handleSubmit = () => {
@@ -64,7 +63,7 @@ const PreferencesForm: React.FC<PreferencesFormProps> = ({ onSubmit }) => {
         onSubmit({
             servings,
             ingredients: newIngredients,
-            preferences,
+            preferences: selectedPreferences,
         });
     };
 
@@ -134,14 +133,14 @@ const PreferencesForm: React.FC<PreferencesFormProps> = ({ onSubmit }) => {
                         placeholder="Ingredient name"
                         value={currentIngredient}
                         onChange={(e) => setCurrentIngredient(e.target.value)}
-                        className="border p-2 flex-grow mr-2"
+                        className="border p-2 flex-grow mr-2 w-32"
                     />
                     <input
                         type="text"
                         placeholder="Quantity"
                         value={currentQuantity}
                         onChange={(e) => setCurrentQuantity(e.target.value)}
-                        className="border p-2 flex-grow mr-2"
+                        className="border p-2 flex-grow mr-2 w-24"
                     />
                     <button
                         onClick={handleAddIngredient}
@@ -160,34 +159,12 @@ const PreferencesForm: React.FC<PreferencesFormProps> = ({ onSubmit }) => {
             </div>
             <div className="mb-4">
                 <label className="block mb-2 font-bold">Other Preferences</label>
-                <div className="flex flex-wrap mb-2 gap-2 overflow-x-auto max-w-full">
-                    {preferences.map((preference, index) => (
-                        <div key={index} className="flex items-center bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
-                            <span>{preference}</span>
-                            <button
-                                onClick={() => handleRemovePreference(preference)}
-                                className="ml-2 text-red-500"
-                            >
-                                &times;
-                            </button>
-                        </div>
-                    ))}
-                </div>
-                <div className="flex mb-2">
-                    <input
-                        type="text"
-                        placeholder="Add other preference"
-                        value={currentPreference}
-                        onChange={(e) => setCurrentPreference(e.target.value)}
-                        className="border p-2 flex-grow mr-2"
-                    />
-                    <button
-                        onClick={handleAddPreference}
-                        className="bg-dark-blue text-white p-2 rounded"
-                    >
-                        Add
-                    </button>
-                </div>
+                <TagsWithAddingField
+                    defaultTags={defaultPreferences}
+                    inputFieldPlaceHolder="Add other preference"
+                    selectedTags={selectedPreferences}
+                    onToggleTag={handleTogglePreference}
+                />
             </div>
             <button
                 onClick={handleSubmit}
