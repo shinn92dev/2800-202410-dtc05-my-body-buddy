@@ -6,7 +6,8 @@ import axios from 'axios';
 
 interface Meal {
   name: string;
-  amount: string;
+  quantity?: number;
+  unit?: string;
   calories: number;
 }
 
@@ -15,9 +16,9 @@ const DietAddMealsWrapper: React.FC = () => {
   const searchParams = useSearchParams();
   const [meals, setMeals] = useState<Meal[]>([]);
   const [name, setName] = useState('');
-  const [quantity, setQuantity] = useState('');
+  const [quantity, setQuantity] = useState<number | string>('');
   const [unit, setUnit] = useState('');
-  const [calories, setCalories] = useState<number | string>(0);
+  const [calories, setCalories] = useState<number | string>('');
   const [userId, setUserId] = useState<string>('');
   const [mealType, setMealType] = useState<string>('');
 
@@ -37,10 +38,24 @@ const DietAddMealsWrapper: React.FC = () => {
     }
   }, [searchParams]);
 
+  const validateQuantity = (value: string) => {
+    const num = Number(value);
+    if (isNaN(num) || num <= 0) {
+      return '';
+    }
+    return value;
+  };
+
   const addMeal = () => {
-    if (name && quantity && Number(calories) > 0) {
-      const amount = unit ? `${quantity} ${unit}` : quantity;
-      setMeals([...meals, { name, amount, calories: Number(calories) }]);
+    if (name && Number(calories) > 0) {
+      const meal: Meal = { name, calories: Number(calories) };
+      if (quantity) {
+        meal.quantity = Number(quantity);
+      }
+      if (unit) {
+        meal.unit = unit;
+      }
+      setMeals([...meals, meal]);
       setName('');
       setQuantity('');
       setUnit('');
@@ -79,17 +94,17 @@ const DietAddMealsWrapper: React.FC = () => {
       <div className="mb-4">
         <input
           type="text"
-          placeholder="Enter meals to add"
+          placeholder="Enter meal name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="border p-2 rounded w-full mb-2"
         />
         <div className="flex space-x-2 mb-2">
           <input
-            type="text"
-            placeholder="Quantity"
+            type="number"
+            placeholder="Quantity (optional)"
             value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
+            onChange={(e) => setQuantity(validateQuantity(e.target.value))}
             className="border p-2 rounded w-1/2"
           />
           <input
@@ -119,7 +134,9 @@ const DietAddMealsWrapper: React.FC = () => {
           <div key={index} className="flex justify-between items-center mb-2 border-b pb-2">
             <div>
               <div className="font-bold">{meal.name}</div>
-              <div className="text-sm text-gray-500">{meal.amount}</div>
+              <div className="text-sm text-gray-500">
+                {meal.quantity && meal.unit ? `${meal.quantity} ${meal.unit}` : meal.quantity ? meal.quantity : ''}
+              </div>
               <div className="text-lg">{meal.calories} kcal</div>
             </div>
             <button
