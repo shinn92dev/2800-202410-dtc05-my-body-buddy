@@ -1,16 +1,18 @@
 import { useState } from "react";
-import TagsWithAddingField from "@/components/global/TagsWithAddingField";
-import "@/components/workout_ai_support/WorkoutAiSupportInput.scss";
+import TagsWithAddingField from '@/components/global/TagsWithAddingField';
 
 type WorkoutAiSupportInputProps = {
-    onGenerateAlternative: (selectedItems: any[], selectedTags: string[], result: string) => void;
+    onGenerateAlternative: (selectedItems: any[], selectedTags: string[]) => void;
+    onGenerateItems: (response: string) => void;
 };
 
+// Sample workout menu items
 const workoutMenuItems = [
     { "title": "Crunches", "quantity": 50, "unit": "reps", "kcalPerUnit": 4.92 },
     { "title": "Cycling", "quantity": 4, "unit": "km", "kcalPerUnit": 30 }
 ];
 
+// Default tags for reasons to replace workout items
 const defaultTags = [
     "Looks too hard",
     "Getting bored",
@@ -21,14 +23,20 @@ const defaultTags = [
 
 const inputFieldPlaceHolder = "Add another reason";
 
-export default function WorkoutAiSupportInput({ onGenerateAlternative }: WorkoutAiSupportInputProps) {
-    const [selectedItemTitles, setSelectedItemTitles] = useState<string[]>([]);
-    const [selectedTagTitles, setSelectedTagTitles] = useState<string[]>([]);
-    const [generated, setGenerated] = useState(false);
+// WorkoutAiSupportInput component
+export default function WorkoutAiSupportInput({ onGenerateAlternative, onGenerateItems }: WorkoutAiSupportInputProps) {
+    const [selectedItemTitles, setSelectedItemTitles] = useState<string[]>([]); // State to track selected item titles
+    const [selectedTagTitles, setSelectedTagTitles] = useState<string[]>([]);   // State to track selected tag titles
+    const [generated, setGenerated] = useState(false);                          // State to track if suggestions are generated
 
+    // Handle click event for generating alternative suggestions
     const handleGenerateAlternative = async () => {
         const selectedItems = workoutMenuItems.filter(item => selectedItemTitles.includes(item.title));
         const selectedTags = defaultTags.filter(tag => selectedTagTitles.includes(tag));
+        onGenerateAlternative(selectedItems, selectedTags);
+        setGenerated(true);
+
+        // Create the prompt and fetch AI response
         const prompt = `Please consider alternative options for the workout menu below, taking into account the reasons provided.\n\nWorkout menu to replace:\n${selectedItems.map(item => `・${item.title} - ${item.quantity} ${item.unit} (${Math.round(item.kcalPerUnit * item.quantity * 10) / 10} kcal)`).join('\n')}\n\nReasons why I want to replace:\n・${selectedTags.join('\n・')}\n\nThe alternative must include the same number of items and must have the same estimated calorie consumption in total.\nEach item must be output in the following format:\n・[item_name] - [quantity] [unit] ([estimated_calorie_consume] kcal)`;
 
         try {
@@ -39,19 +47,14 @@ export default function WorkoutAiSupportInput({ onGenerateAlternative }: Workout
                 },
                 body: JSON.stringify({ prompt }),
             });
-
-            if (!response.ok) {
-                throw new Error('Failed to generate alternative.');
-            }
-
             const data = await response.json();
-            onGenerateAlternative(selectedItems, selectedTags, data.result);
-            setGenerated(true);
+            onGenerateItems(data.result);
         } catch (error) {
-            console.error(error);
+            console.error("Error generating alternative:", error);
         }
     };
 
+    // Toggle selection state for a workout item
     const toggleItem = (title: string) => {
         if (selectedItemTitles.includes(title)) {
             setSelectedItemTitles(selectedItemTitles.filter((t) => t !== title));
@@ -60,6 +63,7 @@ export default function WorkoutAiSupportInput({ onGenerateAlternative }: Workout
         }
     };
 
+    // Toggle selection state for a tag
     const toggleTag = (tag: string) => {
         if (selectedTagTitles.includes(tag)) {
             setSelectedTagTitles(selectedTagTitles.filter((t) => t !== tag));
@@ -120,7 +124,12 @@ export default function WorkoutAiSupportInput({ onGenerateAlternative }: Workout
                         ))}
                     </div>
                 ) : (
-                    <TagsWithAddingField defaultTags={defaultTags} inputFieldPlaceHolder={inputFieldPlaceHolder} selectedTags={selectedTagTitles} onToggleTag={toggleTag} />
+                    <TagsWithAddingField
+                        defaultTags={defaultTags}
+                        inputFieldPlaceHolder={inputFieldPlaceHolder}
+                        selectedTags={selectedTagTitles}
+                        onToggleTag={toggleTag}
+                    />
                 )}
                 {!generated && (
                     <div className="flex justify-center border-t pt-2">
