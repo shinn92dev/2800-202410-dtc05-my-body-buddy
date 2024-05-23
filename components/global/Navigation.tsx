@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SignOutButton from "./signOutButton";
 import { useState } from "react";
-import { UserButton } from "@clerk/nextjs";
 
 export default function Navigation() {
   const path = usePathname();
@@ -54,7 +53,7 @@ export default function Navigation() {
 
         <Link href={`/user/${tempUserId}`} onClick={toggleHBGmenu}>
           <li
-            className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
+            className={`text-white text-center font-bold py-2 px-4 rounded-full m-2 ${
               path === `/user/${tempUserId}`
                 ? "bg-blue-500 hover:bg-blue-700"
                 : "bg-gray-500 hover:bg-gray-700"

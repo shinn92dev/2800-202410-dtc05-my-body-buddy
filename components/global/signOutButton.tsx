@@ -36,14 +36,15 @@ export default function SignOutButton() {
       console.log("Error: ", error);
     }
   };
+
   return (
     // Clicking on this button will sign out a user
     // and reroute them to the "/" (home) page.
     <form onSubmit={handleSubmit(onSubmit)} method="post">
       <button
+        onClick={() => signOut()}
         className={`text-beige font-bold text-center py-2 px-4 rounded-full 
-        m-2 bg-gray-500 hover:bg-gray-700`}
-        type="submit"
+        m-2 size-11/12 bg-gray-500 hover:bg-gray-700`}
       >
         Sign out
       </button>
