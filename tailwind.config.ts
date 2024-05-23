@@ -19,6 +19,9 @@ const config: Config = {
         "logo-pumpkin": "#F86F03",
         "dark-blue": "#525FE1",
       },
+      animation: {
+                'spin-fast': 'spin 0.1s linear 10',
+            },
     },
   },
   plugins: [],
