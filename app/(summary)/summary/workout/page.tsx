@@ -24,6 +24,8 @@ const WorkoutSummary: React.FC = () => {
                 dietLink="/summary/diet"
                 workoutText="Workout"
                 dietText="Diet"
+                workoutTextColor="text-black"
+                dietTextColor="text-gray-300"
             />
             <div className="text-center">
                 <ScoreCircleBarWrapper score={score} percent={percent} />
