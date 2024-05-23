@@ -29,7 +29,7 @@ export default function WorkoutAiSupportInput({ onGenerateAlternative }: Workout
     const handleGenerateAlternative = async () => {
         const selectedItems = workoutMenuItems.filter(item => selectedItemTitles.includes(item.title));
         const selectedTags = defaultTags.filter(tag => selectedTagTitles.includes(tag));
-        const prompt = `Please generate alternative exercise menu for ${selectedItems.map(item => `${item.title} (${item.kcalPerUnit * item.quantity} kcal)`).join(', ')}. The alternative must be same estimated calorie consume. The reason I want to replace: ${selectedTags.join(', ')}`;
+        const prompt = `Please consider alternative options for the workout menu below, taking into account the reasons provided.\n\nWorkout menu to replace:\n${selectedItems.map(item => `・${item.title} - ${item.quantity} ${item.unit} (${Math.round(item.kcalPerUnit * item.quantity * 10) / 10} kcal)`).join('\n')}\n\nReasons why I want to replace:\n・${selectedTags.join('\n・')}\n\nThe alternative must include the same number of items and must have the same estimated calorie consumption in total.\nEach item must be output in the following format:\n・[item_name] - [quantity] [unit] ([estimated_calorie_consume] kcal)`;
 
         try {
             const response = await fetch('/api/generate-alternative', {

@@ -1,15 +1,19 @@
 import React from 'react';
 import AiLines from '@/components/global/AiLines';
 
-const GeneratedMenu: React.FC = () => {
+type GeneratedMenuProps = {
+    generatedMenu: string;
+};
+
+const GeneratedMenu: React.FC<GeneratedMenuProps> = ({ generatedMenu }) => {
     const messages = [
         {
-            messageTitle: "Generating meal menus that meet your preferences...",
-            messageBody: ""
+            messageTitle: "",
+            messageBody: "Generating meal menus that meet your preferences..."
         },
         {
             messageTitle: "",
-            messageBody: "Here's a simple meal plan that uses the specified ingredients and aims to meet the nutrient targets. This meal plan includes two dishes—a main dish and a side salad.\n\n1. Pan-Fried Pork Belly with Cabbage\nIngredients:\n• Pork belly\n• Cabbage\n• Soy sauce\n• Garlic\n• Ginger\n\n2. Mixed Green Salad\nIngredients:\n• Lettuce\n• Cucumber\n• Carrot\n• Olive oil\n• Lemon juice"
+            messageBody: generatedMenu
         }
     ];
 
