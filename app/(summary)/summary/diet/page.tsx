@@ -17,6 +17,7 @@ export default function DietSummary() {
     const dinnerTotalCalories = 1500; // Replace with a logic to get the dinner total calories
     const snackTotalCalories = 500; // Replace with a logic to get the snack total calories
     const maxCalories = 5000;
+
     return (
         <div>
             <TopCalendar/>
@@ -25,6 +26,8 @@ export default function DietSummary() {
                 dietLink="/summary/diet"
                 workoutText="Workout"
                 dietText="Diet"
+                workoutTextColor="text-gray-300"
+                dietTextColor="text-black"
             />
             <div className="text-center">
                 <ScoreCircleBarWrapper score={score} percent={percent} />
