@@ -51,6 +51,15 @@ const CalorieDistributionChart: React.FC<CalorieDistributionChartProps> = ({
 
     const options: ChartOptions<'doughnut'> = {
         responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+            padding: {
+                left: 80,
+                right: 80,
+                top: 20,
+                bottom: 20,
+            },
+        },
         plugins: {
             legend: {
                 display: false,
@@ -70,6 +79,7 @@ const CalorieDistributionChart: React.FC<CalorieDistributionChartProps> = ({
                 },
                 font: {
                     weight: 'bold',
+                    size: 12,
                 },
                 formatter: (value, context) => {
                     const label = context.chart.data.labels?.[context.dataIndex] || '';
@@ -77,14 +87,15 @@ const CalorieDistributionChart: React.FC<CalorieDistributionChartProps> = ({
                 },
                 anchor: 'end',
                 align: 'end',
-                offset: 10,
+                offset: 2,
+                clip: false,
             },
         },
         cutout: '70%',
     };
 
     return (
-        <div className="relative w-64 h-64">
+        <div className="relative w-full h-64">
             <Doughnut data={data} options={options} />
             <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <span className="text-2xl font-bold">{totalCalories}kcal</span>

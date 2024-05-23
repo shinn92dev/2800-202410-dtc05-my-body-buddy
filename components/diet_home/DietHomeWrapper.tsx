@@ -95,10 +95,10 @@ const DietHomeWrapper: React.FC = () => {
 
     return (
         <div>
-            <h1 className="text-2xl font-bold p-2 m-2">
-                This is My Body Buddy Diet Plan page
+            <h1 className="text-3xl font-bold flex flex-col items-center p-2 m-2">
+                Diet Management Plan
             </h1>
-            <div className="flex flex-col items-center p-4">
+            <div className="flex flex-col items-center p-2">
                 <CalorieDistributionChart
                     breakfastCalories={totalCalories(breakfasts)}
                     lunchCalories={totalCalories(lunches)}
