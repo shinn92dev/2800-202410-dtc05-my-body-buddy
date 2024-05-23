@@ -30,7 +30,7 @@ export default function TagsWithAddingField({ defaultTags, inputFieldPlaceHolder
                         onClick={() => onToggleTag(tag)}
                         className={`px-2 py-1 rounded border ${
                             selectedTags.includes(tag)
-                                ? "bg-gray-500 text-white"
+                                ? "bg-dark-blue text-white"
                                 : "bg-white text-gray-700"
                         }`}
                     >
@@ -49,7 +49,7 @@ export default function TagsWithAddingField({ defaultTags, inputFieldPlaceHolder
                 />
                 <button
                     onClick={addTag}
-                    className="px-4 py-1 bg-gray-500 text-white rounded"
+                    className="px-4 py-1 bg-dark-blue text-white rounded"
                 >
                     Add
                 </button>
