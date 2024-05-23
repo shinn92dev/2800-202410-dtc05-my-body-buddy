@@ -9,9 +9,10 @@ import axios from 'axios';
 
 type MealType = {
     name: string;
-    amount: string;
+    quantity?: number;
+    unit?: string;
     calories: number;
-}
+};
 
 type MealsData = {
     userId: string;
@@ -20,12 +21,12 @@ type MealsData = {
     lunch: MealType[];
     dinner: MealType[];
     snacks: MealType[];
-}
+};
 
 export default function DietSummary() {
-    const [meals, setMeals] = useState<{ [key: string]: any } | null>(null);
+    const [meals, setMeals] = useState<MealsData | null>(null);
     const userId = "664719634ee345ddb6962d13"; // Replace with actual user ID
-    const date = "2024-05-23"; // Replace with actual date
+    const [date, setDate] = useState<string>("2024-05-23"); // Replace with actual date
 
     useEffect(() => {
         const fetchMeals = async () => {
@@ -42,9 +43,9 @@ export default function DietSummary() {
         fetchMeals();
     }, [userId, date]);
 
-    const calculateCalories = (mealType: keyof MealsData["breakfast" | "lunch" | "dinner" | "snacks"]) => {
+    const calculateCalories = (mealType: keyof MealsData) => {
         if (!meals || !meals[mealType]) return 0;
-        return meals[mealType].reduce((total: number, item: {calories: number}) => total + item.calories, 0);
+        return meals[mealType].reduce((total, item) => total + item.calories, 0);
     };
 
     const dailyTotalCalories = calculateCalories("breakfast") + calculateCalories("lunch") + calculateCalories("dinner") + calculateCalories("snacks");
@@ -52,11 +53,15 @@ export default function DietSummary() {
     const lunchTotalCalories = calculateCalories("lunch");
     const dinnerTotalCalories = calculateCalories("dinner");
     const snackTotalCalories = calculateCalories("snacks");
-    const maxCalories = 3500;
+    const maxCalories = 5000;
+
+    const handleDateSelect = (selectedDate: Date) => {
+        setDate(selectedDate.toISOString().split('T')[0]); // Format date as YYYY-MM-DD
+    };
 
     return (
         <div>
-            <TopCalendar/>
+            <TopCalendar onDateSelect={handleDateSelect}/>
             <WorkoutDietLink
                 workoutLink="/summary/workout"
                 dietLink="/summary/diet"
@@ -68,11 +73,11 @@ export default function DietSummary() {
             <div className="text-center">
                 <ScoreCircleBarWrapper score={80} percent={80} />
                 <div className='text-xl font-semibold p-4'>Calorie Took</div>
-                <BarGraph label="Daily total" value={dailyTotalCalories} maxValue={maxCalories}/>
-                <BarGraph label="Breakfast total" value={breakfastTotalCalories} maxValue={maxCalories}/>
-                <BarGraph label="Lunch total" value={lunchTotalCalories} maxValue={maxCalories}/>
-                <BarGraph label="Dinner total" value={dinnerTotalCalories} maxValue={maxCalories}/>
-                <BarGraph label="Snack total" value={snackTotalCalories} maxValue={maxCalories}/>
+                <BarGraph label="Daily total" value={dailyTotalCalories} maxValue={maxCalories} />
+                <BarGraph label="Breakfast total" value={breakfastTotalCalories} maxValue={maxCalories} />
+                <BarGraph label="Lunch total" value={lunchTotalCalories} maxValue={maxCalories} />
+                <BarGraph label="Dinner total" value={dinnerTotalCalories} maxValue={maxCalories} />
+                <BarGraph label="Snack total" value={snackTotalCalories} maxValue={maxCalories} />
             </div>
         </div>
     );
