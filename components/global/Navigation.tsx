@@ -67,7 +67,7 @@ export default function Navigation() {
       </ul>
 
       <div className="flex-grow text-center">
-        <Link href="/">
+        <Link href="/summary/diet">
           <img
             src="/my_body_buddy_logo_transparent.png"
             alt="logo"

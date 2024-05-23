@@ -8,7 +8,9 @@ export default function NavigationFooter() {
   console.log(path);
 
   const getButtonClasses = (buttonPath: string) => {
-    return path.startsWith(buttonPath) ? "text-white font-bold" : "text-gray-400";
+    return path.startsWith(buttonPath)
+      ? "text-white font-bold"
+      : "text-gray-400";
   };
 
   return (
@@ -34,8 +36,8 @@ export default function NavigationFooter() {
         </div>
       </Link>
       <Link
-        href="/"
-        className={`grid justify-items-center ${getButtonClasses("/")}`}
+        href="/summary/diet"
+        className={`grid justify-items-center ${getButtonClasses("/summary")}`}
       >
         <div className="content-center">
           <svg
