@@ -4,7 +4,7 @@ import BoardContent from './BoardContent';
 interface BoardProps {
     icon: React.ReactNode;
     title: string;
-    items: { name: string; amount: string; calories: number }[];
+    items: { name: string; quantity?: number; unit?: string; calories: number }[];
     onEdit: (index: number) => void;
     onDelete: (index: number) => void;
     onAdd: () => void;

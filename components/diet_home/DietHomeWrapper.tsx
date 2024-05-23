@@ -9,7 +9,8 @@ import CalorieDistributionChart from '@/components/global/CalorieDistributionCha
 
 interface Meal {
     name: string;
-    amount: string;
+    quantity?: number;
+    unit?: string;
     calories: number;
 }
 
