@@ -12,7 +12,6 @@ export default function Navigation() {
 
   const [isHide, setIsHide] = useState(false);
   const [isDance, setIsDance] = useState(false);
-  const [isPing, setIsPing] = useState(false);
   const [isBounce, setIsBounce] = useState(false);
 
   const clickCountRef = useRef(0);
@@ -26,15 +25,20 @@ export default function Navigation() {
     }
 
     clickTimeoutRef.current = setTimeout(() => {
-      if (clickCountRef.current === 1) {
-        setIsBounce(true);
-        setIsHide(true);
-      } else if (clickCountRef.current === 2) {
+      if (clickCountRef.current === 2) {
         setIsDance(true);
         setIsHide(true);
+        setTimeout(() => {
+          setIsDance(false);
+          setIsHide(false);
+        }, 3000);
       } else if (clickCountRef.current === 3) {
-        setIsPing(true);
+        setIsBounce(true);
         setIsHide(true);
+        setTimeout(() => {
+          setIsBounce(false);
+          setIsHide(false);
+        }, 3000);
       }
       clickCountRef.current = 0;
     }, 250);
@@ -109,9 +113,7 @@ export default function Navigation() {
             onClick={handleLogoClick}
             className={`h-20 w-20 mx-auto ${isHide ? "block" : "hidden"} ${
               isDance ? "animate-spin" : ""
-            } ${isPing ? "animate-ping" : ""} ${
-              isBounce ? "animate-bounce" : ""
-            }`}
+            } ${isBounce ? "animate-bounce" : ""}`}
           />
         </Link>
       </div>
