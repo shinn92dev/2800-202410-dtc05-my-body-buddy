@@ -10,7 +10,7 @@ type PreferencesSummaryProps = {
 
 const PreferencesSummary: React.FC<PreferencesSummaryProps> = ({ preferences }) => {
     return (
-        <div className="p-4 border rounded-lg mb-4">
+        <div className="p-4 border rounded-lg mb-4 bg-beige">
             <h2 className="text-lg font-bold py-1 mt-1">Number of Servings</h2>
             <p>• {preferences.servings} {preferences.servings === '1' ? '(Just for today)' : preferences.servings === '7' ? '(for a week)' : ''}</p>
             <h2 className="text-lg font-bold border-t py-1 mt-1">Ingredients to Include:</h2>
