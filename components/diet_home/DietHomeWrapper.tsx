@@ -88,7 +88,7 @@ const DietHomeWrapper: React.FC = () => {
     };
 
     const handleOnClick = () => {
-        // Handle onClick logic here
+        window.location.href = "/diet/ai-support";
     };
 
     const totalCalories = (meals: Meal[]) => meals.reduce((sum, meal) => sum + meal.calories, 0);
