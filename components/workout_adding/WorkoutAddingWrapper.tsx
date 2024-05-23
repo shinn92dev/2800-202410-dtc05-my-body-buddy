@@ -129,7 +129,7 @@ export default function WorkoutAddingWrapper() {
 
             {/* Display selected items */}
             {selectedItems.map((item, index) => (
-                <div key={item.id} className="p-2 border-y border-gray-300">
+                <div key={item.id} className="p-2 border-y border-gray-300 bg-beige rounded-lg">
                     <div className="flex justify-between items-center mb-2">
                         <h2 className="font-bold">{item.name}</h2>
                         <button onClick={() => handleRemoveItem(index)} className="text-red-500 text-2xl">×</button>

@@ -43,7 +43,7 @@ const MealForm: React.FC<MealFormProps> = ({ addMeal }) => {
   };
 
   return (
-    <div className="mb-4">
+    <div className="mb-4 p-2 bg-beige rounded">
       <input
         type="text"
         placeholder="Enter meal name"
@@ -51,20 +51,20 @@ const MealForm: React.FC<MealFormProps> = ({ addMeal }) => {
         onChange={(e) => setName(e.target.value)}
         className="border p-2 rounded w-full mb-2"
       />
-      <div className="flex space-x-2 mb-2">
+      <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-2">
         <input
           type="text"
           placeholder="Quantity (optional)"
           value={quantity}
           onChange={(e) => setQuantity(validateQuantity(e.target.value))}
-          className="border p-2 rounded w-1/2"
+          className="border p-2 rounded w-full md:w-1/2"
         />
         <input
           type="text"
           placeholder="Unit (optional)"
           value={unit}
           onChange={(e) => setUnit(e.target.value)}
-          className="border p-2 rounded w-1/2"
+          className="border p-2 rounded w-full md:w-1/2"
         />
       </div>
       <input

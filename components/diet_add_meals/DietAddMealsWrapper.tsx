@@ -67,7 +67,7 @@ const DietAddMealsWrapper: React.FC = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 min-h-screen">
       <MealForm addMeal={addMeal} />
       <MealList meals={meals} deleteMeal={deleteMeal} />
       <button
