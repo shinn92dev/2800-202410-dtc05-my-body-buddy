@@ -3,7 +3,8 @@
 import { useState, ChangeEvent } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import SearchWindow from "@/components/global/SearchWindow"; // Importing the new SearchWindow component
+import { v4 as uuidv4 } from "uuid";
+import SearchWindow from "@/components/global/SearchWindow";
 
 // Categories data
 const categories = [
@@ -46,7 +47,7 @@ export default function WorkoutAddingWrapper() {
         if (categoryName === "Walking" || categoryName === "Running" || categoryName === "Cycling") {
             const item = workoutItemOptions.find(option => option.category === categoryName);
             if (item) {
-                setSelectedItems([...selectedItems, { ...item, selectedOption: item.recordOptions[0], quantity: 10 }]);
+                setSelectedItems([...selectedItems, { ...item, id: uuidv4(), selectedOption: { ...item.recordOptions[0], quantity: 10 } }]);
             }
         }
     };
@@ -60,21 +61,21 @@ export default function WorkoutAddingWrapper() {
     const handleItemClick = (itemName: string) => {
         const item = workoutItemOptions.find(option => option.name === itemName);
         if (item) {
-            setSelectedItems([...selectedItems, { ...item, selectedOption: item.recordOptions[0], quantity: 10 }]);
+            setSelectedItems([...selectedItems, { ...item, id: uuidv4(), selectedOption: { ...item.recordOptions[0], quantity: 10 } }]);
         }
     };
 
     // Handle option change event
     const handleOptionChange = (index: number, selectedOption: any) => {
         const updatedItems = [...selectedItems];
-        updatedItems[index].selectedOption = selectedOption;
+        updatedItems[index].selectedOption = { ...selectedOption, quantity: updatedItems[index].selectedOption.quantity };
         setSelectedItems(updatedItems);
     };
 
     // Handle quantity change event
-    const handleQuantityChange = (index: number, optionIndex: number, newQuantity: number) => {
+    const handleQuantityChange = (index: number, newQuantity: number) => {
         const updatedItems = [...selectedItems];
-        updatedItems[index].recordOptions[optionIndex].quantity = newQuantity;
+        updatedItems[index].selectedOption.quantity = newQuantity;
         setSelectedItems(updatedItems);
     };
 
@@ -98,7 +99,7 @@ export default function WorkoutAddingWrapper() {
                         <button
                             key={index}
                             onClick={() => handleCategoryClick(category.name)}
-                            className={`relative border border-gray-500 ${selectedCategory === category.name ? "bg-gray-500" : "bg-white"} h-auto`}
+                            className={`relative border border-gray-500 ${selectedCategory === category.name ? "bg-dark-blue" : "bg-white"} h-auto`}
                         >
                             <Image
                                 src={selectedCategory === category.name ? category.image_selected : category.image}
@@ -128,7 +129,7 @@ export default function WorkoutAddingWrapper() {
 
             {/* Display selected items */}
             {selectedItems.map((item, index) => (
-                <div key={index} className="p-2 border-y border-gray-300">
+                <div key={item.id} className="p-2 border-y border-gray-300 bg-beige rounded-lg">
                     <div className="flex justify-between items-center mb-2">
                         <h2 className="font-bold">{item.name}</h2>
                         <button onClick={() => handleRemoveItem(index)} className="text-red-500 text-2xl">×</button>
@@ -137,7 +138,7 @@ export default function WorkoutAddingWrapper() {
                         <div key={i} className="flex items-center mb-2">
                             <input
                                 type="radio"
-                                name={`option-${index}`}
+                                name={`option-${item.id}`} // Use item.id for unique name
                                 checked={option.unit === item.selectedOption.unit}
                                 onChange={() => handleOptionChange(index, option)}
                                 className="mr-2"
@@ -145,13 +146,13 @@ export default function WorkoutAddingWrapper() {
                             <span className="mr-2">{option.unit}</span>
                             <input
                                 type="number"
-                                value={option.quantity ?? 10}
-                                onChange={(e) => handleQuantityChange(index, i, parseInt(e.target.value))}
+                                value={item.selectedOption.unit === option.unit ? item.selectedOption.quantity : 10}
+                                onChange={(e) => handleQuantityChange(index, parseInt(e.target.value))}
                                 className={`mr-2 p-1 border border-gray-300 rounded w-16 ${option.unit !== item.selectedOption.unit ? "text-gray-400" : ""}`}
                                 disabled={option.unit !== item.selectedOption.unit}
                             />
                             <span className={`${option.unit !== item.selectedOption.unit ? "text-gray-400" : ""}`}>{option.unit}</span>
-                            <span className={`ml-auto ${option.unit !== item.selectedOption.unit ? "text-gray-400" : ""}`}>{((option.quantity ?? 10) * option.kcalPerUnit).toFixed(1)} kcal</span>
+                            <span className={`ml-auto ${option.unit !== item.selectedOption.unit ? "text-gray-400" : ""}`}>{(item.selectedOption.quantity * option.kcalPerUnit).toFixed(1)} kcal</span>
                         </div>
                     ))}
                 </div>
@@ -161,7 +162,7 @@ export default function WorkoutAddingWrapper() {
                 <div className="flex justify-center mt-4">
                     <button
                         onClick={handleAddSelectedItems}
-                        className={`px-4 py-2 ${selectedItems.length === 0 ? "bg-gray-500 text-white opacity-30" : "bg-gray-500 text-white"} rounded`}
+                        className={`px-4 py-2 bg-dark-blue text-white ${selectedItems.length === 0 ? "opacity-30" : ""} rounded`}
                         disabled={selectedItems.length === 0}
                     >
                         Add Selected Items

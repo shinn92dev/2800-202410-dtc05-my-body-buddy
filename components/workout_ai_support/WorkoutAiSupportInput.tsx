@@ -1,10 +1,9 @@
 import { useState } from "react";
-import TagsWithAddingField from "@/components/global/TagsWithAddingField";
-import "@/components/workout_ai_support/WorkoutAiSupportInput.scss";
+import TagsWithAddingField from '@/components/global/TagsWithAddingField';
 
-// Type definition for WorkoutAiSupportInput props
 type WorkoutAiSupportInputProps = {
     onGenerateAlternative: (selectedItems: any[], selectedTags: string[]) => void;
+    onGenerateItems: (response: string) => void;
 };
 
 // Sample workout menu items
@@ -25,17 +24,34 @@ const defaultTags = [
 const inputFieldPlaceHolder = "Add another reason";
 
 // WorkoutAiSupportInput component
-export default function WorkoutAiSupportInput({ onGenerateAlternative }: WorkoutAiSupportInputProps) {
+export default function WorkoutAiSupportInput({ onGenerateAlternative, onGenerateItems }: WorkoutAiSupportInputProps) {
     const [selectedItemTitles, setSelectedItemTitles] = useState<string[]>([]); // State to track selected item titles
     const [selectedTagTitles, setSelectedTagTitles] = useState<string[]>([]);   // State to track selected tag titles
     const [generated, setGenerated] = useState(false);                          // State to track if suggestions are generated
 
     // Handle click event for generating alternative suggestions
-    const handleGenerateAlternative = () => {
+    const handleGenerateAlternative = async () => {
         const selectedItems = workoutMenuItems.filter(item => selectedItemTitles.includes(item.title));
         const selectedTags = defaultTags.filter(tag => selectedTagTitles.includes(tag));
         onGenerateAlternative(selectedItems, selectedTags);
         setGenerated(true);
+
+        // Create the prompt and fetch AI response
+        const prompt = `Please consider alternative options for the workout menu below, taking into account the reasons provided.\n\nWorkout menu to replace:\n${selectedItems.map(item => `・${item.title} - ${item.quantity} ${item.unit} (${Math.round(item.kcalPerUnit * item.quantity * 10) / 10} kcal)`).join('\n')}\n\nReasons why I want to replace:\n・${selectedTags.join('\n・')}\n\nThe alternative must include the same number of items and must have the same estimated calorie consumption in total.\nEach item must be output in the following format:\n・[item_name] - [quantity] [unit] ([estimated_calorie_consume] kcal)`;
+
+        try {
+            const response = await fetch('/api/generate-alternative', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ prompt }),
+            });
+            const data = await response.json();
+            onGenerateItems(data.result);
+        } catch (error) {
+            console.error("Error generating alternative:", error);
+        }
     };
 
     // Toggle selection state for a workout item
@@ -102,19 +118,24 @@ export default function WorkoutAiSupportInput({ onGenerateAlternative }: Workout
                 {generated ? (
                     <div className="flex flex-wrap gap-2 mb-2">
                         {selectedTagTitles.map((tag, index) => (
-                            <span key={index} className="px-2 py-1 rounded border bg-gray-500 text-white">
+                            <span key={index} className="px-2 py-1 rounded border bg-dark-blue text-white">
                                 {tag}
                             </span>
                         ))}
                     </div>
                 ) : (
-                    <TagsWithAddingField defaultTags={defaultTags} inputFieldPlaceHolder={inputFieldPlaceHolder} selectedTags={selectedTagTitles} onToggleTag={toggleTag} />
+                    <TagsWithAddingField
+                        defaultTags={defaultTags}
+                        inputFieldPlaceHolder={inputFieldPlaceHolder}
+                        selectedTags={selectedTagTitles}
+                        onToggleTag={toggleTag}
+                    />
                 )}
                 {!generated && (
                     <div className="flex justify-center border-t pt-2">
                         <button
                             onClick={handleGenerateAlternative}
-                            className="px-4 py-2 bg-gray-500 text-white rounded-full"
+                            className="px-4 py-2 bg-dark-blue text-white rounded-full"
                         >
                             Generate Alternative
                         </button>

@@ -1,13 +1,95 @@
-export const metadata = {
-    title: "Diet Summary",
+"use client";
+
+import React, { useEffect, useState } from "react";
+import TopCalendar from "@/components/top_calendar/TopCalendar";
+import ScoreCircleBarWrapper from "@/components/summary_score_circle_bar/ScoreCircleBarWrapper";
+import BarGraph from "@/components/global/BarGraph";
+import WorkoutDietLink from "@/components/workout_diet_link/WorkoutDietLink";
+import axios from 'axios';
+
+type MealType = {
+    name: string;
+    quantity?: number;
+    unit?: string;
+    calories: number;
+};
+
+type MealsData = {
+    userId: string;
+    date: string;
+    breakfast: MealType[];
+    lunch: MealType[];
+    dinner: MealType[];
+    snacks: MealType[];
 };
 
 export default function DietSummary() {
+    const [meals, setMeals] = useState<MealsData | null>(null);
+    const userId = "664719634ee345ddb6962d13"; // Replace with actual user ID
+    const [date, setDate] = useState<string>("2024-05-23"); // Replace with actual date
+    const [errorStatus, setErrorStatus] = useState<number | null>(null); // Track error status
+
+    useEffect(() => {
+        const fetchMeals = async () => {
+            try {
+                const response = await axios.get(`/api/get-meals`, {
+                    params: { userId, date }
+                });
+                setMeals(response.data);
+                setErrorStatus(null);
+            } catch (error) {
+                console.error("Error fetching meals:", error);
+                if (error.response) {
+                    setErrorStatus(error.response.status);
+                } else {
+                    setErrorStatus(500);
+                }
+            }
+        };
+
+        fetchMeals();
+    }, [userId, date]);
+
+    const calculateCalories = (mealType: keyof MealsData) => {
+        if (errorStatus === 404) {
+            return 0;
+        }
+        if (!meals || !meals[mealType]) return 0;
+        return meals[mealType].reduce((total, item) => total + item.calories, 0);
+    };
+
+    const dailyTotalCalories = calculateCalories("breakfast") + calculateCalories("lunch") + calculateCalories("dinner") + calculateCalories("snacks");
+    const breakfastTotalCalories = calculateCalories("breakfast");
+    const lunchTotalCalories = calculateCalories("lunch");
+    const dinnerTotalCalories = calculateCalories("dinner");
+    const snackTotalCalories = calculateCalories("snacks");
+    const maxCalories = 5000;
+
+    const handleDateSelect = (selectedDate: Date) => {
+        setDate(selectedDate.toISOString().split('T')[0]); // Format date as YYYY-MM-DD
+    };
+
     return (
         <div>
-            <h1 className="text-2xl font-bold p-2 m-2">
-                This is My Body Buddy Diet Summary page
-            </h1>
+            <TopCalendar onDateSelect={handleDateSelect}/>
+            <WorkoutDietLink
+                workoutLink="/summary/workout"
+                dietLink="/summary/diet"
+                workoutText="Workout"
+                dietText="Diet"
+                workoutTextColor="text-gray-300"
+                dietTextColor="text-black"
+            />
+            <div className="text-center">
+                <ScoreCircleBarWrapper score={80} percent={80} />
+                <div className='text-xl font-semibold p-4'>Calorie Took</div>
+                <BarGraph label="Daily total" value={dailyTotalCalories} maxValue={maxCalories} />
+                <BarGraph label="Breakfast total" value={breakfastTotalCalories} maxValue={maxCalories} />
+                <BarGraph label="Lunch total" value={lunchTotalCalories} maxValue={maxCalories} />
+                <BarGraph label="Dinner total" value={dinnerTotalCalories} maxValue={maxCalories} />
+                <BarGraph label="Snack total" value={snackTotalCalories} maxValue={maxCalories} />
+            </div>
         </div>
     );
 }
+
