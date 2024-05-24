@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SignOutButton from "./signOutButton";
 import { useState, useRef, useEffect } from "react";
-import { ClerkProvider, useUser } from "@clerk/clerk-react";
+import { useUser } from "@clerk/clerk-react";
 
 export default function Navigation() {
   const path = usePathname();
@@ -27,14 +27,14 @@ export default function Navigation() {
   const clickCountRef = useRef(0);
   const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-useEffect(() => {
-  if (isLoaded && isSignedIn && user) {
-    setLoggedUsername(user.username);
-    setIsLoading(false);
-  } else {
-    setIsLoading(false);
-  }
-}, [isLoaded, isSignedIn, user]);
+  useEffect(() => {
+    if (isLoaded && isSignedIn && user) {
+      setLoggedUsername(user.username);
+      setIsLoading(false);
+    } else {
+      setIsLoading(false);
+    }
+  }, [isLoaded, isSignedIn, user]);
 
   const handleLogoClick = () => {
     clickCountRef.current += 1;
@@ -140,7 +140,4 @@ useEffect(() => {
       </div>
     </nav>
   );
-}
-function setCurrentUsername(username: any) {
-  throw new Error("Function not implemented.");
 }

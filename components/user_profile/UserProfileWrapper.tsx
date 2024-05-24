@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { connectMongoDB } from "@/config/db";
+
 
 export interface UserData {
   name: string;
@@ -20,19 +22,6 @@ interface UserProfileWrapperProps {
 export default function UserProfileWrapper({
   userData,
 }: UserProfileWrapperProps) {
-    
-  //   // dummy data; TODO: fetch user data from db
-  //   const [userData, setUserData] = useState({
-  //     name: "Domingo",
-  //     age: 30, // Updated to a realistic age
-  //     gender: "Male",
-  //     height: 180,
-  //     weight: 80,
-  //     goalWeight: 70, // Fixed typo
-  //     goalDay: "2024-12-31",
-  //     goalCal: 2177,
-  //   });
-
   return (
     <div className="flex flex-col items-center">
       <div

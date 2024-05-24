@@ -1,5 +1,7 @@
 import UserProfileWrapper from "@/components/user_profile/UserProfileWrapper";
 import { UserData } from "@/components/user_profile/UserProfileWrapper";
+import { connectMongoDB } from "@/config/db";
+import UserModel from "@/models/User";
 
 export default async function UserProfilePage({
   params,
@@ -7,15 +9,33 @@ export default async function UserProfilePage({
   params: { id: string };
 }) {
   const { id } = params;
+  await connectMongoDB();
+  console.log("connected to MongoDB");
 
-  // Fetch user data from the API route
-  const res = await fetch(`http://localhost:3000/api/user`);
+  let userData: UserData | null = null;
 
-  if (!res.ok) {
-    return <h2 className="text-center font-bold">{id} not found</h2>;
+  try {
+    const user = await UserModel.findOne({ username: id });
+
+    if (user) {
+      userData = {
+        name: user.username,
+        age: user.age || "N/A",
+        gender: user.gender || "N/A",
+        height: user.height || "N/A",
+        weight: user.weight || "N/A",
+        goalWeight: user.goalWeight || "N/A",
+        goalDay: user.goalDay || "N/A",
+        goalCal: user.goalCal || "N/A",
+      };
+    }
+  } catch (error) {
+    console.error(`Error fetching user data: ${error}`);
   }
 
-  const userData: UserData = await res.json();
+  if (!userData) {
+    return <h2 className="text-center font-bold">{id} not found</h2>;
+  }
 
   return <UserProfileWrapper userData={userData} />;
 }

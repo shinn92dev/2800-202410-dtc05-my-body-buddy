@@ -1,4 +1,3 @@
-import saveNewUserToMongoDB from "@/app/_helper/saveNewUserToMongoDB";
 import { connectMongoDB } from "@/config/db";
 import UserModel from "@/models/User";
 import { NextResponse } from "next/server";
