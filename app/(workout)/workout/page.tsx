@@ -24,9 +24,10 @@ export default async function WorkoutPage() {
     const totalStringWorkoutData = JSON.stringify(finalData);
     const achievedStringData = JSON.stringify(filteredData?.achieved);
     // console.log(totalStringWorkoutData);
+    const tempFn = (date: Date) => console.log(date);
     return (
         <div className="flex flex-col w-full">
-            <TopCalendar />
+            <TopCalendar onDateSelect={tempFn} />
             <WorkoutHomeWrapper
                 totalWorkoutData={totalStringWorkoutData}
                 achievedWorkoutData={achievedStringData}
