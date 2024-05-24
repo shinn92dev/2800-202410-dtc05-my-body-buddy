@@ -25,7 +25,7 @@ export default async function UserProfilePage({
         height: user.height || "N/A",
         weight: user.weight || "N/A",
         goalWeight: user.goalWeight || "N/A",
-        goalDay: user.goalDay || "N/A",
+        goalDay: user.goalDay || "year-month-date",
         goalCal: user.goalCal || "N/A",
       };
     }

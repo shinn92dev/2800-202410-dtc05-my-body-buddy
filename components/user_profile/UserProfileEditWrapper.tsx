@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { connectMongoDB } from "@/config/db";
+import { useState } from "react";
 
 export interface UserData {
   name: string;
@@ -21,8 +22,40 @@ interface UserProfileWrapperProps {
 export default function UserProfileEditWrapper({
   userData,
 }: UserProfileWrapperProps) {
+  const [formData, setFormData] = useState<UserData>(userData);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("/api/update-user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) {
+        throw new Error("Error updating user data");
+      }
+      const result = await res.json();
+      console.log(result.message);
+    } catch (error) {
+      console.error("Error updating user data:", error);
+    }
+  };
+
   return (
-    <div className="flex flex-col items-center">
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col justify-center items-center"
+    >
       <div
         id="basic-info"
         className="bg-orange m-5 tracking-wide leading-8 font-semibold text-center w-2/3"
@@ -30,19 +63,43 @@ export default function UserProfileEditWrapper({
         <p className="text-4xl p-2">👤</p>
         <div>
           <div className="my-1">Name: {userData.name}</div>
-
           <div className="my-1">
-            Age: <input type="text" placeholder={`${userData.age}`} />
-          </div>
-
-          <div className="my-1">
-            Gender: <input type="text" placeholder={`${userData.gender}`} />
-          </div>
-          <div className="my-1">
-            Height: <input type="text" placeholder={`${userData.height}`} /> cm
+            Age: <br />
+            <input
+              type="text"
+              name="age"
+              value={formData.age}
+              onChange={handleChange}
+            />
           </div>
           <div className="my-1">
-            Weight: <input type="text" placeholder={`${userData.weight}`} /> kg
+            Gender: <br />
+            <input
+              type="text"
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="my-1">
+            Height: <br />
+            <input
+              type="text"
+              name="height"
+              value={formData.height}
+              onChange={handleChange}
+            />{" "}
+            <br /> cm
+          </div>
+          <div className="my-1">
+            Weight: <br />
+            <input
+              type="text"
+              name="weight"
+              value={formData.weight}
+              onChange={handleChange}
+            />{" "}
+            <br /> kg
           </div>
           <br />
         </div>
@@ -54,13 +111,23 @@ export default function UserProfileEditWrapper({
         <p className="text-4xl p-2">🎯</p>
         <div>
           <div className="my-1">
-            Target Date:{" "}
-            <input type="text" placeholder={`${userData.goalDay}`} />
+            Target Date: <br />
+            <input
+              type="text"
+              name="goalDay"
+              value={formData.goalDay}
+              onChange={handleChange}
+            />
           </div>
           <div className="my-1">
-            Target Weight:{" "}
-            <input type="text" placeholder={`${userData.goalWeight}`} />
-            kg
+            Target Weight: <br />
+            <input
+              type="text"
+              name="goalWeight"
+              value={formData.goalWeight}
+              onChange={handleChange}
+            />{" "}
+            <br /> kg
           </div>
         </div>
         <br />
@@ -79,13 +146,15 @@ export default function UserProfileEditWrapper({
         <br />
       </div>
       <div className="flex justify-center m-10">
-        <Link
-          href={`/user/${userData.name}`}
-          className="bg-dark-blue rounded-md px-3 py-2 text-beige"
-        >
-          Done
+        <Link href={`/user/${userData.name}`}>
+          <button
+            type="submit"
+            className="bg-dark-blue rounded-md px-3 py-2 text-beige"
+          >
+            Save
+          </button>
         </Link>
       </div>
-    </div>
+    </form>
   );
 }
