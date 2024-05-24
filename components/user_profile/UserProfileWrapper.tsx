@@ -13,7 +13,14 @@ export interface UserData {
   goalCal: number;
 }
 
-export default function UserProfileWrapper({ userData }) {
+interface UserProfileWrapperProps {
+  userData: UserData;
+}
+
+export default function UserProfileWrapper({
+  userData,
+}: UserProfileWrapperProps) {
+    
   //   // dummy data; TODO: fetch user data from db
   //   const [userData, setUserData] = useState({
   //     name: "Domingo",

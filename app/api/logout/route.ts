@@ -1,4 +1,3 @@
-import { getCurrentUserInformationFromMondoDB } from "@/app/_helper/getCurrentUserInformation";
 import saveNewUserToMongoDB from "@/app/_helper/saveNewUserToMongoDB";
 import { connectMongoDB } from "@/config/db";
 import UserModel from "@/models/User";

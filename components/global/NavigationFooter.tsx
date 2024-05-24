@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 
 export default function NavigationFooter() {
   const path = usePathname();
-  console.log(path);
 
   const getButtonClasses = (buttonPath: string) => {
     return path.startsWith(buttonPath)
