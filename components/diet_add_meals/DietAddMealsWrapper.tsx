@@ -20,6 +20,7 @@ const DietAddMealsWrapper: React.FC = () => {
   const [meals, setMeals] = useState<MealItem[]>([]);
   const [userId, setUserId] = useState<string>('');
   const [mealType, setMealType] = useState<string>('');
+  const [isSaveDisabled, setIsSaveDisabled] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchUserId = async () => {
@@ -36,6 +37,10 @@ const DietAddMealsWrapper: React.FC = () => {
       setMealType(mealTypeParam);
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    setIsSaveDisabled(meals.length === 0 || mealType === '');
+  }, [meals, mealType]);
 
   const addMeal = (meal: MealItem) => {
     setMeals([...meals, meal]);
@@ -73,7 +78,8 @@ const DietAddMealsWrapper: React.FC = () => {
       <MealList meals={meals} deleteMeal={deleteMeal} />
       <button
         onClick={saveMeals}
-        className="bg-logo-pumpkin text-white p-2 rounded w-full mt-4"
+        disabled={isSaveDisabled}
+        className={`p-2 rounded w-full mt-4 ${isSaveDisabled ? 'bg-gray-300' : 'bg-logo-pumpkin text-white'}`}
       >
         Save Meals
       </button>
