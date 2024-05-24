@@ -5,8 +5,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import MealForm from './MealForm';
 import MealList from './MealList';
+import { getLocalDateStringInUTC } from '@/app/_helper/getLocalDateStringInUTC';
 
-interface Meal {
+interface MealItem {
   name: string;
   quantity?: number;
   unit?: string;
@@ -16,9 +17,10 @@ interface Meal {
 const DietAddMealsWrapper: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [meals, setMeals] = useState<Meal[]>([]);
+  const [meals, setMeals] = useState<MealItem[]>([]);
   const [userId, setUserId] = useState<string>('');
   const [mealType, setMealType] = useState<string>('');
+  const [isSaveDisabled, setIsSaveDisabled] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchUserId = async () => {
@@ -36,7 +38,11 @@ const DietAddMealsWrapper: React.FC = () => {
     }
   }, [searchParams]);
 
-  const addMeal = (meal: Meal) => {
+  useEffect(() => {
+    setIsSaveDisabled(meals.length === 0 || mealType === '');
+  }, [meals, mealType]);
+
+  const addMeal = (meal: MealItem) => {
     setMeals([...meals, meal]);
   };
 
@@ -51,7 +57,7 @@ const DietAddMealsWrapper: React.FC = () => {
     }
 
     try {
-      const date = new Date().toISOString().split('T')[0];
+      const date = getLocalDateStringInUTC(); // Get the local date adjusted to UTC
       await axios.post('/api/add-meals', {
         userId,
         date,
@@ -72,7 +78,8 @@ const DietAddMealsWrapper: React.FC = () => {
       <MealList meals={meals} deleteMeal={deleteMeal} />
       <button
         onClick={saveMeals}
-        className="bg-logo-pumpkin text-white p-2 rounded w-full mt-4"
+        disabled={isSaveDisabled}
+        className={`p-2 rounded w-full mt-4 ${isSaveDisabled ? 'bg-gray-300' : 'bg-logo-pumpkin text-white'}`}
       >
         Save Meals
       </button>

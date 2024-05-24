@@ -29,7 +29,6 @@ export default function InputBox({
                 placeholder={placeholder}
                 id={id}
                 name={id}
-                onChange={onChangeFn}
             />
         </div>
     );

@@ -1,5 +1,5 @@
 import WorkoutHomeWrapper from "@/components/workout_home/WorkoutHomeWrapper";
-import TopCalendar from "@/components/top_calendar/TopCalendar";
+// import TopCalendar from "@/components/top_calendar/TopCalendar";
 import { connectMongoDB } from "@/config/db";
 import {
     saveNewUserWorkoutMongoDB,
@@ -23,10 +23,11 @@ export default async function WorkoutPage() {
     console.log("OUTPUT FRsOM PAGE: ", finalData);
     const totalStringWorkoutData = JSON.stringify(finalData);
     const achievedStringData = JSON.stringify(filteredData?.achieved);
-    console.log(totalStringWorkoutData);
+    // console.log(totalStringWorkoutData);
+    const tempFn = (date: Date) => console.log(date);
     return (
         <div className="flex flex-col w-full">
-            {/* <TopCalendar /> */}
+            {/* <TopCalendar onDateSelect={tempFn} /> */}
             <WorkoutHomeWrapper
                 totalWorkoutData={totalStringWorkoutData}
                 achievedWorkoutData={achievedStringData}

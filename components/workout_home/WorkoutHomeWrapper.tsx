@@ -104,8 +104,10 @@ export default function WorkoutHomeWrapper({
     };
 
     const handleDeleteForAchieved = (index: number) => {
-        setAchieved((prevAchieved) => {
-            const newAchieved = prevAchieved.filter((_, i) => i !== index);
+        setAchieved((prevAchieved: any) => {
+            const newAchieved = prevAchieved.filter(
+                (_: any, i: any) => i !== index
+            );
             return newAchieved;
         });
     };
@@ -128,7 +130,7 @@ export default function WorkoutHomeWrapper({
     };
 
     const handleToggleComplete = (index: number) => {
-        setMenuForToday((prevMenu) => {
+        setMenuForToday((prevMenu: any) => {
             const newMenu = [...prevMenu];
             const item = { ...newMenu[index] };
             item.isCompleted = !item.isCompleted;
@@ -140,12 +142,12 @@ export default function WorkoutHomeWrapper({
         });
 
         // Update achieved state based on item completion status
-        setAchieved((prevAchieved) => {
+        setAchieved((prevAchieved: any) => {
             const item = menuForToday[index];
             if (item.isCompleted) {
                 // Remove from achieved
                 return prevAchieved.filter(
-                    (achievedItem) => achievedItem.title !== item.title
+                    (achievedItem: any) => achievedItem.title !== item.title
                 );
             } else {
                 // Add to achieved

@@ -1,5 +1,5 @@
 import React from "react";
-import TopCalendar from "@/components/top_calendar/TopCalendar";
+// import TopCalendar from "@/components/top_calendar/TopCalendar";
 import ScoreCircleBarWrapper from "@/components/summary_score_circle_bar/ScoreCircleBarWrapper";
 import BarGraph from "@/components/global/BarGraph";
 import WorkoutDietLink from "@/components/workout_diet_link/WorkoutDietLink";
@@ -15,10 +15,10 @@ const WorkoutSummary: React.FC = () => {
     const weeklyTotalCalories = 1550; // Replace with logic to get weekly total calories
     const dailyTotalCalories = 255; // Replace with logic to get daily total calories
     const maxCalories = 10000; // Define max calories
-
+    const tempFun = (date: Date) => console.log(date);
     return (
         <div>
-            <TopCalendar />
+            {/* <TopCalendar onDateSelect={tempFun} /> */}
             <WorkoutDietLink
                 workoutLink="/summary/workout"
                 dietLink="/summary/diet"
@@ -30,9 +30,21 @@ const WorkoutSummary: React.FC = () => {
             <div className="text-center">
                 <ScoreCircleBarWrapper score={score} percent={percent} />
                 <div className="text-xl font-semibold p-4">Calorie Burned</div>
-                <BarGraph label="Monthly total" value={monthlyTotalCalories} maxValue={maxCalories} />
-                <BarGraph label="Weekly total" value={weeklyTotalCalories} maxValue={maxCalories} />
-                <BarGraph label="Daily total" value={dailyTotalCalories} maxValue={maxCalories} />
+                <BarGraph
+                    label="Monthly total"
+                    value={monthlyTotalCalories}
+                    maxValue={maxCalories}
+                />
+                <BarGraph
+                    label="Weekly total"
+                    value={weeklyTotalCalories}
+                    maxValue={maxCalories}
+                />
+                <BarGraph
+                    label="Daily total"
+                    value={dailyTotalCalories}
+                    maxValue={maxCalories}
+                />
             </div>
         </div>
     );

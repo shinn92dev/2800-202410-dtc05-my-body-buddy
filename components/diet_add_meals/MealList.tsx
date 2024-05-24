@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface Meal {
+interface MealItem {
   name: string;
   quantity?: number;
   unit?: string;
@@ -8,7 +8,7 @@ interface Meal {
 }
 
 interface MealListProps {
-  meals: Meal[];
+  meals: MealItem[];
   deleteMeal: (index: number) => void;
 }
 
