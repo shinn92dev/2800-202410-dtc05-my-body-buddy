@@ -2,13 +2,13 @@
 
 import React from "react";
 import SignUpAndInIcon from "@/components/global/icons/SignUpAndInIcon";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, Resolver } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import * as yup from "yup";
 import { useSignIn } from "@clerk/nextjs";
 
-const routeLoginPostUser = async (userData) => {
+const routeLoginPostUser = async (userData: any) => {
     try {
         const newUserData = {
             email: userData.email,
@@ -54,7 +54,12 @@ export default function LoginForm() {
         handleSubmit,
         watch,
         formState: { errors },
-    } = useForm<userLoginInput>({ resolver: yupResolver(validationSchema) });
+    } = useForm<userLoginInput>({
+        resolver: yupResolver(validationSchema) as unknown as Resolver<
+            userLoginInput,
+            any
+        >,
+    });
 
     const onSubmit: SubmitHandler<userLoginInput> = async (
         data: userLoginInput
