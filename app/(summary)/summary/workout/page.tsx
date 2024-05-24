@@ -1,5 +1,5 @@
 import React from "react";
-import TopCalendar from "@/components/top_calendar/TopCalendar";
+// import TopCalendar from "@/components/top_calendar/TopCalendar";
 import ScoreCircleBarWrapper from "@/components/summary_score_circle_bar/ScoreCircleBarWrapper";
 import BarGraph from "@/components/global/BarGraph";
 import WorkoutDietLink from "@/components/workout_diet_link/WorkoutDietLink";
@@ -18,7 +18,7 @@ const WorkoutSummary: React.FC = () => {
     const tempFun = (date: Date) => console.log(date);
     return (
         <div>
-            <TopCalendar onDateSelect={tempFun} />
+            {/* <TopCalendar onDateSelect={tempFun} /> */}
             <WorkoutDietLink
                 workoutLink="/summary/workout"
                 dietLink="/summary/diet"
