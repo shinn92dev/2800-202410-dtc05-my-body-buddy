@@ -56,7 +56,7 @@ export default function NavigationBeforeAuth() {
           }`}
         >
           <Link href="/login" onClick={toggleHBGmenu}>
-            Sign In
+            Log In
           </Link>
         </li>
         <li
