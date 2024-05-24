@@ -280,7 +280,7 @@ export default function WorkoutHomeWrapper({
                             forText={"Alternative"}
                             icon={
                                 <Image
-                                    src="/my_boddy_buddy_support_ai_logo.jpg"
+                                    src="/my_boddy_buddy_support_ai_logo.png"
                                     alt="AI Logo"
                                     className="ml-2"
                                     width={24}

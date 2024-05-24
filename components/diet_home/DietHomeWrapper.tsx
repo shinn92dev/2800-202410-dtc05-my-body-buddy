@@ -25,7 +25,7 @@ const DietHomeWrapper: React.FC = () => {
 
     const icon = (
         <Image
-            src="/my_boddy_buddy_support_ai_logo.jpg"
+            src="/my_boddy_buddy_support_ai_logo.png"
             alt="support AI logo"
             width={30}
             height={30}
@@ -118,6 +118,13 @@ const DietHomeWrapper: React.FC = () => {
                     totalTargetCalories={totalTargetCalories}
                 />
             </div>
+            <div className="flex flex-col items-center p-4">
+                <AskAiButton
+                    forText="Menu"
+                    icon={icon}
+                    onClick={handleOnClick}
+                />
+            </div>
             <div className="p-4">
                 <Board
                     icon={<span>🌅</span>}
@@ -156,13 +163,6 @@ const DietHomeWrapper: React.FC = () => {
                     onEdit={(index) => handleEdit("snacks", index)}
                     onDelete={(index) => handleDelete("snacks", index)}
                     onAdd={() => handleAdd("snacks")}
-                />
-            </div>
-            <div className="flex flex-col items-center p-4">
-                <AskAiButton
-                    forText="Menu"
-                    icon={icon}
-                    onClick={handleOnClick}
                 />
             </div>
         </div>
