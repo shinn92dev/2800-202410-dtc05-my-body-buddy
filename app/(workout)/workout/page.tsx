@@ -1,5 +1,5 @@
 import WorkoutHomeWrapper from "@/components/workout_home/WorkoutHomeWrapper";
-import TopCalendar from "@/components/top_calendar/TopCalendar";
+// import TopCalendar from "@/components/top_calendar/TopCalendar";
 import { connectMongoDB } from "@/config/db";
 import {
     saveNewUserWorkoutMongoDB,
@@ -27,7 +27,7 @@ export default async function WorkoutPage() {
     const tempFn = (date: Date) => console.log(date);
     return (
         <div className="flex flex-col w-full">
-            <TopCalendar onDateSelect={tempFn} />
+            {/* <TopCalendar onDateSelect={tempFn} /> */}
             <WorkoutHomeWrapper
                 totalWorkoutData={totalStringWorkoutData}
                 achievedWorkoutData={achievedStringData}
