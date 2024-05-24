@@ -12,18 +12,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: 'Missing required parameters' }, { status: 400 });
     }
 
-    const pstDate = new Date(date).toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
+    const existingMeal = await Meal.findOne({ userId, 'dailyMeals.date': new Date(date) });
 
-    const result = await Meal.findOneAndUpdate(
-      { userId },
-      { $set: { 'dailyMeals.$[element].date': new Date(pstDate) }, $push: { [`dailyMeals.$[element].${mealType}`]: { $each: meals } } },
-      { arrayFilters: [{ 'element.date': new Date(pstDate) }], upsert: true, new: true }
-    );
-
-    if (!result) {
+    if (existingMeal) {
+      await Meal.findOneAndUpdate(
+        { userId, 'dailyMeals.date': new Date(date) },
+        { $push: { [`dailyMeals.$.${mealType}`]: { $each: meals } } },
+        { new: true }
+      );
+    } else {
       await Meal.updateOne(
         { userId },
-        { $push: { dailyMeals: { date: new Date(pstDate), [mealType]: meals } } },
+        { $push: { dailyMeals: { date: new Date(date), [mealType]: meals } } },
         { upsert: true }
       );
     }

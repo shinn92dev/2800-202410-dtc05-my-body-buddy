@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
 interface MealFormProps {
-  addMeal: (meal: Meal) => void;
+  addMeal: (meal: MealItem) => void;
 }
 
-interface Meal {
+interface MealItem {
   name: string;
   quantity?: number;
   unit?: string;
@@ -27,7 +27,7 @@ const MealForm: React.FC<MealFormProps> = ({ addMeal }) => {
 
   const handleAddMeal = () => {
     if (name && Number(calories) > 0) {
-      const meal: Meal = { name, calories: Number(calories) };
+      const meal: MealItem = { name, calories: Number(calories) };
       if (quantity) {
         meal.quantity = Number(quantity);
       }

@@ -5,8 +5,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import MealForm from './MealForm';
 import MealList from './MealList';
+import { getLocalDateStringInUTC } from '@/app/_helper/getLocalDateStringInUTC';
 
-interface Meal {
+interface MealItem {
   name: string;
   quantity?: number;
   unit?: string;
@@ -16,7 +17,7 @@ interface Meal {
 const DietAddMealsWrapper: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [meals, setMeals] = useState<Meal[]>([]);
+  const [meals, setMeals] = useState<MealItem[]>([]);
   const [userId, setUserId] = useState<string>('');
   const [mealType, setMealType] = useState<string>('');
 
@@ -36,7 +37,7 @@ const DietAddMealsWrapper: React.FC = () => {
     }
   }, [searchParams]);
 
-  const addMeal = (meal: Meal) => {
+  const addMeal = (meal: MealItem) => {
     setMeals([...meals, meal]);
   };
 
@@ -51,7 +52,7 @@ const DietAddMealsWrapper: React.FC = () => {
     }
 
     try {
-      const date = new Date().toISOString().split('T')[0];
+      const date = getLocalDateStringInUTC(); // Get the local date adjusted to UTC
       await axios.post('/api/add-meals', {
         userId,
         date,
