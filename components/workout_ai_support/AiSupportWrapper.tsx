@@ -116,7 +116,7 @@ export default function AiSupportWrapper() {
                                         onClick={handleRegenerateAlternative}
                                         className="px-4 py-2 bg-gray-500 text-white rounded-full"
                                     >
-                                        Regenerate
+                                        ↻ Regenerate
                                     </button>
                                 </div>
                             </div>
