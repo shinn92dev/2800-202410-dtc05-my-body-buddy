@@ -4,32 +4,37 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SignOutButton from "./signOutButton";
 import { useState, useRef, useEffect } from "react";
-import { getCurrentUserInformationFromMondoDB } from "@/app/_helper/getCurrentUserInformation";
+import { useUser } from "@clerk/clerk-react";
 
 export default function Navigation() {
   const path = usePathname();
+  console.log(path);
+
+  // for hamburger menu
   const [isOpen, setIsOpen] = useState(false);
   const toggleHBGmenu = () => setIsOpen(!isOpen);
 
+  // for logo animation
   const [isHide, setIsHide] = useState(false);
   const [isDance, setIsDance] = useState(false);
   const [isBounce, setIsBounce] = useState(false);
-  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+
+  // for url path fetch
+  const [loggedUsername, setLoggedUsername] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const { isLoaded, isSignedIn, user } = useUser();
 
   const clickCountRef = useRef(0);
   const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // const currentUserId = await getCurrentUserInformationFromMondoDB().username;
-
   useEffect(() => {
-    async function fetchUser() {
-      const userData = await getCurrentUserInformationFromMondoDB();
-      if (userData) {
-        setCurrentUserId(userData.username);
-      }
+    if (isLoaded && isSignedIn && user) {
+      setLoggedUsername(user.username);
+      setIsLoading(false);
+    } else {
+      setIsLoading(false);
     }
-    fetchUser();
-  }, []);
+  }, [isLoaded, isSignedIn, user]);
 
   const handleLogoClick = () => {
     clickCountRef.current += 1;
@@ -96,17 +101,21 @@ export default function Navigation() {
           </svg>
         </button>
 
-        <Link href={`/user/${currentUserId}`} onClick={toggleHBGmenu}>
-          <li
-            className={`text-white text-center font-bold py-2 px-4 rounded-full m-2 ${
-              path === `/user/${currentUserId}`
-                ? "bg-blue-500 hover:bg-blue-700"
-                : "bg-gray-500 hover:bg-gray-700"
-            }`}
-          >
-            Profile
-          </li>
-        </Link>
+        {!isLoading && loggedUsername ? (
+          <Link href={`/user/${loggedUsername}`} onClick={toggleHBGmenu}>
+            <li
+              className={`text-white text-center font-bold py-2 px-4 rounded-full m-2 ${
+                path === `/user/${loggedUsername}`
+                  ? "bg-blue-500 hover:bg-blue-700"
+                  : "bg-gray-500 hover:bg-gray-700"
+              }`}
+            >
+              Profile
+            </li>
+          </Link>
+        ) : (
+          <li className="text-center py-2 px-4">Loading...</li>
+        )}
 
         <SignOutButton />
       </ul>
