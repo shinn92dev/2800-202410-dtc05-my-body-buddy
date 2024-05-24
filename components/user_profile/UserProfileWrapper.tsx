@@ -2,8 +2,6 @@
 // TODO: one time pop-up message for complete profile
 
 import Link from "next/link";
-import { connectMongoDB } from "@/config/db";
-
 
 export interface UserData {
   name: string;
