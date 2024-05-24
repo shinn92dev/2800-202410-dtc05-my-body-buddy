@@ -107,7 +107,7 @@ export default function WorkoutHomeWrapper() {
     };
 
     return (
-        <div className="p-4 items-center">
+        <div className="p-4 items-center bg-white">
             <h1 className="text-center text-2xl font-bold">Your Progress</h1>
             <div className="flex justify-center mt-4">
                 <CircleBar title={totalCaloriesOfAchieved + " kcal"}
@@ -120,7 +120,7 @@ export default function WorkoutHomeWrapper() {
                        onDelete={(index) => handleDeleteForAchieved(index)} onAdd={handleAddForAchieved}/>
             </div>
             <div className="mt-4">
-                <div className="p-4 bg-white rounded-lg shadow-md">
+                <div className="p-4 bg-beige rounded-lg shadow-md">
                     <div className="flex justify-between items-center mb-4">
                         <div className="flex items-center">
                             <span>🏋️</span>
@@ -140,7 +140,7 @@ export default function WorkoutHomeWrapper() {
                                 <div className="flex items-center">
                                     <span className="text-lg font-semibold mr-4">{item.calories} kcal</span>
                                     <button onClick={() => handleToggleComplete(index)}
-                                            className={`px-4 py-2 rounded-full ${item.isCompleted ? 'bg-white text-gray-500 border' : 'bg-gray-500 text-white'}`}>
+                                            className={`px-4 py-2 rounded-full ${item.isCompleted ? 'bg-white text-gray-500 border' : 'bg-dark-blue text-white'}`}>
                                         {item.isCompleted ? 'Undo' : 'Done'}
                                     </button>
                                 </div>

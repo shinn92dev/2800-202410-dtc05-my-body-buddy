@@ -4,7 +4,7 @@ import BoardContent from './BoardContent';
 interface BoardProps {
     icon: React.ReactNode;
     title: string;
-    items: { name: string; amount: string; calories: number }[];
+    items: { name: string; quantity?: number; unit?: string; calories: number }[];
     onEdit: (index: number) => void;
     onDelete: (index: number) => void;
     onAdd: () => void;
@@ -14,7 +14,7 @@ const Board: React.FC<BoardProps> = ({ icon, title, items, onEdit, onDelete, onA
     const totalCalories = items.reduce((total, item) => total + item.calories, 0);
 
     return (
-        <div className="p-4 bg-white rounded-lg shadow-md">
+        <div className="p-4 bg-beige rounded-lg shadow-md">
             <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center">
                     {icon}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
@@ -28,6 +28,9 @@ const CalorieDistributionChart: React.FC<CalorieDistributionChartProps> = ({
     snackCalories,
     totalTargetCalories,
 }) => {
+    const [isSpinning, setIsSpinning] = useState(false);
+    const [clickCount, setClickCount] = useState(0);
+
     const totalCalories = breakfastCalories + lunchCalories + dinnerCalories + snackCalories;
     const remainingCalories = totalTargetCalories - totalCalories;
 
@@ -42,8 +45,8 @@ const CalorieDistributionChart: React.FC<CalorieDistributionChartProps> = ({
                     snackCalories,
                     remainingCalories > 0 ? remainingCalories : 0,
                 ],
-                backgroundColor: ['#525FE1', '#FFA41B', '#EE752F', '#F86F03', '#FFFFFF'],
-                hoverBackgroundColor: ['#3B4CC0', '#FF8C00', '#CC5F23', '#D85D00', '#FFFFFF'],
+                backgroundColor: ['#525FE1', '#FFA41B', '#EE752F', '#F86F03', 'lightgray'],
+                hoverBackgroundColor: ['#3B4CC0', '#FF8C00', '#CC5F23', '#D85D00', '#FFF6F4'],
                 borderColor: '#FFF6F4',
             },
         ],
@@ -51,6 +54,15 @@ const CalorieDistributionChart: React.FC<CalorieDistributionChartProps> = ({
 
     const options: ChartOptions<'doughnut'> = {
         responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+            padding: {
+                left: 80,
+                right: 80,
+                top: 20,
+                bottom: 20,
+            },
+        },
         plugins: {
             legend: {
                 display: false,
@@ -70,6 +82,7 @@ const CalorieDistributionChart: React.FC<CalorieDistributionChartProps> = ({
                 },
                 font: {
                     weight: 'bold',
+                    size: 12,
                 },
                 formatter: (value, context) => {
                     const label = context.chart.data.labels?.[context.dataIndex] || '';
@@ -77,14 +90,32 @@ const CalorieDistributionChart: React.FC<CalorieDistributionChartProps> = ({
                 },
                 anchor: 'end',
                 align: 'end',
-                offset: 10,
+                offset: 2,
+                clip: false,
             },
         },
         cutout: '70%',
     };
 
+    const handleClick = () => {
+        setClickCount((prevCount) => prevCount + 1);
+        setTimeout(() => {
+            setClickCount(0);
+        }, 500); 
+    };
+
+    if (clickCount === 3) {
+        setClickCount(0);
+        if (!isSpinning) {
+            setIsSpinning(true);
+            setTimeout(() => {
+                setIsSpinning(false);
+            }, 1000); 
+        }
+    }
+
     return (
-        <div className="relative w-64 h-64">
+        <div className={`relative w-full h-64 ${isSpinning ? 'animate-spin-fast' : ''}`} onClick={handleClick}>
             <Doughnut data={data} options={options} />
             <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <span className="text-2xl font-bold">{totalCalories}kcal</span>
