@@ -25,6 +25,7 @@ export default function UserProfileEditWrapper({
   userData,
 }: UserProfileWrapperProps) {
   const [formData, setFormData] = useState<UserData>(userData);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -35,6 +36,7 @@ export default function UserProfileEditWrapper({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    goalCalCalc(); // Calculate the goal calories before saving
     try {
       const res = await fetch("/api/update-user", {
         method: "POST",
@@ -46,12 +48,32 @@ export default function UserProfileEditWrapper({
       if (!res.ok) {
         throw new Error("Error updating user data");
       }
-      console.log(formData);
       const result = await res.json();
       console.log(result.message);
     } catch (error) {
       console.error("Error updating user data:", error);
     }
+  };
+
+  const goalCalCalc = () => {
+    let goalCal = 0;
+    if (formData.gender.toLowerCase() === "female") {
+      goalCal =
+        7.38 * formData.weight +
+        607 * formData.height -
+        2.31 * formData.age +
+        243;
+    } else if (formData.gender.toLowerCase() === "male") {
+      goalCal =
+        9.65 * formData.weight +
+        573 * formData.height -
+        5.08 * formData.age +
+        560;
+    }
+    setFormData((prevData) => ({
+      ...prevData,
+      goalCal: Math.round(goalCal), // rounding to avoid decimals
+    }));
   };
 
   return (
@@ -65,7 +87,7 @@ export default function UserProfileEditWrapper({
       >
         <p className="text-4xl p-2">👤</p>
         <div>
-          <div className="my-1">Name: {userData.name}</div>
+          <div className="my-1">Name: {formData.name}</div>
           <div className="my-1">
             Age: <br />
             <input
@@ -141,10 +163,10 @@ export default function UserProfileEditWrapper({
       >
         <p className="text-4xl p-2">🚀</p>
         <div>
-          To reach your goal of {userData.goalWeight} kg <br />
-          until {userData.goalDay}, <br />
-          you should eat: <br />
-          {userData.goalCal} Calories/day
+          To reach your goal of {formData.goalWeight} kg <br />
+          until {formData.goalDay}, <br />
+          you should take: <br />
+          {formData.goalCal} Calories/day
         </div>
         <br />
       </div>

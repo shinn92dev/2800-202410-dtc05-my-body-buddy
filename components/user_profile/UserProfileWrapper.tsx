@@ -1,5 +1,4 @@
 "use client";
-// TODO: one time pop-up message for complete profile
 
 import Link from "next/link";
 
@@ -56,7 +55,7 @@ export default function UserProfileWrapper({
         <div>
           To reach your goal of {userData.goalWeight} kg <br />
           until {userData.goalDay}, <br />
-          you should eat: <br />
+          you should take: <br />
           {userData.goalCal} Calories/day
         </div>
         <br />
