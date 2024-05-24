@@ -25,7 +25,7 @@ const DietHomeWrapper: React.FC = () => {
 
     const icon = (
         <Image
-            src="/my_boddy_buddy_support_ai_logo.jpg"
+            src="/my_boddy_buddy_support_ai_logo.png"
             alt="support AI logo"
             width={30}
             height={30}
