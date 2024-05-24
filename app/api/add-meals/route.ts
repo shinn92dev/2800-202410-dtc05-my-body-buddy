@@ -12,11 +12,21 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: 'Missing required parameters' }, { status: 400 });
     }
 
-    await Meal.updateOne(
-      { userId, date: new Date(date) },
-      { $push: { [mealType]: { $each: meals } } },
-      { upsert: true }
-    );
+    const existingMeal = await Meal.findOne({ userId, 'dailyMeals.date': new Date(date) });
+
+    if (existingMeal) {
+      await Meal.findOneAndUpdate(
+        { userId, 'dailyMeals.date': new Date(date) },
+        { $push: { [`dailyMeals.$.${mealType}`]: { $each: meals } } },
+        { new: true }
+      );
+    } else {
+      await Meal.updateOne(
+        { userId },
+        { $push: { dailyMeals: { date: new Date(date), [mealType]: meals } } },
+        { upsert: true }
+      );
+    }
 
     return NextResponse.json({ message: 'Meals added successfully' }, { status: 201 });
   } catch (error) {
