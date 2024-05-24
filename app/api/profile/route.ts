@@ -1,34 +1,43 @@
-// import { NextApiRequest, NextApiResponse } from "next";
-// import { connectMongoDB } from "@/config/db";
-// import UserModel from "@/models/User";
+import { NextRequest, NextResponse } from "next/server";
+import { connectMongoDB } from "@/config/db";
+import UserModel from "@/models/User";
 
-// export default async function handler(
-//   req: NextApiRequest,
-//   res: NextApiResponse
-// ) {
-//   if (req.method !== "POST") {
-//     return res.status(405).json({ message: "Method Not Allowed" });
-//   }
+export async function POST(req: NextRequest) {
+    await connectMongoDB();
 
-//   await connectMongoDB();
+    const { name, age, gender, height, weight, goalWeight, goalDay, goalCal } =
+        await req.json();
 
-//   const { name, age, gender, height, weight, goalWeight, goalDay, goalCal } =
-//     req.body;
+    try {
+        const user = await UserModel.findOneAndUpdate(
+            { username: name },
+            { age, gender, height, weight, goalWeight, goalDay, goalCal },
+            { new: true, upsert: true }
+        );
 
-//   try {
-//     const user = await UserModel.findOneAndUpdate(
-//       { username: name },
-//       { age, gender, height, weight, goalWeight, goalDay, goalCal },
-//       { new: true, upsert: true }
-//     );
+        if (!user) {
+            return NextResponse.json(
+                { message: "User not found" },
+                { status: 404 }
+            );
+        }
 
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
+        return NextResponse.json(
+            { message: "User data updated successfully", user },
+            { status: 200 }
+        );
+    } catch (error) {
+        console.error("Error updating user data:", error);
+        return NextResponse.json(
+            { message: "Internal Server Error" },
+            { status: 500 }
+        );
+    }
+}
 
-//     res.status(200).json({ message: "User data updated successfully", user });
-//   } catch (error) {
-//     console.error("Error updating user data:", error);
-//     res.status(500).json({ message: "Internal Server Error" });
-//   }
-// }
+export async function GET(req: NextRequest) {
+    return NextResponse.json(
+        { message: "Method Not Allowed" },
+        { status: 405 }
+    );
+}
