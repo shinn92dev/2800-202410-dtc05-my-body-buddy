@@ -6,15 +6,14 @@ import { usePathname } from "next/navigation";
 
 export default function NavigationBeforeAuth() {
   const path = usePathname();
-  console.log(path);
   const [isOpen, setIsOpen] = useState(false);
   const toggleHBGmenu = () => setIsOpen(!isOpen);
   console.log(path);
 
   return (
-    <nav className="relative flex items-center">
+    <nav className="flex items-center justify-between px-4">
       <button
-        className="block ml-4"
+        className="block"
         onClick={toggleHBGmenu}
         aria-label="Toggle menu"
       >
@@ -31,70 +30,54 @@ export default function NavigationBeforeAuth() {
         </svg>
       </button>
 
-            <ul
-                className={`flex-col flex-wrap ${
-                    isOpen ? "block" : "hidden"
-                } lg:flex`}
-            >
-                <li
-                    className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
-                        path === "/"
-                            ? "bg-dark-blue hover:bg-dark-blue"
-                            : "bg-gray-500 hover:bg-gray-700"
-                    }`}
-                >
-                    <Link href="/">Home</Link>
-                </li>
-                <li
-                    className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
-                        path === "/login"
-                            ? "bg-dark-blue hover:bg-dark-blue"
-                            : "bg-gray-500 hover:bg-gray-700"
-                    }`}
-                >
-                    <Link href="/login">Sign In</Link>
-                </li>
-                <li
-                    className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
-                        path === "/signup"
-                            ? "bg-dark-blue hover:bg-dark-blue"
-                            : "bg-gray-500 hover:bg-gray-700"
-                    }`}
-                >
-                    <Link href="/signup">Sign Up</Link>
-                </li>
-            </ul>
-      <ul>
-        <Link href="/login" onClick={toggleHBGmenu}>
-          <li
-            className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
-              path === "/login"
-                ? "bg-dark-blue hover:bg-dark-blue"
-                : "bg-gray-500 hover:bg-gray-700"
-            }`}
+      <ul
+        className={`absolute left-1 top-1 w-1/3 bg-white border border-logo-pumpkin shadow-lg rounded-md ${
+          isOpen ? "block" : "hidden"
+        }`}
+      >
+        <button onClick={toggleHBGmenu}>
+          <svg
+            className="mt-3 h-10 w-10 fill-current text-logo-pumpkin"
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#e8eaed"
           >
-            login
-          </li>
-        </Link>
-        <Link href="/signup" onClick={toggleHBGmenu}>
-          <li
-            className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
-              path === "/signup"
-                ? "bg-dark-blue hover:bg-dark-blue"
-                : "bg-gray-500 hover:bg-gray-700"
-            }`}
-          >
-            signup
-          </li>
-        </Link>
+            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+          </svg>
+        </button>
+
+        <li
+          className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
+            path === "/login"
+              ? "bg-dark-blue hover:bg-dark-blue"
+              : "bg-gray-500 hover:bg-gray-700"
+          }`}
+        >
+          <Link href="/login" onClick={toggleHBGmenu}>
+            Sign In
+          </Link>
+        </li>
+        <li
+          className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
+            path === "/signup"
+              ? "bg-dark-blue hover:bg-dark-blue"
+              : "bg-gray-500 hover:bg-gray-700"
+          }`}
+        >
+          <Link href="/signup" onClick={toggleHBGmenu}>
+            Sign Up
+          </Link>
+        </li>
       </ul>
 
-      <div className="flex justify-center items-center">
+      <div className="flex-grow text-center">
         <Link href="/">
           <img
             src="/my_body_buddy_logo_transparent.png"
             alt="logo"
-            className="h-20 w-20"
+            className="h-20 w-20 mx-auto"
           />
         </Link>
       </div>

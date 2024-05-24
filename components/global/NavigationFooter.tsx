@@ -8,64 +8,63 @@ export default function NavigationFooter() {
   console.log(path);
 
   const getButtonClasses = (buttonPath: string) => {
-    return path.startsWith(buttonPath) ? "text-white font-bold" : "text-gray-400";
+    return path.startsWith(buttonPath)
+      ? "text-white font-bold"
+      : "text-gray-400";
   };
 
   return (
-    <div
-      className="grid grid-flow-col justify-stretch fixed inset-x-0 bottom-0 h-20
-        bg-logo-pumpkin text-beige text-center"
-    >
+    <div className="grid grid-flow-col justify-stretch fixed inset-x-0 bottom-0 h-20 bg-logo-pumpkin text-beige text-center">
       <Link
-        className={`grid justify-items-center ${getButtonClasses("/diet")}`}
+        className={`flex flex-col justify-center items-center ${getButtonClasses(
+          "/diet"
+        )}`}
         href="/diet"
       >
-        <div className="content-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="24px"
-            viewBox="0 -960 960 960"
-            width="24px"
-            fill="currentColor"
-          >
-            <path d="m175-120-56-56 410-410q-18-42-5-95t57-95q53-53 118-62t106 32q41 41 32 106t-62 118q-42 44-95 57t-95-5l-50 50 304 304-56 56-304-302-304 302Zm118-342L173-582q-54-54-54-129t54-129l248 250-128 128Z" />
-          </svg>
-          Diet
-        </div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="24px"
+          viewBox="0 -960 960 960"
+          width="24px"
+          fill="currentColor"
+        >
+          <path d="m175-120-56-56 410-410q-18-42-5-95t57-95q53-53 118-62t106 32q41 41 32 106t-62 118q-42 44-95 57t-95-5l-50 50 304 304-56 56-304-302-304 302Zm118-342L173-582q-54-54-54-129t54-129l248 250-128 128Z" />
+        </svg>
+        <p>Diet</p>
       </Link>
       <Link
-        href="/"
-        className={`grid justify-items-center ${getButtonClasses("/")}`}
+        href="/summary/diet"
+        className={`flex flex-col justify-center items-center ${getButtonClasses(
+          "/summary"
+        )}`}
       >
-        <div className="content-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="24px"
-            viewBox="0 -960 960 960"
-            width="24px"
-            fill="currentColor"
-          >
-            <path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z" />
-          </svg>
-          Home
-        </div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="24px"
+          viewBox="0 -960 960 960"
+          width="24px"
+          fill="currentColor"
+        >
+          <path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z" />
+        </svg>
+        <p>Home</p>
       </Link>
       <Link
         href="/workout"
-        className={`grid justify-items-center ${getButtonClasses("/workout")}`}
+        className={`flex flex-col justify-center items-center ${getButtonClasses(
+          "/workout"
+        )}`}
       >
-        <div className="content-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="24px"
-            viewBox="0 -960 960 960"
-            width="24px"
-            fill="currentColor"
-          >
-            <path d="m480-80-20-400-140-40H40v-80h240l280-200 52 61-166 119h114l312-180 48 56-340 264-20 400h-80ZM240-640q-33 0-56.5-23.5T160-720q0-33 23.5-56.5T240-800q33 0 56.5 23.5T320-720q0 33-23.5 56.5T240-640Z" />
-          </svg>
-          Work Out
-        </div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="24px"
+          viewBox="0 -960 960 960"
+          width="24px"
+          fill="currentColor"
+        >
+          <path d="m480-80-20-400-140-40H40v-80h240l280-200 52 61-166 119h114l312-180 48 56-340 264-20 400h-80ZM240-640q-33 0-56.5-23.5T160-720q0-33 23.5-56.5T240-800q33 0 56.5 23.5T320-720q0 33-23.5 56.5T240-640Z" />
+        </svg>
+        <p>Work Out</p>
       </Link>
     </div>
   );

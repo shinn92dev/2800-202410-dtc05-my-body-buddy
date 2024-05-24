@@ -3,20 +3,63 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SignOutButton from "./signOutButton";
-import { useState } from "react";
-import { UserButton } from "@clerk/nextjs";
+import { useState, useRef, useEffect } from "react";
+import { getCurrentUserInformationFromMondoDB } from "@/app/_helper/getCurrentUserInformation";
 
 export default function Navigation() {
   const path = usePathname();
-
   const [isOpen, setIsOpen] = useState(false);
   const toggleHBGmenu = () => setIsOpen(!isOpen);
 
-  const tempUserId: string = "Anthony";
-  console.log(path);
+  const [isHide, setIsHide] = useState(false);
+  const [isDance, setIsDance] = useState(false);
+  const [isBounce, setIsBounce] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+
+  const clickCountRef = useRef(0);
+  const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // const currentUserId = await getCurrentUserInformationFromMondoDB().username;
+
+  useEffect(() => {
+    async function fetchUser() {
+      const userData = await getCurrentUserInformationFromMondoDB();
+      if (userData) {
+        setCurrentUserId(userData.username);
+      }
+    }
+    fetchUser();
+  }, []);
+
+  const handleLogoClick = () => {
+    clickCountRef.current += 1;
+
+    if (clickTimeoutRef.current) {
+      clearTimeout(clickTimeoutRef.current);
+    }
+
+    clickTimeoutRef.current = setTimeout(() => {
+      if (clickCountRef.current === 2) {
+        setIsDance(true);
+        setIsHide(true);
+        setTimeout(() => {
+          setIsDance(false);
+          setIsHide(false);
+        }, 3000);
+      } else if (clickCountRef.current === 3) {
+        setIsBounce(true);
+        setIsHide(true);
+        setTimeout(() => {
+          setIsBounce(false);
+          setIsHide(false);
+        }, 3000);
+      }
+      clickCountRef.current = 0;
+    }, 250);
+  };
 
   return (
-    <nav className="flex items-center justify-between">
+    <nav className="flex items-center justify-between px-4">
       <button
         className="block ml-4"
         onClick={toggleHBGmenu}
@@ -53,28 +96,39 @@ export default function Navigation() {
           </svg>
         </button>
 
-        <Link href={`/user/${tempUserId}`} onClick={toggleHBGmenu}>
+        <Link href={`/user/${currentUserId}`} onClick={toggleHBGmenu}>
           <li
-            className={`text-white font-bold py-2 px-4 rounded-full m-2 ${
-              path === `/user/${tempUserId}`
+            className={`text-white text-center font-bold py-2 px-4 rounded-full m-2 ${
+              path === `/user/${currentUserId}`
                 ? "bg-blue-500 hover:bg-blue-700"
                 : "bg-gray-500 hover:bg-gray-700"
             }`}
           >
-            User
+            Profile
           </li>
         </Link>
+
+        <SignOutButton />
       </ul>
 
-        <Link href="/" onClick={toggleHBGmenu}>
+      <div className="flex-grow text-center">
+        <Link href="/summary/diet">
           <img
             src="/my_body_buddy_logo_transparent.png"
             alt="logo"
-            className="h-20 w-20"
+            onClick={handleLogoClick}
+            className={`h-20 w-20 mx-auto ${isHide ? "hidden" : ""}`}
+          />
+          <img
+            src="/person_only_transparent.png"
+            alt="person only logo"
+            onClick={handleLogoClick}
+            className={`h-20 w-20 mx-auto ${isHide ? "block" : "hidden"} ${
+              isDance ? "animate-spin" : ""
+            } ${isBounce ? "animate-bounce" : ""}`}
           />
         </Link>
-
-      <div className="mr-5"><UserButton /></div>
+      </div>
     </nav>
   );
 }
