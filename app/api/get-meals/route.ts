@@ -44,8 +44,6 @@ export async function GET(req: NextRequest) {
       return value;
     }));
 
-    console.log('Response data:', responseData);
-
     return NextResponse.json(responseData, { status: 200 });
   } catch (error) {
     console.error('Error fetching meals:', error);
