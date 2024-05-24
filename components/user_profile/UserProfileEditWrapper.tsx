@@ -3,6 +3,10 @@
 // goal calories calculation
 // one time pop-up message for complete profile
 
+// done 없애기
+// footer nav 회색 바꾸기
+// input box 패딩 넣기
+
 import Link from "next/link";
 import { useState } from "react";
 
