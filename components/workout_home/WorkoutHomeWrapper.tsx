@@ -5,11 +5,39 @@ import React, { useState, useEffect } from "react";
 import CircleBar from "@/components/global/CircleBar";
 import Board from "@/components/global/Board";
 import AskAiButton from "@/components/global/AskAiButton";
+import { useForm, SubmitHandler } from "react-hook-form";
 
-const defaultAchieved = [
-    { title: "Walking", quantity: 45, unit: "min", kcalPerUnit: 3.5 },
-    { title: "Push-ups", quantity: 50, unit: "reps", kcalPerUnit: 0.32 },
-];
+const routeWorkoutHomeWrapperPost = async (
+    username: string,
+    date: Date,
+    workoutTitle: string
+) => {
+    try {
+        const formattedDate = new Date(
+            `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
+        );
+        const response = await fetch("/api/workout-wrapper", {
+            method: "POST",
+            body: JSON.stringify({
+                username: username,
+                date: formattedDate,
+                title: workoutTitle,
+            }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        console.log("Response from workout home wrapper:", response);
+        if (!response.ok) {
+            throw new Error("Not OK");
+        }
+        const data = await response.json();
+        console.log("Server Response:", data);
+        // window.location.href = "/workout";
+    } catch (error) {
+        console.log(error);
+    }
+};
 
 export default function WorkoutHomeWrapper({
     totalWorkoutData,
@@ -129,7 +157,18 @@ export default function WorkoutHomeWrapper({
     const handleAskAI = () => {
         window.location.href = "workout/ai-support";
     };
-
+    const { handleSubmit } = useForm();
+    const onSubmit = async () => {
+        try {
+            await routeWorkoutHomeWrapperPost(
+                "john.doe",
+                new Date(),
+                "Running"
+            );
+        } catch (error) {
+            console.log(error);
+        }
+    };
     return (
         <div className="p-4 items-center">
             <h1 className="text-center text-2xl font-bold">Your Progress</h1>
@@ -197,18 +236,24 @@ export default function WorkoutHomeWrapper({
                                     <span className="text-lg font-semibold mr-4">
                                         {item.calories} kcal
                                     </span>
-                                    <button
-                                        onClick={() =>
-                                            handleToggleComplete(index)
-                                        }
-                                        className={`px-4 py-2 rounded-full ${
-                                            item.isCompleted
-                                                ? "bg-white text-gray-500 border"
-                                                : "bg-gray-500 text-white"
-                                        }`}
+                                    <form
+                                        method="post"
+                                        onSubmit={handleSubmit(onSubmit)}
                                     >
-                                        {item.isCompleted ? "Undo" : "Done"}
-                                    </button>
+                                        <button
+                                            type="submit"
+                                            onClick={() =>
+                                                handleToggleComplete(index)
+                                            }
+                                            className={`px-4 py-2 rounded-full ${
+                                                item.isCompleted
+                                                    ? "bg-white text-gray-500 border"
+                                                    : "bg-gray-500 text-white"
+                                            }`}
+                                        >
+                                            {item.isCompleted ? "Undo" : "Done"}
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         ))}

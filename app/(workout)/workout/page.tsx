@@ -15,7 +15,7 @@ export const metadata = {
 export default async function WorkoutPage() {
     const data = await retrieveWorkout("john.doe");
     const filteredData = filterWorkoutsByAchievement(
-        new Date(),
+        new Date("2024-05-22"),
         data?.workouts
     );
     const finalData = [...filteredData?.achieved, ...filteredData?.onGoing];
