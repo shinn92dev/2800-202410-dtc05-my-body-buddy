@@ -5,7 +5,7 @@ import TopCalendar from "@/components/top_calendar/TopCalendar";
 import ScoreCircleBarWrapper from "@/components/summary_score_circle_bar/ScoreCircleBarWrapper";
 import BarGraph from "@/components/global/BarGraph";
 import WorkoutDietLink from "@/components/workout_diet_link/WorkoutDietLink";
-import axios from 'axios';
+import axios from "axios";
 
 type MealType = {
     name: string;
@@ -33,11 +33,11 @@ export default function DietSummary() {
         const fetchMeals = async () => {
             try {
                 const response = await axios.get(`/api/get-meals`, {
-                    params: { userId, date }
+                    params: { userId, date },
                 });
                 setMeals(response.data);
                 setErrorStatus(null);
-            } catch (error) {
+            } catch (error: any) {
                 console.error("Error fetching meals:", error);
                 if (error.response) {
                     setErrorStatus(error.response.status);
@@ -55,10 +55,17 @@ export default function DietSummary() {
             return 0;
         }
         if (!meals || !meals[mealType]) return 0;
-        return meals[mealType].reduce((total, item) => total + item.calories, 0);
+        return (meals[mealType] as MealType[]).reduce(
+            (total: any, item: any) => total + item.calories,
+            0
+        );
     };
 
-    const dailyTotalCalories = calculateCalories("breakfast") + calculateCalories("lunch") + calculateCalories("dinner") + calculateCalories("snacks");
+    const dailyTotalCalories =
+        calculateCalories("breakfast") +
+        calculateCalories("lunch") +
+        calculateCalories("dinner") +
+        calculateCalories("snacks");
     const breakfastTotalCalories = calculateCalories("breakfast");
     const lunchTotalCalories = calculateCalories("lunch");
     const dinnerTotalCalories = calculateCalories("dinner");
@@ -66,12 +73,12 @@ export default function DietSummary() {
     const maxCalories = 5000;
 
     const handleDateSelect = (selectedDate: Date) => {
-        setDate(selectedDate.toISOString().split('T')[0]); // Format date as YYYY-MM-DD
+        setDate(selectedDate.toISOString().split("T")[0]); // Format date as YYYY-MM-DD
     };
 
     return (
         <div>
-            <TopCalendar onDateSelect={handleDateSelect}/>
+            <TopCalendar onDateSelect={handleDateSelect} />
             <WorkoutDietLink
                 workoutLink="/summary/workout"
                 dietLink="/summary/diet"
@@ -82,14 +89,33 @@ export default function DietSummary() {
             />
             <div className="text-center">
                 <ScoreCircleBarWrapper score={80} percent={80} />
-                <div className='text-xl font-semibold p-4'>Calorie Took</div>
-                <BarGraph label="Daily total" value={dailyTotalCalories} maxValue={maxCalories} />
-                <BarGraph label="Breakfast total" value={breakfastTotalCalories} maxValue={maxCalories} />
-                <BarGraph label="Lunch total" value={lunchTotalCalories} maxValue={maxCalories} />
-                <BarGraph label="Dinner total" value={dinnerTotalCalories} maxValue={maxCalories} />
-                <BarGraph label="Snack total" value={snackTotalCalories} maxValue={maxCalories} />
+                <div className="text-xl font-semibold p-4">Calorie Took</div>
+                <BarGraph
+                    label="Daily total"
+                    value={dailyTotalCalories}
+                    maxValue={maxCalories}
+                />
+                <BarGraph
+                    label="Breakfast total"
+                    value={breakfastTotalCalories}
+                    maxValue={maxCalories}
+                />
+                <BarGraph
+                    label="Lunch total"
+                    value={lunchTotalCalories}
+                    maxValue={maxCalories}
+                />
+                <BarGraph
+                    label="Dinner total"
+                    value={dinnerTotalCalories}
+                    maxValue={maxCalories}
+                />
+                <BarGraph
+                    label="Snack total"
+                    value={snackTotalCalories}
+                    maxValue={maxCalories}
+                />
             </div>
         </div>
     );
 }
-

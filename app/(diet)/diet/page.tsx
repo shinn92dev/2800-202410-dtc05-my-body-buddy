@@ -6,9 +6,10 @@ export const metadata = {
 };
 
 export default function DietHome() {
+    const tempFunc = (date: Date) => console.log();
     return (
         <div className="flex flex-col w-full">
-            <CalendarNavbar/>
+            <CalendarNavbar onDateSelect={tempFunc} />
             <DietHomeWrapper />
         </div>
     );
