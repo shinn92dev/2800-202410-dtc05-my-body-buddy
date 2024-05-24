@@ -10,7 +10,7 @@ const MealItemSchema = new Schema({
 
 // Define the DailyMeal schema
 const DailyMealSchema = new Schema({
-  date: { type: Date, required: true, get: (value: Date) => new Date(value).toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }) },
+  date: { type: Date, required: true },
   breakfast: [MealItemSchema],
   lunch: [MealItemSchema],
   dinner: [MealItemSchema],
@@ -23,7 +23,7 @@ const MealSchema = new Schema({
   dailyMeals: [DailyMealSchema],
 });
 
-// Compile the model
+// Compile the model if it doesn't already exist
 const Meal = models.Meal || model('Meal', MealSchema);
 
 export default Meal;

@@ -14,6 +14,8 @@ interface Meal {
     calories: number;
 }
 
+type MealType = 'breakfast' | 'lunch' | 'dinner' | 'snacks';
+
 const DietHomeWrapper: React.FC = () => {
     const [breakfasts, setBreakfasts] = useState<Meal[]>([]);
     const [lunches, setLunches] = useState<Meal[]>([]);
@@ -55,18 +57,18 @@ const DietHomeWrapper: React.FC = () => {
                 setDinners(data.dinner || []);
                 setSnacks(data.snacks || []);
             } catch (error) {
-                console.error("Error fetching meals:", error);
+                console.error("Error fetching meals:", (error as Error).message);
             }
         };
 
         fetchMeals();
     }, [userId]);
 
-    const handleEdit = (mealType: string, index: number) => {
+    const handleEdit = (mealType: MealType, index: number) => {
         // Handle edit logic here
     };
 
-    const handleDelete = async (mealType: string, index: number) => {
+    const handleDelete = async (mealType: MealType, index: number) => {
         try {
             const date = new Date().toISOString().split("T")[0];
             await axios.delete("/api/delete-meal", {
@@ -88,11 +90,11 @@ const DietHomeWrapper: React.FC = () => {
                 setSnacks(snacks.filter((_, i) => i !== index));
             }
         } catch (error) {
-            console.error("Error deleting meal item:", error);
+            console.error("Error deleting meal item:", (error as Error).message);
         }
     };
 
-    const handleAdd = (mealType: string) => {
+    const handleAdd = (mealType: MealType) => {
         // Navigate to AddingItems page
         window.location.href = `/diet/add-meals?mealType=${mealType}`;
     };
