@@ -6,11 +6,16 @@ import CircleBar from "@/components/global/CircleBar";
 import Board from "@/components/global/Board";
 import AskAiButton from "@/components/global/AskAiButton";
 import { useForm, SubmitHandler } from "react-hook-form";
-
+import {
+    retrieveWorkout,
+    filterWorkoutsByAchievement,
+} from "@/app/_helper/workout";
 const routeWorkoutHomeWrapperPost = async (
     username: string,
     date: Date,
-    workoutTitle: string
+    workoutTitle: string,
+    status: boolean,
+    setWorkoutData: any
 ) => {
     try {
         const formattedDate = new Date(
@@ -32,6 +37,15 @@ const routeWorkoutHomeWrapperPost = async (
             throw new Error("Not OK");
         }
         const data = await response.json();
+        const totalWorkoutData = await retrieveWorkout("john.doe");
+        const filteredWorkoutData = await filterWorkoutsByAchievement(
+            new Date(),
+            totalWorkoutData
+        );
+        setWorkoutData([
+            ...filteredWorkoutData?.achieved,
+            ...filteredWorkoutData?.onGoing,
+        ]);
         console.log("Server Response:", data);
         // window.location.href = "/workout";
     } catch (error) {
@@ -158,12 +172,15 @@ export default function WorkoutHomeWrapper({
         window.location.href = "workout/ai-support";
     };
     const { handleSubmit } = useForm();
-    const onSubmit = async () => {
+    const onSubmit = async (event) => {
+        console.log(event);
         try {
             await routeWorkoutHomeWrapperPost(
                 "john.doe",
                 new Date(),
-                "Running"
+                "Running",
+                true,
+                setMenuForTodayItems
             );
         } catch (error) {
             console.log(error);
