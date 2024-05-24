@@ -44,6 +44,7 @@ export default function UserProfileEditWrapper({
       if (!res.ok) {
         throw new Error("Error updating user data");
       }
+      console.log(formData);
       const result = await res.json();
       console.log(result.message);
     } catch (error) {
@@ -145,14 +146,18 @@ export default function UserProfileEditWrapper({
         </div>
         <br />
       </div>
-      <div className="flex justify-center m-10">
-        <Link href={`/user/${userData.name}`}>
-          <button
-            type="submit"
-            className="bg-dark-blue rounded-md px-3 py-2 text-beige"
-          >
-            Save
-          </button>
+      <div className="flex justify-between w-1/3 m-10">
+        <button
+          type="submit"
+          className="bg-dark-blue rounded-md px-3 py-2 text-beige"
+        >
+          Save
+        </button>
+        <Link
+          className="bg-dark-blue rounded-md px-3 py-2 text-beige"
+          href={`/user/${userData.name}`}
+        >
+          Done
         </Link>
       </div>
     </form>

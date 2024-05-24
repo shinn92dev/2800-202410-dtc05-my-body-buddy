@@ -15,6 +15,36 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
   },
+  age: {
+    type: Number,
+    required: false,
+    unique: false,
+  },
+  gender: {
+    type: String,
+    required: false,
+    unique: false,
+  },
+  height: {
+    type: Number,
+    required: false,
+    unique: false,
+  },
+  weight: {
+    type: Number,
+    required: false,
+    unique: false,
+  },
+  goalWeight: {
+    type: Number,
+    required: false,
+    unique: false,
+  },
+  goalDay: {
+    type: String,
+    required: false,
+    unique: false,
+  },
 });
 
 if (mongoose.models && mongoose.models["User"]) {
