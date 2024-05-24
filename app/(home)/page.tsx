@@ -3,7 +3,6 @@ import Introduction from "./introduction";
 import Logo from "./logo";
 import Encourage from "./encourage";
 import Button from "./button";
-import { getCurrentUserInformationFromClerk } from "../_helper/getCurrentUserInformation";
 
 export const metadata = {
     title: "HOME",

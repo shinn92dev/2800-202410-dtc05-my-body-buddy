@@ -13,14 +13,17 @@ import SignupForm from "@/app/ui/signup-form";
 export default function SignUp() {
     const [showModal, setShowModal] = useState(false);
     const { signUp } = useSignUp();
-    const [emai, setEmail] = useState<string>("");
+    const [email, setEmail] = useState<string>("");
     const [username, setUsername] = useState<string>("");
     const [userInfo, setUserInfo] = useState<any>(null);
 
-    const handleSignUp = async (event) => {
+    const handleSignUp = async (event: any) => {
         event.preventDefault();
         try {
-            await signUp?.create({ email: email, username: username });
+            await signUp?.create({ email: email, username: username } as {
+                email: string;
+                username: string;
+            });
             // const user = await signUp?.currentUser();
         } catch (error) {
             console.log("Sign up failed: ", error);

@@ -120,10 +120,10 @@ export const filterWorkoutsByAchievement = (date: Date, workoutDetail: any) => {
     }
     if (specificDayWorkout) {
         const achievedWorkouts = specificDayWorkout.workoutDetail.filter(
-            (workout) => workout.achieved
+            (workout: any) => workout.achieved
         );
         const onGoingWorkouts = specificDayWorkout.workoutDetail.filter(
-            (workout) => !workout.achieved
+            (workout: any) => !workout.achieved
         );
         console.log("FILTER FUNCTION DONE!");
         return { achieved: achievedWorkouts, onGoing: onGoingWorkouts };
