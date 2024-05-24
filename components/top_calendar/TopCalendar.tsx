@@ -27,19 +27,19 @@ const TopCalendar: React.FC<TopCalendarProps> = ({ onDateSelect }) => {
         const previousWeekLastDay = addDays(currentWeek, -1);
         setCurrentWeek(startOfWeek(previousWeekLastDay));
         setSelectedDate(previousWeekLastDay);
-        onDateSelect(previousWeekLastDay);
+        // onDateSelect(previousWeekLastDay);
     };
 
     const handleNextWeek = (): void => {
         const nextWeekFirstDay = addDays(currentWeek, 7);
         setCurrentWeek(startOfWeek(nextWeekFirstDay));
         setSelectedDate(nextWeekFirstDay);
-        onDateSelect(nextWeekFirstDay);
+        // onDateSelect(nextWeekFirstDay);
     };
 
     const handleDateClick = (date: Date): void => {
         setSelectedDate(date);
-        onDateSelect(date);
+        // onDateSelect(date);
     };
 
     return (
