@@ -1,7 +1,7 @@
 "use client";
-// TODO: one time pop-up message for complete profile
 
 import Link from "next/link";
+import { connectMongoDB } from "@/config/db";
 
 export interface UserData {
   name: string;
@@ -18,7 +18,7 @@ interface UserProfileWrapperProps {
   userData: UserData;
 }
 
-export default function UserProfileWrapper({
+export default function UserProfileEditWrapper({
   userData,
 }: UserProfileWrapperProps) {
   return (
@@ -29,11 +29,21 @@ export default function UserProfileWrapper({
       >
         <p className="text-4xl p-2">👤</p>
         <div>
-          <div>Name: {userData.name}</div>
-          <div>Age: {userData.age}</div>
-          <div>Gender: {userData.gender}</div>
-          <div>Height: {userData.height} cm</div>
-          <div>Weight: {userData.weight} kg</div>
+          <div className="my-1">Name: {userData.name}</div>
+
+          <div className="my-1">
+            Age: <input type="text" placeholder={`${userData.age}`} />
+          </div>
+
+          <div className="my-1">
+            Gender: <input type="text" placeholder={`${userData.gender}`} />
+          </div>
+          <div className="my-1">
+            Height: <input type="text" placeholder={`${userData.height}`} /> cm
+          </div>
+          <div className="my-1">
+            Weight: <input type="text" placeholder={`${userData.weight}`} /> kg
+          </div>
           <br />
         </div>
       </div>
@@ -43,8 +53,15 @@ export default function UserProfileWrapper({
       >
         <p className="text-4xl p-2">🎯</p>
         <div>
-          <div>Target Date: {userData.goalDay}</div>
-          <div>Target Weight: {userData.goalWeight} kg</div>
+          <div className="my-1">
+            Target Date:{" "}
+            <input type="text" placeholder={`${userData.goalDay}`} />
+          </div>
+          <div className="my-1">
+            Target Weight:{" "}
+            <input type="text" placeholder={`${userData.goalWeight}`} />
+            kg
+          </div>
         </div>
         <br />
       </div>
@@ -63,10 +80,10 @@ export default function UserProfileWrapper({
       </div>
       <div className="flex justify-center m-10">
         <Link
-          href={`/user/${userData.name}/edit`}
+          href={`/user/${userData.name}`}
           className="bg-dark-blue rounded-md px-3 py-2 text-beige"
         >
-          Edit
+          Done
         </Link>
       </div>
     </div>
