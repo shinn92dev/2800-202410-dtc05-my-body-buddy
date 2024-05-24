@@ -33,6 +33,33 @@ export default function AiSupportWrapper() {
         router.push("/workout");
     };
 
+    const handleRegenerateAlternative = async () => {
+        // Regenerate the alternative using the same items and tags
+        setGenerated(false);
+        const prompt = `Please consider alternative options for the workout menu below, taking into account the reasons provided.\n\nWorkout menu to replace:\n${selectedItems.map(item => `・${item.title} - ${item.quantity} ${item.unit} (${Math.round(item.kcalPerUnit * item.quantity * 10) / 10} kcal)`).join('\n')}\n\nReasons why I want to replace:\n・${selectedTags.join('\n・')}\n\nThe alternative must include the same number of items and must have the same estimated calorie consumption in total.\nEach item must be output in the following format:\n・[item_name] - [quantity] [unit] ([estimated_calorie_consume] kcal)`;
+
+        try {
+            const response = await fetch('/api/generate-alternative', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ prompt }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to generate alternative');
+            }
+
+            const data = await response.json();
+            handleGenerateItems(data.result);
+        } catch (error) {
+            console.error('Error generating alternative:', error);
+        } finally {
+            setGenerated(true);
+        }
+    };
+
     // Function to parse AI response and update generatedItems
     const handleGenerateItems = (response: string) => {
         const regex = /・(.+?)\s*-\s*(\d+)\s*(\w+)\s*\((\d+)\s*kcal\)/g;
@@ -46,7 +73,6 @@ export default function AiSupportWrapper() {
             items.push({ title, quantity, unit, kcalPerUnit });
         }
         setGeneratedItems(items);
-        console.log(items); // Display generated items in the console
     };
 
     return (
@@ -56,7 +82,7 @@ export default function AiSupportWrapper() {
             {generated && <AiLines messageBody={messageBodyWhenButtonClicked} />}
             {generatedItems.length > 0 && (
                 <div>
-                    <div className="flex flex-col items-start p-2 w-full">
+                    <div className="flex flex-col items-start p-2">
                         <div className="flex items-start w-full">
                             <div className="mr-2">
                                 <Image src="/my_boddy_buddy_support_ai_logo.jpg" alt="support AI logo" width={51} height={51} />
@@ -83,6 +109,14 @@ export default function AiSupportWrapper() {
                                         className="px-4 py-2 bg-dark-blue text-white rounded-full"
                                     >
                                         Adopt Alternative
+                                    </button>
+                                </div>
+                                <div className="flex justify-center pt-2">
+                                    <button
+                                        onClick={handleRegenerateAlternative}
+                                        className="px-4 py-2 bg-gray-500 text-white rounded-full"
+                                    >
+                                        Regenerate
                                     </button>
                                 </div>
                             </div>
