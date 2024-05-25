@@ -1,3 +1,5 @@
+// models/Meal.ts
+
 import mongoose, { Schema, model, models } from 'mongoose';
 
 // Define the MealItem schema
@@ -19,7 +21,7 @@ const DailyMealSchema = new Schema({
 
 // Define the main Meal schema
 const MealSchema = new Schema({
-  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true, unique: true },
+  userId: { type: String, ref: 'User', required: true },
   dailyMeals: [DailyMealSchema],
 });
 
