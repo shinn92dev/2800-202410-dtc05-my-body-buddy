@@ -1,19 +1,21 @@
-import saveNewUserToMongoDB from "@/app/_helper/saveNewUserToMongoDB";
+// pages/api/signup.ts
+
 import { connectMongoDB } from "@/config/db";
+import saveNewUserToMongoDB from "@/app/_helper/saveNewUserToMongoDB";
 import { NextResponse } from "next/server";
 
 export async function POST(req: any) {
     try {
         await connectMongoDB();
-        const { email, username, isLoggedIn } = await req.json();
+        const { email, username, isLoggedIn, userId } = await req.json();
 
-        console.log(email, username, isLoggedIn);
         const userData = {
             email: email,
             username: username,
             isLoggedIn: isLoggedIn,
+            userId: userId,
         };
-        saveNewUserToMongoDB(userData);
+        await saveNewUserToMongoDB(userData);
         return NextResponse.json(
             { message: "User data saved successfully" },
             { status: 200 }

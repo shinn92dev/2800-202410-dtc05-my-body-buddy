@@ -4,33 +4,28 @@ import React from "react";
 import SignUpAndInIcon from "@/components/global/icons/SignUpAndInIcon";
 import { useForm, SubmitHandler, Resolver } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-
 import * as yup from "yup";
 import { useSignUp } from "@clerk/nextjs";
-import { connectMongoDB } from "@/config/db";
 
 const createNewUser = async (userData: any) => {
     try {
-        const newUserData = {
-            email: userData.email,
-            username: userData.username,
-            isLoggedIn: true,
-        };
         const response = await fetch("/api/signup", {
             method: "POST",
-            body: JSON.stringify(newUserData),
+            body: JSON.stringify(userData),
             headers: {
                 "Content-Type": "application/json",
             },
         });
         if (!response.ok) {
+            const errorData = await response.json();
+            console.error("Error Response: ", errorData);
             throw new Error("Not OK");
         }
         const data = await response.json();
         window.location.href = "/summary/diet";
         return data;
     } catch (error) {
-        console.error(error);
+        console.error("Error in createNewUser: ", error);
     }
 };
 
@@ -39,6 +34,7 @@ type newUserInputs = {
     username: string;
     password: string;
 };
+
 const validationSchema = yup.object({
     email: yup
         .string()
@@ -64,7 +60,6 @@ export default function SignupForm() {
     const {
         register,
         handleSubmit,
-        watch,
         formState: { errors },
     } = useForm<newUserInputs>({
         resolver: yupResolver(validationSchema) as unknown as Resolver<
@@ -73,21 +68,28 @@ export default function SignupForm() {
         >,
     });
 
-    const onSubmit: SubmitHandler<newUserInputs> = async (
-        data: newUserInputs
-    ) => {
+    const onSubmit: SubmitHandler<newUserInputs> = async (data: newUserInputs) => {
         try {
             const signUpResult = await signUp?.create({
                 emailAddress: data.email,
                 username: data.username,
                 password: data.password,
             });
+
             if (signUpResult?.status === "complete") {
-                console.log("User Info: ", signUpResult);
-                createNewUser(data);
+                const userId = signUpResult.createdUserId;  // Clerkで作成されたユーザーIDを取得
+                const userData = {
+                    email: data.email,
+                    username: data.username,
+                    isLoggedIn: true,
+                    userId: userId,
+                };
+                createNewUser(userData);
+            } else {
+                console.error("Sign Up Incomplete: ", signUpResult);
             }
         } catch (error) {
-            console.log("Error: ", error);
+            console.log("Error in onSubmit: ", error);
         }
     };
 
@@ -154,18 +156,6 @@ export default function SignupForm() {
                 type="submit"
             >
                 <SignUpAndInIcon width={6} />
-                {/* <svg
-                                                className={`w-6 h-6 -ml-2`}
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                            >
-                                                <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                                                <circle cx="8.5" cy="7" r="4" />
-                                                <path d="M20 8v6M23 11h-6" />
-                                            </svg> */}
                 <span className="ml-3">Submit</span>
             </button>
         </form>
