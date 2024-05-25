@@ -1,12 +1,16 @@
+// pages/api/add-meals.ts
+
 import { NextRequest, NextResponse } from 'next/server';
 import { connectMongoDB } from '@/config/db';
 import Meal from '@/models/Meal';
+import { getAuth } from '@clerk/nextjs/server';
 
 export async function POST(req: NextRequest) {
   await connectMongoDB();
 
   try {
-    const { userId, date, meals, mealType } = await req.json();
+    const { userId } = getAuth(req);
+    const { date, meals, mealType } = await req.json();
 
     if (!userId || !date || !meals || !mealType) {
       return NextResponse.json({ message: 'Missing required parameters' }, { status: 400 });
