@@ -22,8 +22,7 @@ const DietHomeWrapper: React.FC = () => {
     const [dinners, setDinners] = useState<Meal[]>([]);
     const [snacks, setSnacks] = useState<Meal[]>([]);
     const [userId, setUserId] = useState<string>("");
-    const [totalTargetCalories, setTotalTargetCalories] =
-        useState<number>(2200); // Example target calories
+    const [totalTargetCalories, setTotalTargetCalories] = useState<number>(2200);
 
     const icon = (
         <Image
@@ -36,8 +35,12 @@ const DietHomeWrapper: React.FC = () => {
 
     useEffect(() => {
         const fetchUserId = async () => {
-            const fetchedUserId = "664719634ee345ddb6962d13"; // Temporary user ID
-            setUserId(fetchedUserId);
+            try {
+                const response = await axios.get('/api/get-user-id');
+                setUserId(response.data.userId);
+            } catch (error) {
+                console.error("Error fetching user ID:", (error as Error).message);
+            }
         };
 
         fetchUserId();
@@ -48,9 +51,7 @@ const DietHomeWrapper: React.FC = () => {
             if (!userId) return;
             const date = new Date().toISOString().split("T")[0];
             try {
-                const response = await axios.get(
-                    `/api/get-meals?userId=${userId}&date=${date}`
-                );
+                const response = await axios.get(`/api/get-meals?userId=${userId}&date=${date}`);
                 const data = response.data;
                 setBreakfasts(data.breakfast || []);
                 setLunches(data.lunch || []);
@@ -95,7 +96,6 @@ const DietHomeWrapper: React.FC = () => {
     };
 
     const handleAdd = (mealType: MealType) => {
-        // Navigate to AddingItems page
         window.location.href = `/diet/add-meals?mealType=${mealType}`;
     };
 
@@ -103,8 +103,7 @@ const DietHomeWrapper: React.FC = () => {
         window.location.href = "/diet/ai-support";
     };
 
-    const totalCalories = (meals: Meal[]) =>
-        meals.reduce((sum, meal) => sum + meal.calories, 0);
+    const totalCalories = (meals: Meal[]) => meals.reduce((sum, meal) => sum + meal.calories, 0);
 
     return (
         <div className="bg-white min-h-screen p-4">

@@ -24,9 +24,14 @@ const DietAddMealsWrapper: React.FC = () => {
 
   useEffect(() => {
     const fetchUserId = async () => {
-      const fetchedUserId = "664719634ee345ddb6962d13"; // temporary user ID
-      setUserId(fetchedUserId);
-    };
+            try {
+                const response = await axios.get('/api/get-user-id');
+                console.log("User ID:", response.data.userId);
+                setUserId(response.data.userId);
+            } catch (error) {
+                console.error("Error fetching user ID:", (error as Error).message);
+            }
+        };
 
     fetchUserId();
   }, []);
