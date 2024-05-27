@@ -45,7 +45,11 @@ const validationSchema = yup.object({
         .min(5, "Username must be at least 5 characters")
         .max(20, "Username must be less than 20 characters")
         .required("Username is required"),
-    password: yup.string().min(8, "Password must be at least 8 characters"),
+    password: yup
+        .string()
+        .min(8, "Password must be at least 8 characters")
+        .max(30, "Password must be less than 30 characters")
+        .required("Password is required"),
 });
 
 export default function SignupForm() {
