@@ -13,12 +13,12 @@ type DetailedWorkoutDataType = {
         }
     ];
 };
-type OneDayWorkoutType = {};
 type WorkoutDataType = {
-    username: string;
+    userId: string;
     workouts: DetailedWorkoutDataType[];
 };
 
+// Save new user's workout data to MongoDB
 export const saveNewUserWorkoutMongoDB = async (
     workoutData: WorkoutDataType
 ) => {
@@ -26,61 +26,63 @@ export const saveNewUserWorkoutMongoDB = async (
         await connectMongoDB();
         const newUserWorkout = new WorkoutModel(workoutData);
         await newUserWorkout.save();
-        console.log("WOrkout for new user saved successfully");
+        console.log("Workout for new user saved successfully");
     } catch (error) {
         console.log("Error while saving new user workout data: ", error);
     }
 };
 
-// newWorkoutData must be type of DetailedWorkoutDataType
+// Update workout data for existing user
 export const updateWorkoutMongoDB = async (
-    username: string,
+    userId: string,
     newWorkoutData: DetailedWorkoutDataType
 ) => {
     if (newWorkoutData) {
         try {
             await connectMongoDB();
             console.log("WorkoutData: ", newWorkoutData);
-            const currentUser = await WorkoutModel.findOneAndUpdate(
+            await WorkoutModel.findOneAndUpdate(
                 {
-                    username: username,
+                    userId: userId,
                 },
                 { $push: { workouts: newWorkoutData } }
             );
             console.log(
-                "New workout updated successfully for ",
-                username,
-                ": "
+                "New workout updated successfully for userId: ",
+                userId
             );
-            console.log(currentUser);
         } catch (error) {
-            console.log("Error while saving workout data");
+            console.log("Error while saving workout data: ", error);
         }
     }
 };
 
-export const retrieveWorkout = async (username: string) => {
+// Retrieve workout data for the current user
+export const retrieveWorkout = async (userId: string) => {
     try {
         await connectMongoDB();
         const workoutForCurrentUser = await WorkoutModel.findOne(
             {
-                username: username,
+                userId: userId,
             },
             { _id: 0 }
         );
+        if (!workoutForCurrentUser) {
+            console.log("No workout data found for userId: ", userId);
+            return null;
+        }
         console.log(
-            "Workout for current user retrieved successfully for ",
-            username,
-            ": "
+            "Workout for current user retrieved successfully for userId: ",
+            userId
         );
-        console.log(workoutForCurrentUser);
         return workoutForCurrentUser;
     } catch (error) {
-        console.log("Error while retrieving workout");
+        console.log("Error while retrieving workout: ", error);
         return null;
     }
 };
 
+// Filter workouts for a specific day
 export const filterSpecificDayWorkout = (date: Date, workouts: any) => {
     console.log("CHECK THIS OUTPUT:", workouts);
     if (!Array.isArray(workouts)) {
@@ -89,46 +91,28 @@ export const filterSpecificDayWorkout = (date: Date, workouts: any) => {
     const specificDayWorkout = workouts.filter(
         (workout: DetailedWorkoutDataType) => {
             return (
-                workout.date.getFullYear() === date.getFullYear() &&
-                workout.date.getMonth() === date.getMonth() &&
-                workout.date.getDate() === date.getDate()
+                workout.date.getUTCFullYear() === date.getUTCFullYear() &&
+                workout.date.getUTCMonth() === date.getUTCMonth() &&
+                workout.date.getUTCDate() === date.getUTCDate()
             );
         }
     );
     return specificDayWorkout[0];
 };
 
+// Filter workouts by achievement status
 export const filterWorkoutsByAchievement = (date: Date, workoutDetail: any) => {
     const specificDayWorkout = filterSpecificDayWorkout(date, workoutDetail);
-    const filterYear = date.getFullYear();
-    const filterMonth = date.getMonth();
-    const filterDay = date.getDate();
-    console.log("OUTPUT FROM FILTER:", specificDayWorkout);
-    const workoutYear = specificDayWorkout?.date.getFullYear();
-    const workoutMonth = specificDayWorkout?.date.getMonth();
-    const workoutDay = specificDayWorkout?.date.getDate();
-    // Compare year, month, and day for equality
-    if (
-        filterYear !== workoutYear ||
-        filterMonth !== workoutMonth ||
-        filterDay !== workoutDay
-    ) {
-        console.log(
-            "You gave this function wrong date of workout (considering only year, month, and day)"
-        );
-        return null;
-    }
-    if (specificDayWorkout) {
-        const achievedWorkouts = specificDayWorkout.workoutDetail.filter(
-            (workout: any) => workout.achieved
-        );
-        const onGoingWorkouts = specificDayWorkout.workoutDetail.filter(
-            (workout: any) => !workout.achieved
-        );
-        console.log("FILTER FUNCTION DONE!");
-        return { achieved: achievedWorkouts, onGoing: onGoingWorkouts };
-    } else {
+    if (!specificDayWorkout) {
         console.log(`Cannot find workout for ${date}`);
         return null;
     }
+    const achievedWorkouts = specificDayWorkout.workoutDetail.filter(
+        (workout: any) => workout.achieved
+    );
+    const onGoingWorkouts = specificDayWorkout.workoutDetail.filter(
+        (workout: any) => !workout.achieved
+    );
+    console.log("FILTER FUNCTION DONE!");
+    return { achieved: achievedWorkouts, onGoing: onGoingWorkouts };
 };
