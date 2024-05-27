@@ -1,7 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+<<<<<<< HEAD
 import TopCalendar from "@/components/global/TopCalendar";
+=======
+import TopCalendar from "@/components/top_calendar/TopCalendar";
+>>>>>>> cabd08e (✨feat(summary diet):get user id and date dynamically)
 import ScoreCircleBarWrapper from "@/components/summary_score_circle_bar/ScoreCircleBarWrapper";
 import BarGraph from "@/components/global/BarGraph";
 import WorkoutDietLink from "@/components/workout_diet_link/WorkoutDietLink";
@@ -28,9 +32,13 @@ export default function DietSummary() {
     const [meals, setMeals] = useState<MealsData | null>(null);
     const [userId, setUserId] = useState<string | null>(null);
     const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
+<<<<<<< HEAD
     const [errorStatus, setErrorStatus] = useState<number | null>(null); 
     const [weeklyMeals, setWeeklyMeals] = useState<MealsData[]>([]);
     const [weekRange, setWeekRange] = useState<string>("");
+=======
+    const [errorStatus, setErrorStatus] = useState<number | null>(null); // Track error status
+>>>>>>> cabd08e (✨feat(summary diet):get user id and date dynamically)
 
     useEffect(() => {
         // Fetch user ID from the API
@@ -67,7 +75,11 @@ export default function DietSummary() {
                         console.log(`No meals found for date: ${date}`);
                     } else {
                         console.error("Error fetching meals:", error);
+<<<<<<< HEAD
                         setErrorStatus(error.response ? error.response.status : 500);
+=======
+                        setErrorStatus(error.response ? error.status : 500);
+>>>>>>> cabd08e (✨feat(summary diet):get user id and date dynamically)
                     }
                 }
             };
@@ -75,6 +87,7 @@ export default function DietSummary() {
         }
     }, [userId, date]);
 
+<<<<<<< HEAD
     useEffect(() => {
         if (userId) {
             const fetchWeeklyMeals = async () => {
@@ -127,6 +140,16 @@ export default function DietSummary() {
             weekDates.push(date.toISOString().split('T')[0]);
         }
         return weekDates;
+=======
+    const calculateCalories = (mealType: keyof MealsData) => {
+        if (errorStatus === 404 || !meals || !meals[mealType]) {
+            return 0;
+        }
+        return (meals[mealType] as MealType[]).reduce(
+            (total: any, item: any) => total + item.calories,
+            0
+        );
+>>>>>>> cabd08e (✨feat(summary diet):get user id and date dynamically)
     };
 
     const calculateAverageCalories = (mealType: keyof MealsData) => {
@@ -145,9 +168,23 @@ export default function DietSummary() {
     const averageSnackCalories = calculateAverageCalories("snacks");
     const maxCalories = 5000;
 
+<<<<<<< HEAD
     return (
         <div>
             <TopCalendar onDateSelect={(date) => handleDateSelect(date, setDate)} />
+=======
+    const handleDateSelect = (selectedDate: Date) => {
+        // Convert selected date to UTC date to avoid timezone issues
+        const utcDate = new Date(Date.UTC(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate()));
+        
+        // Set the date state as the selected date in the format YYYY-MM-DD
+        setDate(utcDate.toISOString().split("T")[0]); 
+    };
+
+    return (
+        <div>
+            <TopCalendar onDateSelect={handleDateSelect} />
+>>>>>>> cabd08e (✨feat(summary diet):get user id and date dynamically)
             <WorkoutDietLink
                 workoutLink="/summary/workout"
                 dietLink="/summary/diet"
