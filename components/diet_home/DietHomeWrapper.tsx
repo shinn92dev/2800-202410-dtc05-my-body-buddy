@@ -6,6 +6,8 @@ import AskAiButton from "@/components/global/AskAiButton";
 import axios from "axios";
 import Image from "next/image";
 import CalorieDistributionChart from "@/components/global/CalorieDistributionChart";
+import TopCalendar from "@/components/global/TopCalendar";
+import { format } from "date-fns";
 
 interface Meal {
     name: string;
@@ -23,6 +25,7 @@ const DietHomeWrapper: React.FC = () => {
     const [snacks, setSnacks] = useState<Meal[]>([]);
     const [userId, setUserId] = useState<string>("");
     const [totalTargetCalories, setTotalTargetCalories] = useState<number>(2200);
+    const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
     const icon = (
         <Image
@@ -49,7 +52,7 @@ const DietHomeWrapper: React.FC = () => {
     useEffect(() => {
         const fetchMeals = async () => {
             if (!userId) return;
-            const date = new Date().toISOString().split("T")[0];
+            const date = format(selectedDate, "yyyy-MM-dd");
             try {
                 const response = await axios.get(`/api/get-meals?userId=${userId}&date=${date}`);
                 const data = response.data;
@@ -63,7 +66,7 @@ const DietHomeWrapper: React.FC = () => {
         };
 
         fetchMeals();
-    }, [userId]);
+    }, [userId, selectedDate]);
 
     const handleEdit = (mealType: MealType, index: number) => {
         // Handle edit logic here
@@ -71,7 +74,7 @@ const DietHomeWrapper: React.FC = () => {
 
     const handleDelete = async (mealType: MealType, index: number) => {
         try {
-            const date = new Date().toISOString().split("T")[0];
+            const date = format(selectedDate, "yyyy-MM-dd");
             await axios.delete("/api/delete-meal", {
                 data: {
                     userId,
@@ -96,17 +99,22 @@ const DietHomeWrapper: React.FC = () => {
     };
 
     const handleAdd = (mealType: MealType) => {
-        window.location.href = `/diet/add-meals?mealType=${mealType}`;
+        window.location.href = `/diet/add-meals?mealType=${mealType}&date=${format(selectedDate, "yyyy-MM-dd")}`;
     };
 
     const handleOnClick = () => {
         window.location.href = "/diet/ai-support";
     };
 
+    const handleDateSelect = (date: Date) => {
+        setSelectedDate(date);
+    };
+
     const totalCalories = (meals: Meal[]) => meals.reduce((sum, meal) => sum + meal.calories, 0);
 
     return (
         <div className="bg-white min-h-screen p-4">
+            <TopCalendar onDateSelect={handleDateSelect} />
             <h1 className="text-3xl font-bold flex flex-col items-center p-2 m-2">
                 Diet Management Plan
             </h1>

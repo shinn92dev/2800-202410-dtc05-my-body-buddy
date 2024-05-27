@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { format, addDays, startOfWeek, startOfMonth } from "date-fns";
+import { format, addDays, subDays, startOfWeek, startOfMonth } from "date-fns";
 
 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -10,9 +10,8 @@ interface TopCalendarProps {
 }
 
 const TopCalendar: React.FC<TopCalendarProps> = ({ onDateSelect }) => {
-    const [currentWeek, setCurrentWeek] = useState<Date>(
-        startOfWeek(new Date())
-    );
+    const [currentDate, setCurrentDate] = useState<Date>(new Date());
+    const [currentWeek, setCurrentWeek] = useState<Date>(subDays(new Date(), 3));
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
     const getWeekDates = (): Date[] => {
@@ -21,25 +20,25 @@ const TopCalendar: React.FC<TopCalendarProps> = ({ onDateSelect }) => {
         );
     };
 
-    const currentMonth = format(startOfMonth(currentWeek), "MMMM yyyy");
+    const currentMonth = format(startOfMonth(currentDate), "MMMM yyyy");
 
     const handlePreviousWeek = (): void => {
-        const previousWeekLastDay = addDays(currentWeek, -1);
-        setCurrentWeek(startOfWeek(previousWeekLastDay));
-        setSelectedDate(previousWeekLastDay);
-        // onDateSelect(previousWeekLastDay);
+        const previousWeekStart = subDays(currentWeek, 7);
+        setCurrentWeek(previousWeekStart);
+        setSelectedDate(previousWeekStart);
+        onDateSelect(previousWeekStart);
     };
 
     const handleNextWeek = (): void => {
-        const nextWeekFirstDay = addDays(currentWeek, 7);
-        setCurrentWeek(startOfWeek(nextWeekFirstDay));
-        setSelectedDate(nextWeekFirstDay);
-        // onDateSelect(nextWeekFirstDay);
+        const nextWeekStart = addDays(currentWeek, 7);
+        setCurrentWeek(nextWeekStart);
+        setSelectedDate(nextWeekStart);
+        onDateSelect(nextWeekStart);
     };
 
     const handleDateClick = (date: Date): void => {
         setSelectedDate(date);
-        // onDateSelect(date);
+        onDateSelect(date);
     };
 
     return (
