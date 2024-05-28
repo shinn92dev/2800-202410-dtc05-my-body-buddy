@@ -126,7 +126,7 @@ const DietHomeWrapper: React.FC = () => {
         <div className="bg-white min-h-screen p-4">
             <TopCalendar onDateSelect={onDateSelect} />
             <h1 className="text-3xl font-bold flex flex-col items-center p-2 m-2">
-                Diet Menu for {format(localDate, "MMMM d, yyyy")}
+                Diet Log for {format(localDate, "MMMM d, yyyy")}
             </h1>
             <div className="flex flex-col items-center p-2">
                 <CalorieDistributionChart
