@@ -219,6 +219,7 @@ const WorkoutHomeWrapper: React.FC = () => {
     const onSubmit = async () => {
         try {
             const res = await axios.get("/api/get-user-id");
+            const res = await axios.get("/api/get-user-id");
             const { userId } = res.data;
 
             await routeWorkoutHomeWrapperPost(userId, new Date(), "Running");
@@ -257,7 +258,7 @@ const WorkoutHomeWrapper: React.FC = () => {
                         <div className="flex items-center">
                             <span>🏋️</span>
                             <h2 className="text-xl font-bold ml-2">
-                                Workout for Today
+                                Workout for Today Workout for Today
                             </h2>
                         </div>
                         <span className="text-lg font-semibold">
@@ -340,6 +341,12 @@ const WorkoutHomeWrapper: React.FC = () => {
 export default WorkoutHomeWrapper;
 
 const filterWorkoutsByAchievement = (date: Date, workouts: any[]) => {
+    const achieved = workouts.filter(
+        (workout) => workout.date <= date && workout.isCompleted
+    );
+    const onGoing = workouts.filter(
+        (workout) => workout.date > date || !workout.isCompleted
+    );
     const achieved = workouts.filter(
         (workout) => workout.date <= date && workout.isCompleted
     );
