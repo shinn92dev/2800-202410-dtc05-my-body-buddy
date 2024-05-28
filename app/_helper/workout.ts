@@ -10,17 +10,17 @@ const formatDateFromInput = (date: Date) => {
 };
 
 export const fetchWorkoutForSpecificDate = (workoutDate: any, date: Date) => {
-    const workoutForToday = workoutDate.workouts.filter((workout) => {
+    const workoutForToday = workoutDate.workouts.filter((workout: { date: Date; }) => {
         const dateFromMongoDB = formatDateFromMongoDB(workout.date);
         const dateFromUser = formatDateFromInput(date);
         return dateFromMongoDB == dateFromUser;
     });
-    const achievedWorkouts = workoutForToday.flatMap((workout) =>
-        workout.workoutDetail.filter((detail) => detail.achieved)
+    const achievedWorkouts = workoutForToday.flatMap((workout: { workoutDetail: any[]; }) =>
+        workout.workoutDetail.filter((detail: { achieved: any; }) => detail.achieved)
     );
 
-    const onGoingWorkouts = workoutForToday.flatMap((workout) =>
-        workout.workoutDetail.filter((detail) => !detail.achieved)
+    const onGoingWorkouts = workoutForToday.flatMap((workout: { workoutDetail: any[]; }) =>
+        workout.workoutDetail.filter((detail: { achieved: any; }) => !detail.achieved)
     );
 
     const result = {
@@ -34,7 +34,7 @@ export const fetchWorkoutForSpecificDate = (workoutDate: any, date: Date) => {
 
 export const calculateKcalForWorkout = (workouts: any) => {
     let totalKcal = 0;
-    workouts.forEach((workout) => {
+    workouts.forEach((workout: { calories: number; }) => {
         totalKcal += workout.calories;
     });
     return totalKcal;
