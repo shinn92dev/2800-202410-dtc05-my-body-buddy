@@ -1,11 +1,14 @@
+import { connectMongoDB } from "@/config/db";
+import WorkoutModel from "@/models/Workout";
 import { format } from "date-fns";
+import axios from "axios";
 
 // Parameter: workout date from MongoDB
 const formatDateFromMongoDB = (date: Date) => {
     return new Date(date).toISOString().split("T")[0];
 };
 // Parameter: workout date from User
-const formatDateFromInput = (date: Date) => {
+export const formatDateFromInput = (date: Date) => {
     return format(date, "yyyy-MM-dd");
 };
 
@@ -40,4 +43,19 @@ export const calculateKcalForWorkout = (workouts: any) => {
     return totalKcal;
 };
 
-export const updateWorkoutStatus = (workouts: any, status: boolean) => {};
+export const updateWorkoutStatus = async (
+    userId: string,
+    date: Date,
+    name: string,
+    achieved: boolean
+) => {
+    console.log("Update Workout Status Function");
+    const formattedDate = formatDateFromInput(date);
+    const response = await axios.put("/api/update-workout-achievement", {
+        userId,
+        date: formattedDate,
+        name,
+        achieved,
+    });
+    return response.data;
+};

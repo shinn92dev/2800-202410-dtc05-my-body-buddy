@@ -7,79 +7,17 @@ import Board from "@/components/global/Board";
 import AskAiButton from "@/components/global/AskAiButton";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import { format } from "date-fns";
+import { format, formatDate } from "date-fns";
 import {
     fetchWorkoutForSpecificDate,
     calculateKcalForWorkout,
+    updateWorkoutStatus,
+    formatDateFromInput,
 } from "@/app/_helper/workout";
 
-const routeWorkoutHomeWrapperPost = async (
-    userId: string,
-    date: Date,
-    workoutTitle: string
-) => {
-    try {
-        const formattedDate = new Date(
-            `${date.getUTCFullYear()}-${
-                date.getUTCMonth() + 1
-            }-${date.getUTCDate()}`
-        );
-        const response = await fetch("/api/workout-wrapper", {
-            method: "POST",
-            body: JSON.stringify({
-                userId: userId,
-                date: formattedDate,
-                title: workoutTitle,
-            }),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        console.log("Response from workout home wrapper:", response);
-        if (!response.ok) {
-            throw new Error("Not OK");
-        }
-        const data = await response.json();
-        console.log("Server Response:", data);
-    } catch (error) {
-        console.log(error);
-    }
-};
-
 const WorkoutHomeWrapper: React.FC = () => {
-    const [menuForToday, setMenuForToday] = useState<any[]>([]);
-    const [achieved, setAchieved] = useState<any[]>([]);
     const [achievedWorkoutData, setAchievedWorkoutData] = useState<any[]>([]);
     const [onGoingWorkoutData, setOnGoingWorkoutData] = useState<any[]>([]);
-    const calculateTotalCalories = (
-        items: { quantity: number; kcalPerUnit: number }[]
-    ) => {
-        return items.reduce(
-            (total, item) => total + item.quantity * item.kcalPerUnit,
-            0
-        );
-    };
-
-    const convertToItems = (
-        items: {
-            title: string;
-            count: number;
-            unit: string;
-            cals: number;
-            achieved?: boolean;
-        }[]
-    ) => {
-        return items.map((item) => {
-            return {
-                name: item.title,
-                amount: item.count + " " + item.unit,
-                calories: item.count * item.cals,
-                ...(item.achieved !== undefined && {
-                    isCompleted: item.achieved,
-                }),
-            };
-        });
-    };
 
     const fetchWorkoutData = async () => {
         try {
@@ -114,91 +52,73 @@ const WorkoutHomeWrapper: React.FC = () => {
         fetchWorkoutData();
     }, []);
 
-    const [totalCaloriesOfMenuForToday, setTotalCaloriesOfMenuForToday] =
-        useState(calculateTotalCalories(menuForToday));
-    const [totalCaloriesOfAchieved, setTotalCaloriesOfAchieved] = useState(
-        calculateTotalCalories(achieved)
-    );
-
-    const [menuForTodayItems, setMenuForTodayItems] = useState(
-        convertToItems(menuForToday)
-    );
-    const [achievedItems, setAchievedItems] = useState(
-        convertToItems(achieved)
-    );
-
-    useEffect(() => {
-        setTotalCaloriesOfAchieved(calculateTotalCalories(achieved));
-        setAchievedItems(convertToItems(achieved));
-        setMenuForTodayItems(convertToItems(menuForToday));
-    }, [menuForToday, achieved]);
-
     const handleEditForAchieved = (index: number) => {
         // Handle edit logic here
     };
 
     const handleDeleteForAchieved = (index: number) => {
-        setAchieved((prevAchieved: any) => {
-            const newAchieved = prevAchieved.filter(
-                (_: any, i: any) => i !== index
-            );
-            return newAchieved;
-        });
+        // Handle delete logic here
     };
 
     const handleAddForAchieved = () => {
         window.location.href = `workout/adding`;
     };
 
+    const handleAskAI = () => {
+        window.location.href = "workout/ai-support";
+    };
+
     const handleToggleComplete = async (index: number) => {
         try {
-            const item = menuForToday[index];
-            const res = await axios.put(`/api/update-workout-achievement`, {
-                userId: item.userId,
-                date: item.date,
-                title: item.name,
-                achieved: !item.isCompleted,
+            const item = onGoingWorkoutData[index];
+            const res = await axios.get("/api/get-user-id");
+            const { userId } = res.data;
+            console.log(item);
+            console.log("Update start:", userId);
+            const formattedDate = formatDateFromInput(new Date());
+            const newData = {
+                userId: userId,
+                date: formattedDate,
+                name: item.name,
+                achieved: !item.achieved,
+            };
+            const response = await fetch("/api/update-workout-achievement", {
+                method: "POST",
+                body: JSON.stringify(newData),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            console.log(response);
+            const responseData = await response.json();
+            console.log("Response data:", responseData);
+
+            setOnGoingWorkoutData((prevData) => {
+                const newData = [...prevData];
+                newData[index] = {
+                    ...newData[index],
+                    isCompleted: !newData[index].achieved,
+                };
+                return newData;
             });
 
-            if (res.status === 200) {
-                setMenuForToday((prevMenu: any) => {
-                    const newMenu = [...prevMenu];
-                    newMenu[index].isCompleted = !newMenu[index].isCompleted;
-                    return newMenu;
-                });
-
-                setAchieved((prevAchieved: any) => {
-                    const newAchieved = menuForToday[index].isCompleted
-                        ? prevAchieved.filter(
-                              (achievedItem: any) =>
-                                  achievedItem.title !== item.name
-                          )
-                        : [...prevAchieved, item];
-                    return newAchieved;
-                });
-            } else {
-                throw new Error("Failed to update achievement status");
-            }
+            setAchievedWorkoutData((prevData) => {
+                if (item.isCompleted) {
+                    return prevData.filter(
+                        (workout) => workout.name !== item.name
+                    );
+                } else {
+                    return [
+                        ...prevData,
+                        { ...item, isCompleted: !item.isCompleted },
+                    ];
+                }
+            });
         } catch (error) {
             console.error("Error updating achievement status:", error);
         }
     };
 
-    const handleAskAI = () => {
-        window.location.href = "workout/ai-support";
-    };
-
-    const { handleSubmit } = useForm();
-    const onSubmit = async () => {
-        try {
-            const res = await axios.get("/api/get-user-id");
-            const { userId } = res.data;
-
-            await routeWorkoutHomeWrapperPost(userId, new Date(), "Running");
-        } catch (error) {
-            console.log(error);
-        }
-    };
     const totalCalories =
         calculateKcalForWorkout(achievedWorkoutData) +
         calculateKcalForWorkout(onGoingWorkoutData);
@@ -212,8 +132,8 @@ const WorkoutHomeWrapper: React.FC = () => {
                     }
                     subtitle={"/ " + totalCalories + " kcal"}
                     percent={
-                        (totalCaloriesOfAchieved /
-                            totalCaloriesOfMenuForToday) *
+                        (totalCalories /
+                            calculateKcalForWorkout(onGoingWorkoutData)) *
                         100
                     }
                 />
@@ -266,20 +186,15 @@ const WorkoutHomeWrapper: React.FC = () => {
                                     <span className="text-lg font-semibold mr-4">
                                         {item.calories} kcal
                                     </span>
-                                    <form
-                                        method="post"
-                                        onSubmit={handleSubmit(onSubmit)}
+                                    <button
+                                        type="button"
+                                        className="px-4 py-2 rounded-full bg-gray-500 text-white"
+                                        onClick={() =>
+                                            handleToggleComplete(index)
+                                        }
                                     >
-                                        <button
-                                            type="submit"
-                                            onClick={() =>
-                                                handleToggleComplete(index)
-                                            }
-                                            className="px-4 py-2 rounded-full bg-gray-500 text-white"
-                                        >
-                                            Done
-                                        </button>
-                                    </form>
+                                        Done
+                                    </button>
                                 </div>
                             </div>
                         ))}
