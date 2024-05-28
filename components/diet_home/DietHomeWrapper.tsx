@@ -29,6 +29,7 @@ const DietHomeWrapper: React.FC = () => {
     const [userId, setUserId] = useState<string>("");
     const [totalTargetCalories, setTotalTargetCalories] = useState<number>(2200);
     const [selectedDate, setSelectedDate] = useState<Date>(new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())));
+    const localDate = new Date(selectedDate.getUTCFullYear(), selectedDate.getUTCMonth(), selectedDate.getUTCDate());
 
     const icon = (
         <Image
@@ -80,7 +81,6 @@ const DietHomeWrapper: React.FC = () => {
 
     const handleDelete = async (mealType: MealType, index: number) => {
         try {
-            const localDate = new Date(selectedDate.getUTCFullYear(), selectedDate.getUTCMonth(), selectedDate.getUTCDate());
             const date = format(localDate, "yyyy-MM-dd");
             await axios.delete("/api/delete-meal", {
                 data: {
@@ -106,7 +106,6 @@ const DietHomeWrapper: React.FC = () => {
     };
 
     const handleAdd = (mealType: MealType) => {
-        const localDate = new Date(selectedDate.getUTCFullYear(), selectedDate.getUTCMonth(), selectedDate.getUTCDate());
         const date = format(localDate, "yyyy-MM-dd");
         window.location.href = `/diet/add-meals?mealType=${mealType}&date=${date}`;
     };
@@ -127,7 +126,7 @@ const DietHomeWrapper: React.FC = () => {
         <div className="bg-white min-h-screen p-4">
             <TopCalendar onDateSelect={onDateSelect} />
             <h1 className="text-3xl font-bold flex flex-col items-center p-2 m-2">
-                Diet Management Plan
+                Diet Menu for {format(localDate, "MMMM d, yyyy")}
             </h1>
             <div className="flex flex-col items-center p-2">
                 <CalorieDistributionChart
