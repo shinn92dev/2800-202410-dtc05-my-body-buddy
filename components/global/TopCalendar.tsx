@@ -58,7 +58,7 @@ const TopCalendar: React.FC<TopCalendarProps> = ({ onDateSelect }) => {
     return (
         <div className="bg-beige">
             <div className="flex flex-col items-center">
-                <div className="text-base font-semibold text-gray-700 flex items-center">
+                <div className="text-xl font-bold text-gray-700 flex items-center pt-2">
                     {currentMonth}
                     <button
                         onClick={() => setShowCalendarPopup(!showCalendarPopup)}
@@ -87,10 +87,10 @@ const TopCalendar: React.FC<TopCalendarProps> = ({ onDateSelect }) => {
                                     }`}
                                 onClick={() => handleDateClick(date)}
                             >
-                                <div className="text-sm sm:text-md lg:text-lg font-bold">
+                                <div className="text-md sm:text-lg lg:text-xl font-bold">
                                     {format(date, "d")}
                                 </div>
-                                <div className="text-xs sm:text-sm">
+                                <div className="text-xs sm:text-sm lg:text-md">
                                     {daysOfWeek[date.getDay() === 0 ? 6 : date.getDay() - 1]}
                                 </div>
                             </div>
