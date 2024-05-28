@@ -1,6 +1,7 @@
 import React from 'react';
 import AiLines from '@/components/global/AiLines';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import "@/components/global/AiLines.scss";
 
 import Image from "next/image";
@@ -26,7 +27,8 @@ const GeneratedMenu: React.FC<GeneratedMenuProps> = ({ generatedMenu }) => {
                         <div style={{width: '50px', height: '50px', backgroundColor: 'transparent'}}></div>
                     </div>
                     <div className="relative speech-bubble-ai bg-beige p-4 rounded-lg">
-                        <ReactMarkdown>{generatedMenu}</ReactMarkdown>
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{generatedMenu}</ReactMarkdown>
+                        {/*<span>{formattedGeneratedMenu}</span>*/}
                     </div>
                 </div>
             </div>
