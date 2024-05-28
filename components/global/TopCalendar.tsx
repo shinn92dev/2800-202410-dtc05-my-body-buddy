@@ -56,7 +56,7 @@ const TopCalendar: React.FC<TopCalendarProps> = ({ onDateSelect }) => {
     }, [currentWeek]);
 
     return (
-        <div className="bg-orange">
+        <div className="bg-beige">
             <div className="flex flex-col items-center">
                 <div className="text-base font-semibold text-gray-700 flex items-center">
                     {currentMonth}
