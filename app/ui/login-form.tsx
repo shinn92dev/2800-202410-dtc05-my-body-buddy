@@ -4,9 +4,9 @@ import React from "react";
 import SignUpAndInIcon from "@/components/global/icons/SignUpAndInIcon";
 import { useForm, SubmitHandler, Resolver } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-
 import * as yup from "yup";
 import { useSignIn } from "@clerk/nextjs";
+import axios from "axios";
 
 const routeLoginPostUser = async (userData: any) => {
     try {
@@ -15,19 +15,16 @@ const routeLoginPostUser = async (userData: any) => {
             username: userData.username,
             isLoggedIn: true,
         };
-        const response = await fetch("/api/login", {
-            method: "POST",
-            body: JSON.stringify(newUserData),
+        const response = await axios.post("/api/login", newUserData, {
             headers: {
                 "Content-Type": "application/json",
             },
         });
-        if (!response.ok) {
+        if (response.status !== 200) {
             throw new Error("Not OK");
         }
-        const data = await response.json();
         window.location.href = "/summary/diet";
-        return data;
+        return response.data;
     } catch (error) {
         console.error(error);
     }
@@ -35,9 +32,9 @@ const routeLoginPostUser = async (userData: any) => {
 
 type userLoginInput = {
     email: string;
-    username: string;
     password: string;
 };
+
 const validationSchema = yup.object({
     email: yup
         .string()
@@ -52,8 +49,7 @@ export default function LoginForm() {
     const {
         register,
         handleSubmit,
-        watch,
-        formState: { errors },
+        formState: { errors, isSubmitting },
     } = useForm<userLoginInput>({
         resolver: yupResolver(validationSchema) as unknown as Resolver<
             userLoginInput,
@@ -70,9 +66,10 @@ export default function LoginForm() {
                 password: data.password,
             });
             if (logInResult?.status === "complete") {
-                routeLoginPostUser(data);
+                await routeLoginPostUser(data);
+            } else {
+                console.error("Login Incomplete: ", logInResult);
             }
-            console.log("User Info: ", logInResult);
         } catch (error) {
             console.log("Error: ", error);
         }
@@ -84,7 +81,7 @@ export default function LoginForm() {
             onSubmit={handleSubmit(onSubmit)}
             method="post"
         >
-            <div className="">
+            <div className="mt-4">
                 <label htmlFor="email" className="hidden">
                     Email
                 </label>
@@ -120,11 +117,40 @@ export default function LoginForm() {
             </div>
 
             <button
-                className="mt-2 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
+                className="mt-4 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
                 type="submit"
+                disabled={isSubmitting}
             >
-                <SignUpAndInIcon width={6} />
-                <span className="ml-3">Submit</span>
+                {isSubmitting ? (
+                    <>
+                        <svg
+                            className="animate-spin h-5 w-5 mr-3 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                            ></circle>
+                            <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8v8H4z"
+                            ></path>
+                        </svg>
+                        <span>Submit</span>
+                    </>
+                ) : (
+                    <>
+                        <SignUpAndInIcon width={6} />
+                        <span className="ml-3">Submit</span>
+                    </>
+                )}
             </button>
         </form>
     );
