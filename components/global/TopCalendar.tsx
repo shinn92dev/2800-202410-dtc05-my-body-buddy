@@ -5,7 +5,7 @@ import { format, addDays, subDays, startOfWeek, startOfMonth } from "date-fns";
 import { FaCalendarAlt } from "react-icons/fa";
 import CalendarPopup from "./CalendarPopup";
 
-const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 interface TopCalendarProps {
     onDateSelect: (date: Date) => void;
@@ -13,7 +13,7 @@ interface TopCalendarProps {
 
 const TopCalendar: React.FC<TopCalendarProps> = ({ onDateSelect }) => {
     const [currentDate, setCurrentDate] = useState<Date>(new Date());
-    const [currentWeek, setCurrentWeek] = useState<Date>(subDays(new Date(), 3));
+    const [currentWeek, setCurrentWeek] = useState<Date>(startOfWeek(new Date(), { weekStartsOn: 1 }));
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const [showCalendarPopup, setShowCalendarPopup] = useState<boolean>(false);
 
@@ -46,7 +46,7 @@ const TopCalendar: React.FC<TopCalendarProps> = ({ onDateSelect }) => {
 
     const handleDateSelect = (date: Date): void => {
         setSelectedDate(date);
-        setCurrentWeek(startOfWeek(date));
+        setCurrentWeek(startOfWeek(date, { weekStartsOn: 1 }));
         setShowCalendarPopup(false);
         onDateSelect(date);
     };
@@ -91,7 +91,7 @@ const TopCalendar: React.FC<TopCalendarProps> = ({ onDateSelect }) => {
                                     {format(date, "d")}
                                 </div>
                                 <div className="text-xs sm:text-sm">
-                                    {daysOfWeek[date.getDay()].slice(0, 3)}
+                                    {daysOfWeek[date.getDay() === 0 ? 6 : date.getDay() - 1]}
                                 </div>
                             </div>
                         ))}
