@@ -8,7 +8,7 @@ import GoogleIcon from "@/components/global/icons/GoogleIcon";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import getTestUser from "@/app/_helper/testUser";
-import SignupForm from "@/app/ui/signup-form";
+import SignupForm from "@/components/signup/SignupForm";
 
 export default function SignUp() {
     const [showModal, setShowModal] = useState(false);
