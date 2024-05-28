@@ -1,6 +1,6 @@
 // models/Meal.ts
 
-import mongoose, { Schema, model, models } from 'mongoose';
+import { Schema, model, models } from 'mongoose';
 
 // Define the MealItem schema
 const MealItemSchema = new Schema({
