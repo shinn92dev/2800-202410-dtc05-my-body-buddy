@@ -6,6 +6,7 @@ const stripTimeFromDate = (date: Date) => {
     d.setUTCHours(0, 0, 0, 0);
     return d;
 };
+
 export async function POST(req: any) {
     // console.log("BODY:", req.body);
     // return NextResponse.json({ message: "HELLO" }, { status: 200 });
@@ -17,46 +18,41 @@ export async function POST(req: any) {
         try {
             await connectMongoDB();
 
-            const fformattedDate = stripTimeFromDate(new Date(date));
-            const formattedDate = new Date(
-                Date.UTC(
-                    fformattedDate.getFullYear(),
-                    fformattedDate.getMonth(),
-                    fformattedDate.getDate() + 1
-                )
-            );
+            const formattedDate = stripTimeFromDate(new Date(date));
+
             const fetched = await WorkoutModel.findOne({ userId: userId });
-            console.log("Date From DB", fetched.workouts[2].date);
-            console.log("Date From User", formattedDate);
-            console.log(
-                "Date matches",
-                fetched.workouts[2].date == formattedDate
-            );
+            if (!fetched) {
+                return NextResponse.json(
+                    { message: "Workout not found" },
+                    { status: 404 }
+                );
+            }
+
+            const workoutForDate = fetched.workouts.find((workout) => {
+                const workoutDate = stripTimeFromDate(new Date(workout.date));
+                return workoutDate.getTime() === formattedDate.getTime();
+            });
+
+            if (!workoutForDate) {
+                return NextResponse.json(
+                    { message: "Workout for the specified date not found" },
+                    { status: 404 }
+                );
+            }
+
+            const workoutIndex = fetched.workouts.findIndex((workout) => {
+                const workoutDate = stripTimeFromDate(new Date(workout.date));
+                return workoutDate.getTime() === formattedDate.getTime();
+            });
 
             const result = await WorkoutModel.updateOne(
                 {
                     userId,
-                    workouts: {
-                        $elemMatch: {
-                            date: {
-                                $gte: new Date(
-                                    formattedDate.getFullYear(),
-                                    formattedDate.getMonth(),
-                                    formattedDate.getDate()
-                                ),
-                                $lt: new Date(
-                                    formattedDate.getFullYear(),
-                                    formattedDate.getMonth(),
-                                    formattedDate.getDate()
-                                ),
-                            },
-                            "workoutDetail.name": name,
-                        },
-                    },
+                    [`workouts.${workoutIndex}.workoutDetail.name`]: name,
                 },
                 {
                     $set: {
-                        "workouts.$[].workoutDetail.$[detail].achieved":
+                        [`workouts.${workoutIndex}.workoutDetail.$[detail].achieved`]:
                             achieved,
                     },
                 },

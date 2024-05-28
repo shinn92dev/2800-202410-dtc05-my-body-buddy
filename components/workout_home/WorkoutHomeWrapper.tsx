@@ -75,7 +75,8 @@ const WorkoutHomeWrapper: React.FC = () => {
             const { userId } = res.data;
             console.log(item);
             console.log("Update start:", userId);
-            const formattedDate = formatDateFromInput(new Date());
+            // TODO: REPLACE DATE FROM CALENDAR DATE
+            const formattedDate = new Date().toISOString();
             const newData = {
                 userId: userId,
                 date: formattedDate,
