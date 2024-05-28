@@ -84,9 +84,6 @@ export default function AiSupportWrapper() {
                 <div>
                     <div className="flex flex-col items-start p-2">
                         <div className="flex items-start w-full">
-                            <div className="mr-2">
-                                <Image src="/my_boddy_buddy_support_ai_logo.png" alt="support AI logo" width={51} height={51} />
-                            </div>
                             <div className="relative speech-bubble-ai bg-beige p-4 rounded-lg w-full">
                                 <p>Generated Items:</p>
                                 {generatedItems.map((item, index) => (
