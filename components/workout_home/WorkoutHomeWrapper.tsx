@@ -95,24 +95,47 @@ const WorkoutHomeWrapper: React.FC = () => {
                 });
             } else {
                 console.log(data);
-                // const currentDate = new Date();
-                // const workoutsForUser = data.workouts.filter(
-                //     (workout) => workout.userId === userId
-                // );
+                const currentDate = new Date();
+                const currentDateUTC = new Date(
+                    Date.UTC(
+                        currentDate.getUTCFullYear(),
+                        currentDate.getUTCMonth(),
+                        currentDate.getUTCDate()
+                    )
+                );
 
-                // const achievedWorkouts = workoutsForUser.filter(
-                //     (workout) => workout.achieved === true
-                // );
-                // const onGoingWorkouts = workoutsForUser.filter(
-                //     (workout) => workout.achieved === false
-                // );
+                const workoutsForToday = data.workouts.filter((workout) => {
+                    const workoutDate = new Date(workout.date);
+                    const workoutDateUTC = new Date(
+                        Date.UTC(
+                            workoutDate.getUTCFullYear(),
+                            workoutDate.getUTCMonth(),
+                            workoutDate.getUTCDate()
+                        )
+                    );
+                    console.log("Database date:", workoutDateUTC);
+                    console.log("Today:", currentDateUTC);
+                    return (
+                        workoutDateUTC.getTime() === currentDateUTC.getTime()
+                    );
+                });
 
-                // const finalData = [...achievedWorkouts, ...onGoingWorkouts];
-                // console.log(finalData);
-                // setTotalWorkoutData(finalData);
-                // setAchievedWorkoutData(achievedWorkouts);
-                // setMenuForToday(onGoingWorkouts);
-                // setAchieved(achievedWorkouts);
+                const achievedWorkouts = workoutsForToday.filter((workout) =>
+                    workout.workoutDetail.some((detail) => detail.achieved)
+                );
+
+                const onGoingWorkouts = workoutsForToday.filter((workout) =>
+                    workout.workoutDetail.some((detail) => !detail.achieved)
+                );
+
+                const finalData = [...achievedWorkouts, ...onGoingWorkouts];
+
+                console.log(finalData);
+
+                setTotalWorkoutData(finalData);
+                setAchievedWorkoutData(achievedWorkouts);
+                setMenuForToday(onGoingWorkouts);
+                setAchieved(achievedWorkouts);
             }
         } catch (error) {
             console.error("Error fetching workout data:", error);
