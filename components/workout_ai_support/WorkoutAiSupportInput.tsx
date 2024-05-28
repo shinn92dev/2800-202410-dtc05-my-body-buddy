@@ -15,7 +15,7 @@ const workoutMenuItems = [
 // Default tags for reasons to replace workout items
 const defaultTags = [
     "Looks too hard",
-    "Getting bored",
+    "I have muscle pain",
     "Want to feel outside",
     "Prefer to stay inside",
     "I don’t have equipment",
