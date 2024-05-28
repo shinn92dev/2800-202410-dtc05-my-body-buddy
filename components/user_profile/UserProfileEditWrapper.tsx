@@ -1,27 +1,9 @@
 "use client";
-<<<<<<< HEAD
-// TODO
-// goal calories calculation
-// one time pop-up message for complete profile
 
 import Link from "next/link";
 import { useState } from "react";
-=======
-
-import Link from "next/link";
-import { connectMongoDB } from "@/config/db";
->>>>>>> 72361cb (Add edit input form)
-
-export interface UserData {
-  name: string;
-  age: number;
-  gender: string;
-  height: number;
-  weight: number;
-  goalWeight: number;
-  goalDay: string;
-  goalCal: number;
-}
+import { UserData } from "@/components/user_profile/UserProfile";
+import { goalCalCalc } from "@/app/_helper/goalCalCalc"; // should be updated helper function
 
 interface UserProfileWrapperProps {
   userData: UserData;
@@ -30,8 +12,8 @@ interface UserProfileWrapperProps {
 export default function UserProfileEditWrapper({
   userData,
 }: UserProfileWrapperProps) {
-<<<<<<< HEAD
   const [formData, setFormData] = useState<UserData>(userData);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -42,6 +24,7 @@ export default function UserProfileEditWrapper({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    goalCalCalc(); // Calculate the goal calories before saving
     try {
       const res = await fetch("/api/update-user", {
         method: "POST",
@@ -53,7 +36,6 @@ export default function UserProfileEditWrapper({
       if (!res.ok) {
         throw new Error("Error updating user data");
       }
-      console.log(formData);
       const result = await res.json();
       console.log(result.message);
     } catch (error) {
@@ -66,18 +48,17 @@ export default function UserProfileEditWrapper({
       onSubmit={handleSubmit}
       className="flex flex-col justify-center items-center"
     >
-=======
+
   return (
     <div className="flex flex-col items-center">
->>>>>>> 72361cb (Add edit input form)
+
       <div
         id="basic-info"
         className="bg-orange m-5 tracking-wide leading-8 font-semibold text-center w-2/3"
       >
         <p className="text-4xl p-2">👤</p>
         <div>
-          <div className="my-1">Name: {userData.name}</div>
-<<<<<<< HEAD
+          <div className="my-1">Name: {formData.name}</div>
           <div className="my-1">
             Age: <br />
             <input
@@ -115,7 +96,6 @@ export default function UserProfileEditWrapper({
               onChange={handleChange}
             />{" "}
             <br /> kg
-=======
 
           <div className="my-1">
             Age: <input type="text" placeholder={`${userData.age}`} />
@@ -129,7 +109,6 @@ export default function UserProfileEditWrapper({
           </div>
           <div className="my-1">
             Weight: <input type="text" placeholder={`${userData.weight}`} /> kg
->>>>>>> 72361cb (Add edit input form)
           </div>
           <br />
         </div>
@@ -141,12 +120,12 @@ export default function UserProfileEditWrapper({
         <p className="text-4xl p-2">🎯</p>
         <div>
           <div className="my-1">
-<<<<<<< HEAD
+
             Target Date: <br />
             <input
               type="text"
               name="goalDay"
-              value={formData.goalDay}
+              value={formData.goalDay} // type Date error
               onChange={handleChange}
             />
           </div>
@@ -159,7 +138,6 @@ export default function UserProfileEditWrapper({
               onChange={handleChange}
             />{" "}
             <br /> kg
-=======
             Target Date:{" "}
             <input type="text" placeholder={`${userData.goalDay}`} />
           </div>
@@ -167,7 +145,6 @@ export default function UserProfileEditWrapper({
             Target Weight:{" "}
             <input type="text" placeholder={`${userData.goalWeight}`} />
             kg
->>>>>>> 72361cb (Add edit input form)
           </div>
         </div>
         <br />
@@ -178,17 +155,18 @@ export default function UserProfileEditWrapper({
       >
         <p className="text-4xl p-2">🚀</p>
         <div>
-          To reach your goal of {userData.goalWeight} kg <br />
-          until {userData.goalDay}, <br />
-          you should eat: <br />
-          {userData.goalCal} Calories/day
+          To reach your goal of {formData.goalWeight} kg <br />
+          until {formData.goalDay}, <br />
+          {/* type Date error */}
+          you should take: <br />
+          {formData.goalCal} Calories/day
         </div>
         <br />
       </div>
-<<<<<<< HEAD
       <div className="flex justify-between w-1/3 m-10">
         <button
           type="submit"
+          onClick={goalCalCalc}
           className="bg-dark-blue rounded-md px-3 py-2 text-beige"
         >
           Save
@@ -196,20 +174,18 @@ export default function UserProfileEditWrapper({
         <Link
           className="bg-dark-blue rounded-md px-3 py-2 text-beige"
           href={`/user/${userData.name}`}
-=======
+
       <div className="flex justify-center m-10">
         <Link
           href={`/user/${userData.name}`}
           className="bg-dark-blue rounded-md px-3 py-2 text-beige"
->>>>>>> 72361cb (Add edit input form)
         >
           Done
         </Link>
       </div>
-<<<<<<< HEAD
+      
     </form>
-=======
     </div>
->>>>>>> 72361cb (Add edit input form)
+
   );
 }

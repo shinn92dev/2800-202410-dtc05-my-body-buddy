@@ -25,13 +25,13 @@ export default async function UserProfilePage({
     if (user) {
       userData = {
         name: user.username,
-        age: user.age || "N/A",
-        gender: user.gender || "N/A",
-        height: user.height || "N/A",
-        weight: user.weight || "N/A",
-        goalWeight: user.goalWeight || "N/A",
+        age: user.age || "Please ender a number",
+        gender: user.gender || "female or male",
+        height: user.height || "Please ender a number",
+        weight: user.weight || "Please ender a number",
+        goalWeight: user.goalWeight || "Please ender a number",
         goalDay: user.goalDay || "year-month-date",
-        goalCal: user.goalCal || "N/A",
+        goalCal: user.goalCal || "...Will be updated after saving...",
       };
     }
   } catch (error) {
