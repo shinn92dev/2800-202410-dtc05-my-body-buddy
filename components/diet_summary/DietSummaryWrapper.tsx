@@ -119,12 +119,12 @@ export default function DietSummaryWrapper() {
 
     const getWeekDates = (currentDate: Date) => {
         const weekDates = [];
-        const dayOfWeek = currentDate.getUTCDay();
-        const sunday = new Date(currentDate);
-        sunday.setUTCDate(currentDate.getUTCDate() - dayOfWeek);
+        const dayOfWeek = (currentDate.getUTCDay() + 6) % 7;
+        const monday = new Date(currentDate);
+        monday.setUTCDate(currentDate.getUTCDate() - dayOfWeek);
         for (let i = 0; i < 7; i++) {
-            const date = new Date(sunday);
-            date.setUTCDate(sunday.getUTCDate() + i);
+            const date = new Date(monday);
+            date.setUTCDate(monday.getUTCDate() + i);
             weekDates.push(date.toISOString().split('T')[0]);
         }
         return weekDates;
@@ -132,14 +132,55 @@ export default function DietSummaryWrapper() {
 
     const calculateAverageCalories = (mealType: keyof MealsData) => {
         if (!weeklyMeals.length) return 0;
-        const totalCalories = weeklyMeals.reduce((total, day) => {
-            return total + (day[mealType] ? (day[mealType] as MealType[]).reduce((mealTotal, item) => mealTotal + item.calories, 0) : 0);
+    
+        const daysWithData = weeklyMeals.filter(day => day[mealType] && (day[mealType] as MealType[]).length > 0).length;
+    
+        if (daysWithData === 0) return 0;
+    
+        const totalCalories = weeklyMeals.reduce((total, day, index) => {
+            const dayCalories = day[mealType] ? (day[mealType] as MealType[]).reduce((mealTotal, item) => {
+                console.log(`Day ${index + 1} (${day.date}): Adding ${item.calories} calories from ${item.name}`);
+                return mealTotal + item.calories;
+            }, 0) : 0;
+    
+            console.log(`Total calories for ${mealType} on Day ${index + 1} (${day.date}): ${dayCalories}`);
+            return total + dayCalories;
         }, 0);
-        console.log(`Total ${mealType} calories for the week:`, totalCalories);
-        return Math.round(totalCalories / weeklyMeals.length);
+    
+        console.log(`Total calories for ${mealType} over ${weeklyMeals.length} days: ${totalCalories}`);
+        const averageCalories = totalCalories / daysWithData;
+        console.log(`Average calories for ${mealType} over ${daysWithData} days: ${averageCalories}`);
+    
+        return Math.round(averageCalories);
     };
 
-    const averageDailyCalories = calculateAverageCalories("breakfast") + calculateAverageCalories("lunch") + calculateAverageCalories("dinner") + calculateAverageCalories("snacks");
+    const calculateTotalDailyCalories = () => {
+        const totalDailyCalories = weeklyMeals.reduce((total, day, index) => {
+            const dayCalories = (day.breakfast || []).reduce((mealTotal, item) => mealTotal + item.calories, 0)
+                + (day.lunch || []).reduce((mealTotal, item) => mealTotal + item.calories, 0)
+                + (day.dinner || []).reduce((mealTotal, item) => mealTotal + item.calories, 0)
+                + (day.snacks || []).reduce((mealTotal, item) => mealTotal + item.calories, 0);
+
+            console.log(`Total daily calories on Day ${index + 1} (${day.date}): ${dayCalories}`);
+            return total + dayCalories;
+        }, 0);
+        
+        const daysWithData = weeklyMeals.filter(day => (
+            (day.breakfast && day.breakfast.length > 0) ||
+            (day.lunch && day.lunch.length > 0) ||
+            (day.dinner && day.dinner.length > 0) ||
+            (day.snacks && day.snacks.length > 0)
+        )).length;
+        
+        const averageDailyCalories = totalDailyCalories / daysWithData;
+        console.log(`Total daily calories over ${weeklyMeals.length} days: ${totalDailyCalories}`);
+        console.log(`Average daily calories over ${daysWithData} days: ${averageDailyCalories}`);
+        
+        return Math.round(averageDailyCalories);
+    };
+    
+
+    const averageDailyCalories = calculateTotalDailyCalories();
     const averageBreakfastCalories = calculateAverageCalories("breakfast");
     const averageLunchCalories = calculateAverageCalories("lunch");
     const averageDinnerCalories = calculateAverageCalories("dinner");
