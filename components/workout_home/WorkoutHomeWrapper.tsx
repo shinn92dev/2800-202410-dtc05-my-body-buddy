@@ -216,7 +216,7 @@ const WorkoutHomeWrapper: React.FC = () => {
                 <Board
                     icon={<span>🕺</span>}
                     title={"Achieved"}
-                    items={achievedItems}
+                    items={achievedWorkoutData}
                     onEdit={(index) => handleEditForAchieved(index)}
                     onDelete={(index) => handleDeleteForAchieved(index)}
                     onAdd={handleAddForAchieved}
@@ -236,7 +236,7 @@ const WorkoutHomeWrapper: React.FC = () => {
                         <span className="text-lg font-semibold">kcal</span>
                     </div>
                     <div>
-                        {achievedWorkoutData.map((item, index) => (
+                        {onGoingWorkoutData.map((item, index) => (
                             <div
                                 key={index}
                                 className={`flex justify-between items-center p-2 border-b`}
@@ -251,8 +251,9 @@ const WorkoutHomeWrapper: React.FC = () => {
                                     >
                                         {item.title}
                                     </p>
+
                                     <p className="text-sm text-gray-500">
-                                        {item.count}
+                                        {item.count} {item.unit}
                                     </p>
                                 </div>
                                 <div className="flex items-center">
@@ -299,14 +300,3 @@ const WorkoutHomeWrapper: React.FC = () => {
 };
 
 export default WorkoutHomeWrapper;
-
-const filterWorkoutsByAchievement = (date: Date, workouts: any[]) => {
-    const achieved = workouts.filter(
-        (workout) => workout.date <= date && workout.isCompleted
-    );
-    const onGoing = workouts.filter(
-        (workout) => workout.date > date || !workout.isCompleted
-    );
-
-    return { achieved, onGoing };
-};
