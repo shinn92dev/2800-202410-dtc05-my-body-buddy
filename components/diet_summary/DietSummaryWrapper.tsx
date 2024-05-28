@@ -25,7 +25,7 @@ type MealsData = {
     snacks: MealType[];
 };
 
-export default function DietSummaryWrapper() {
+export default function DietSummary() {
     const [meals, setMeals] = useState<MealsData | null>(null);
     const [userId, setUserId] = useState<string | null>(null);
     const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
