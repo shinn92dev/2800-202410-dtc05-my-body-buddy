@@ -88,7 +88,7 @@ export default function WorkoutAiSupportInput({ onGenerateAlternative, onGenerat
                                     </div>
                                 </div>
                                 <div>
-                                    <h2 className="font-bold">{(item.kcalPerUnit * item.quantity).toFixed(1)} kcal</h2>
+                                    <h2 className="font-bold">{(item.kcalPerUnit * item.quantity).toFixed(0)} kcal</h2>
                                 </div>
                             </div>
                         )
@@ -109,7 +109,7 @@ export default function WorkoutAiSupportInput({ onGenerateAlternative, onGenerat
                                 </div>
                             </div>
                             <div>
-                                <h2 className="font-bold">{(item.kcalPerUnit * item.quantity).toFixed(1)} kcal</h2>
+                                <h2 className="font-bold">{(item.kcalPerUnit * item.quantity).toFixed(0)} kcal</h2>
                             </div>
                         </div>
                     )

@@ -110,7 +110,7 @@ export default function AiSupportWrapper() {
                                             </div>
                                         </div>
                                         <div>
-                                            <h2 className="font-bold">{(item.kcalPerUnit * item.quantity).toFixed(1)} kcal</h2>
+                                            <h2 className="font-bold">{(item.kcalPerUnit * item.quantity).toFixed(0)} kcal</h2>
                                         </div>
                                     </div>
                                 ))}

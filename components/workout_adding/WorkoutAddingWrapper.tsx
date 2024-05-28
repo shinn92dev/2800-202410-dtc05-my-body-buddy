@@ -167,7 +167,7 @@ export default function WorkoutAddingWrapper() {
                                 disabled={option.unit !== selectedItem.selectedOption.unit}
                             />
                             <span className={`${option.unit !== selectedItem.selectedOption.unit ? "text-gray-400" : ""}`}>{option.unit}</span>
-                            <span className={`ml-auto ${option.unit !== selectedItem.selectedOption.unit ? "text-gray-400" : ""}`}>{(selectedItem.selectedOption.quantity * option.kcalPerUnit).toFixed(1)} kcal</span>
+                            <span className={`ml-auto ${option.unit !== selectedItem.selectedOption.unit ? "text-gray-400" : ""}`}>{(selectedItem.selectedOption.quantity * option.kcalPerUnit).toFixed(0)} kcal</span>
                         </div>
                     ))}
                     <div className="flex justify-center mt-2">
@@ -195,7 +195,7 @@ export default function WorkoutAddingWrapper() {
                             </div>
                         </div>
                         <div>
-                            <h2 className="font-bold">{(item.selectedOption.quantity * item.selectedOption.kcalPerUnit).toFixed(1)} kcal
+                            <h2 className="font-bold">{(item.selectedOption.quantity * item.selectedOption.kcalPerUnit).toFixed(0)} kcal
                                 <button onClick={() => handleRemoveDraftedItem(index)}
                                         className="text-red-500 text-2xl ml-2">×
                                 </button>
