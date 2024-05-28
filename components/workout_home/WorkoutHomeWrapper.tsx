@@ -7,6 +7,8 @@ import Board from "@/components/global/Board";
 import AskAiButton from "@/components/global/AskAiButton";
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import { format } from "date-fns";
+import { fetchWorkoutForSpecificDate } from "@/app/_helper/workout";
 
 const routeWorkoutHomeWrapperPost = async (
     userId: string,
@@ -95,29 +97,21 @@ const WorkoutHomeWrapper: React.FC = () => {
                 });
             } else {
                 console.log(data);
-                const currentDate = new Date();
-                const currentDateUTC = new Date(
-                    Date.UTC(
-                        currentDate.getUTCFullYear(),
-                        currentDate.getUTCMonth(),
-                        currentDate.getUTCDate()
-                    )
-                );
+                const date = new Date();
+                const currentDate = format(date, "yyyy-MM-dd");
+
+                const worrrr = fetchWorkoutForSpecificDate(data, new Date());
+                console.log("#####################");
+                console.log(worrrr);
+                console.log("#####################");
 
                 const workoutsForToday = data.workouts.filter((workout) => {
-                    const workoutDate = new Date(workout.date);
-                    const workoutDateUTC = new Date(
-                        Date.UTC(
-                            workoutDate.getUTCFullYear(),
-                            workoutDate.getUTCMonth(),
-                            workoutDate.getUTCDate()
-                        )
-                    );
-                    console.log("Database date:", workoutDateUTC);
-                    console.log("Today:", currentDateUTC);
-                    return (
-                        workoutDateUTC.getTime() === currentDateUTC.getTime()
-                    );
+                    const workoutDate = new Date(workout.date)
+                        .toISOString()
+                        .split("T")[0];
+                    console.log("Database date:", workoutDate);
+                    console.log("Today:", currentDate);
+                    return workoutDate === currentDate;
                 });
 
                 const achievedWorkouts = workoutsForToday.filter((workout) =>
@@ -181,18 +175,6 @@ const WorkoutHomeWrapper: React.FC = () => {
     const handleAddForAchieved = () => {
         // Navigate to AddingItems page
         window.location.href = `workout/adding`;
-    };
-
-    const handleEditForMenuForToday = (index: number) => {
-        // Handle edit logic here
-    };
-
-    const handleDeleteForMenuForToday = (index: number) => {
-        // Handle delete logic here
-    };
-
-    const handleAddForMenuForToday = () => {
-        // Handle add logic here
     };
 
     const handleToggleComplete = async (index: number) => {
