@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import WorkoutModel from "@/models/Workout";
 import { connectMongoDB } from "@/config/db";
-
+const stripTimeFromDate = (date: Date) => {
+    const d = new Date(date);
+    d.setUTCHours(0, 0, 0, 0);
+    return d;
+};
 export async function POST(req: any) {
     // console.log("BODY:", req.body);
     // return NextResponse.json({ message: "HELLO" }, { status: 200 });
@@ -13,20 +17,54 @@ export async function POST(req: any) {
         try {
             await connectMongoDB();
 
-            const formattedDate = new Date(date).toISOString().split("T")[0];
+            const fformattedDate = stripTimeFromDate(new Date(date));
+            const formattedDate = new Date(
+                Date.UTC(
+                    fformattedDate.getFullYear(),
+                    fformattedDate.getMonth(),
+                    fformattedDate.getDate() + 1
+                )
+            );
+            const fetched = await WorkoutModel.findOne({ userId: userId });
+            console.log("Date From DB", fetched.workouts[2].date);
+            console.log("Date From User", formattedDate);
+            console.log(
+                "Date matches",
+                fetched.workouts[2].date == formattedDate
+            );
+
             const result = await WorkoutModel.updateOne(
                 {
                     userId,
-                    "workouts.date": formattedDate,
-                    "workouts.workoutDetail.name": name,
+                    workouts: {
+                        $elemMatch: {
+                            date: {
+                                $gte: new Date(
+                                    formattedDate.getFullYear(),
+                                    formattedDate.getMonth(),
+                                    formattedDate.getDate()
+                                ),
+                                $lt: new Date(
+                                    formattedDate.getFullYear(),
+                                    formattedDate.getMonth(),
+                                    formattedDate.getDate()
+                                ),
+                            },
+                            "workoutDetail.name": name,
+                        },
+                    },
                 },
                 {
                     $set: {
-                        "workouts.$.workoutDetail.$[detail].achieved": achieved,
+                        "workouts.$[].workoutDetail.$[detail].achieved":
+                            achieved,
                     },
                 },
-                { arrayFilters: [{ "detail.name": name }] }
+                {
+                    arrayFilters: [{ "detail.name": name }],
+                }
             );
+
             console.log("######################");
             console.log(result);
             console.log("######################");
