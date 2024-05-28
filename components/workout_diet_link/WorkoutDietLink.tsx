@@ -18,7 +18,7 @@ const WorkoutDietLink: React.FC<WorkoutDietLinkProps> = ({
     dietTextColor,
 }) => {
     return (
-        <div className="flex justify-center space-x-4 mt-4">
+        <div className="flex justify-center space-x-4 mt-4 relative z-20">
             <a
                 href={workoutLink}
                 className={`text-center px-4 py-2 rounded hover:bg-gray-200 focus:outline-none ${workoutTextColor}`}
@@ -36,3 +36,4 @@ const WorkoutDietLink: React.FC<WorkoutDietLinkProps> = ({
 };
 
 export default WorkoutDietLink;
+
