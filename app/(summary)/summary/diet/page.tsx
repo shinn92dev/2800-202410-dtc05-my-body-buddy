@@ -5,6 +5,7 @@ import TopCalendar from "@/components/global/TopCalendar";
 import ScoreCircleBarWrapper from "@/components/summary_score_circle_bar/ScoreCircleBarWrapper";
 import BarGraph from "@/components/global/BarGraph";
 import WorkoutDietLink from "@/components/workout_diet_link/WorkoutDietLink";
+import AverageCalorieBanner from "@/components/global/AverageCalorieBanner";
 import axios from "axios";
 import { handleDateSelect } from "@/app/_helper/handleDate"; 
 
@@ -157,10 +158,8 @@ export default function DietSummary() {
                 dietTextColor="text-black"
             />
             <div className="text-center">
-                <ScoreCircleBarWrapper score={80} percent={80} />
-                <div className="text-xl font-semibold p-4">
-                    Average Calorie Intake from {weekRange}
-                </div>
+                {/* <ScoreCircleBarWrapper score={80} percent={80} /> */}
+                <AverageCalorieBanner title="Average Calories intake from" range={weekRange} />
                 <BarGraph
                     label="Average daily"
                     value={averageDailyCalories}

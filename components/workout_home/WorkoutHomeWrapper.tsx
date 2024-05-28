@@ -7,6 +7,11 @@ import Board from "@/components/global/Board";
 import AskAiButton from "@/components/global/AskAiButton";
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import { format } from "date-fns";
+import {
+    fetchWorkoutForSpecificDate,
+    calculateKcalForWorkout,
+} from "@/app/_helper/workout";
 
 const routeWorkoutHomeWrapperPost = async (
     userId: string,
@@ -15,7 +20,9 @@ const routeWorkoutHomeWrapperPost = async (
 ) => {
     try {
         const formattedDate = new Date(
-            `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()}`
+            `${date.getUTCFullYear()}-${
+                date.getUTCMonth() + 1
+            }-${date.getUTCDate()}`
         );
         const response = await fetch("/api/workout-wrapper", {
             method: "POST",
@@ -42,9 +49,8 @@ const routeWorkoutHomeWrapperPost = async (
 const WorkoutHomeWrapper: React.FC = () => {
     const [menuForToday, setMenuForToday] = useState<any[]>([]);
     const [achieved, setAchieved] = useState<any[]>([]);
-    const [totalWorkoutData, setTotalWorkoutData] = useState<any[]>([]);
     const [achievedWorkoutData, setAchievedWorkoutData] = useState<any[]>([]);
-
+    const [onGoingWorkoutData, setOnGoingWorkoutData] = useState<any[]>([]);
     const calculateTotalCalories = (
         items: { quantity: number; kcalPerUnit: number }[]
     ) => {
@@ -77,29 +83,27 @@ const WorkoutHomeWrapper: React.FC = () => {
 
     const fetchWorkoutData = async () => {
         try {
-            const res = await axios.get('/api/get-user-id');
+            const res = await axios.get("/api/get-user-id");
             const { userId } = res.data;
+            console.log(userId);
 
-            const dataRes = await axios.get(`/api/get-workout?userId=${userId}`);
+            const dataRes = await axios.get(
+                `/api/get-workout?userId=${userId}`
+            );
             const data = dataRes.data;
 
-            if (!data) {
-                await axios.post('/api/save-new-workout', {
+            if (!data || data.workouts.length === 0) {
+                await axios.post("/api/save-new-workout", {
                     userId: userId,
-                    workouts: []
+                    workouts: [],
                 });
             } else {
-                const currentDate = new Date();
-                const filteredData = filterWorkoutsByAchievement(
-                    currentDate,
-                    data.workouts
+                const workoutDataForDate = fetchWorkoutForSpecificDate(
+                    data,
+                    new Date()
                 );
-                const finalData = [...filteredData.achieved, ...filteredData.onGoing];
-
-                setTotalWorkoutData(finalData);
-                setAchievedWorkoutData(filteredData.achieved);
-                setMenuForToday(finalData);
-                setAchieved(filteredData.achieved);
+                setOnGoingWorkoutData(workoutDataForDate.onGoing);
+                setAchievedWorkoutData(workoutDataForDate.achieved);
             }
         } catch (error) {
             console.error("Error fetching workout data:", error);
@@ -143,47 +147,41 @@ const WorkoutHomeWrapper: React.FC = () => {
     };
 
     const handleAddForAchieved = () => {
-        // Navigate to AddingItems page
         window.location.href = `workout/adding`;
     };
 
-    const handleEditForMenuForToday = (index: number) => {
-        // Handle edit logic here
-    };
-
-    const handleDeleteForMenuForToday = (index: number) => {
-        // Handle delete logic here
-    };
-
-    const handleAddForMenuForToday = () => {
-        // Handle add logic here
-    };
-
-    const handleToggleComplete = (index: number) => {
-        setMenuForToday((prevMenu: any) => {
-            const newMenu = [...prevMenu];
-            const item = { ...newMenu[index] };
-            item.isCompleted = !item.isCompleted;
-
-            // Update the new menu
-            newMenu[index] = item;
-
-            return newMenu;
-        });
-
-        // Update achieved state based on item completion status
-        setAchieved((prevAchieved: any) => {
+    const handleToggleComplete = async (index: number) => {
+        try {
             const item = menuForToday[index];
-            if (item.isCompleted) {
-                // Remove from achieved
-                return prevAchieved.filter(
-                    (achievedItem: any) => achievedItem.title !== item.title
-                );
+            const res = await axios.put(`/api/update-workout-achievement`, {
+                userId: item.userId,
+                date: item.date,
+                title: item.name,
+                achieved: !item.isCompleted,
+            });
+
+            if (res.status === 200) {
+                setMenuForToday((prevMenu: any) => {
+                    const newMenu = [...prevMenu];
+                    newMenu[index].isCompleted = !newMenu[index].isCompleted;
+                    return newMenu;
+                });
+
+                setAchieved((prevAchieved: any) => {
+                    const newAchieved = menuForToday[index].isCompleted
+                        ? prevAchieved.filter(
+                              (achievedItem: any) =>
+                                  achievedItem.title !== item.name
+                          )
+                        : [...prevAchieved, item];
+                    return newAchieved;
+                });
             } else {
-                // Add to achieved
-                return [...prevAchieved, item];
+                throw new Error("Failed to update achievement status");
             }
-        });
+        } catch (error) {
+            console.error("Error updating achievement status:", error);
+        }
     };
 
     const handleAskAI = () => {
@@ -193,26 +191,26 @@ const WorkoutHomeWrapper: React.FC = () => {
     const { handleSubmit } = useForm();
     const onSubmit = async () => {
         try {
-            const res = await axios.get('/api/get-user-id');
+            const res = await axios.get("/api/get-user-id");
             const { userId } = res.data;
 
-            await routeWorkoutHomeWrapperPost(
-                userId,
-                new Date(),
-                "Running"
-            );
+            await routeWorkoutHomeWrapperPost(userId, new Date(), "Running");
         } catch (error) {
             console.log(error);
         }
     };
-
+    const totalCalories =
+        calculateKcalForWorkout(achievedWorkoutData) +
+        calculateKcalForWorkout(onGoingWorkoutData);
     return (
         <div className="p-4 items-center bg-white">
             <h1 className="text-center text-2xl font-bold">Your Progress</h1>
             <div className="flex justify-center mt-4">
                 <CircleBar
-                    title={totalCaloriesOfAchieved + " kcal"}
-                    subtitle={"/ " + totalCaloriesOfMenuForToday + " kcal"}
+                    title={
+                        calculateKcalForWorkout(achievedWorkoutData) + " kcal"
+                    }
+                    subtitle={"/ " + totalCalories + " kcal"}
                     percent={
                         (totalCaloriesOfAchieved /
                             totalCaloriesOfMenuForToday) *
@@ -224,7 +222,7 @@ const WorkoutHomeWrapper: React.FC = () => {
                 <Board
                     icon={<span>🕺</span>}
                     title={"Achieved"}
-                    items={achievedItems}
+                    items={achievedWorkoutData}
                     onEdit={(index) => handleEditForAchieved(index)}
                     onDelete={(index) => handleDeleteForAchieved(index)}
                     onAdd={handleAddForAchieved}
@@ -236,24 +234,18 @@ const WorkoutHomeWrapper: React.FC = () => {
                         <div className="flex items-center">
                             <span>🏋️</span>
                             <h2 className="text-xl font-bold ml-2">
-                                Menu for Today
+                                Workout for Today
                             </h2>
                         </div>
                         <span className="text-lg font-semibold">
-                            {menuForTodayItems.reduce(
-                                (total, item) => total + item.calories,
-                                0
-                            )}{" "}
-                            kcal
+                            {calculateKcalForWorkout(onGoingWorkoutData)}kcal
                         </span>
                     </div>
                     <div>
-                        {menuForTodayItems.map((item, index) => (
+                        {onGoingWorkoutData.map((item, index) => (
                             <div
                                 key={index}
-                                className={`flex justify-between items-center p-2 border-b ${
-                                    item.isCompleted ? "text-gray-300" : ""
-                                }`}
+                                className={`flex justify-between items-center p-2 border-b`}
                             >
                                 <div>
                                     <p
@@ -265,8 +257,9 @@ const WorkoutHomeWrapper: React.FC = () => {
                                     >
                                         {item.name}
                                     </p>
+
                                     <p className="text-sm text-gray-500">
-                                        {item.amount}
+                                        {item.quantity} {item.unit}
                                     </p>
                                 </div>
                                 <div className="flex items-center">
@@ -282,13 +275,9 @@ const WorkoutHomeWrapper: React.FC = () => {
                                             onClick={() =>
                                                 handleToggleComplete(index)
                                             }
-                                            className={`px-4 py-2 rounded-full ${
-                                                item.isCompleted
-                                                    ? "bg-white text-gray-500 border"
-                                                    : "bg-gray-500 text-white"
-                                            }`}
+                                            className="px-4 py-2 rounded-full bg-gray-500 text-white"
                                         >
-                                            {item.isCompleted ? "Undo" : "Done"}
+                                            Done
                                         </button>
                                     </form>
                                 </div>
@@ -317,10 +306,3 @@ const WorkoutHomeWrapper: React.FC = () => {
 };
 
 export default WorkoutHomeWrapper;
-
-const filterWorkoutsByAchievement = (date: Date, workouts: any[]) => {
-    const achieved = workouts.filter((workout) => workout.date <= date && workout.isCompleted);
-    const onGoing = workouts.filter((workout) => workout.date > date || !workout.isCompleted);
-
-    return { achieved, onGoing };
-};
