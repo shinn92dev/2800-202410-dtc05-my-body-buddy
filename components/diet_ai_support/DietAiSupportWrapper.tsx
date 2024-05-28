@@ -33,11 +33,12 @@ const DietAiSupportWrapper: React.FC = () => {
         }
     };
 
-    const message: string = "Hi! I'm BODY BUDDY AI.\nI'll suggest a menu that includes the nutrients you should be taking.\n\nPlease fill out your preferences in the form below.";
+    const initialMessageTitle: string = "Hi! I'm BODY BUDDY AI.";
+    const initialMessageBody: string = "I'll suggest a menu that includes the nutrients you should be taking.\n\nPlease fill out your preferences in the form below.";
 
     return (
         <div className="p-4 w-full max-w-lg">
-            <AiLines messageBody={message} />
+            <AiLines messageTitle={initialMessageTitle} messageBody={initialMessageBody} />
             {!generated && <PreferencesForm onSubmit={handleFormSubmit} />}
             {preferences && <PreferencesSummary preferences={preferences} />}
             {generated && <GeneratedMenu generatedMenu={generatedMenu} />}
