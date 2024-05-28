@@ -22,7 +22,12 @@ export async function GET(req: NextRequest) {
 
     if (!meals) {
       console.log(`No meals found for userId: ${userId}`);
-      return NextResponse.json({ message: 'No meals found for the specified user' }, { status: 404 });
+      return NextResponse.json({
+        breakfast: [],
+        lunch: [],
+        dinner: [],
+        snacks: [],
+      }, { status: 200 });
     }
 
     const dateObj = new Date(date).toISOString().split('T')[0];
@@ -33,7 +38,12 @@ export async function GET(req: NextRequest) {
 
     if (!dailyMeal) {
       console.log(`No meals found for date: ${date}`);
-      return NextResponse.json({ message: 'No meals found for the specified date' }, { status: 404 });
+      return NextResponse.json({
+        breakfast: [],
+        lunch: [],
+        dinner: [],
+        snacks: [],
+      }, { status: 200 });
     }
 
     const responseData = JSON.parse(JSON.stringify(dailyMeal, (key, value) => {
