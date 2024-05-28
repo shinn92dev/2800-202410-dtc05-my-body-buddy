@@ -15,7 +15,9 @@ const routeWorkoutHomeWrapperPost = async (
 ) => {
     try {
         const formattedDate = new Date(
-            `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()}`
+            `${date.getUTCFullYear()}-${
+                date.getUTCMonth() + 1
+            }-${date.getUTCDate()}`
         );
         const response = await fetch("/api/workout-wrapper", {
             method: "POST",
@@ -77,29 +79,40 @@ const WorkoutHomeWrapper: React.FC = () => {
 
     const fetchWorkoutData = async () => {
         try {
-            const res = await axios.get('/api/get-user-id');
+            const res = await axios.get("/api/get-user-id");
             const { userId } = res.data;
+            console.log(userId);
 
-            const dataRes = await axios.get(`/api/get-workout?userId=${userId}`);
+            const dataRes = await axios.get(
+                `/api/get-workout?userId=${userId}`
+            );
             const data = dataRes.data;
 
-            if (!data) {
-                await axios.post('/api/save-new-workout', {
+            if (!data || data.workouts.length === 0) {
+                await axios.post("/api/save-new-workout", {
                     userId: userId,
-                    workouts: []
+                    workouts: [],
                 });
             } else {
-                const currentDate = new Date();
-                const filteredData = filterWorkoutsByAchievement(
-                    currentDate,
-                    data.workouts
-                );
-                const finalData = [...filteredData.achieved, ...filteredData.onGoing];
+                console.log(data);
+                // const currentDate = new Date();
+                // const workoutsForUser = data.workouts.filter(
+                //     (workout) => workout.userId === userId
+                // );
 
-                setTotalWorkoutData(finalData);
-                setAchievedWorkoutData(filteredData.achieved);
-                setMenuForToday(finalData);
-                setAchieved(filteredData.achieved);
+                // const achievedWorkouts = workoutsForUser.filter(
+                //     (workout) => workout.achieved === true
+                // );
+                // const onGoingWorkouts = workoutsForUser.filter(
+                //     (workout) => workout.achieved === false
+                // );
+
+                // const finalData = [...achievedWorkouts, ...onGoingWorkouts];
+                // console.log(finalData);
+                // setTotalWorkoutData(finalData);
+                // setAchievedWorkoutData(achievedWorkouts);
+                // setMenuForToday(onGoingWorkouts);
+                // setAchieved(achievedWorkouts);
             }
         } catch (error) {
             console.error("Error fetching workout data:", error);
@@ -159,31 +172,38 @@ const WorkoutHomeWrapper: React.FC = () => {
         // Handle add logic here
     };
 
-    const handleToggleComplete = (index: number) => {
-        setMenuForToday((prevMenu: any) => {
-            const newMenu = [...prevMenu];
-            const item = { ...newMenu[index] };
-            item.isCompleted = !item.isCompleted;
-
-            // Update the new menu
-            newMenu[index] = item;
-
-            return newMenu;
-        });
-
-        // Update achieved state based on item completion status
-        setAchieved((prevAchieved: any) => {
+    const handleToggleComplete = async (index: number) => {
+        try {
             const item = menuForToday[index];
-            if (item.isCompleted) {
-                // Remove from achieved
-                return prevAchieved.filter(
-                    (achievedItem: any) => achievedItem.title !== item.title
-                );
+            const res = await axios.put(`/api/update-workout-achievement`, {
+                userId: item.userId,
+                date: item.date,
+                title: item.name,
+                achieved: !item.isCompleted,
+            });
+
+            if (res.status === 200) {
+                setMenuForToday((prevMenu: any) => {
+                    const newMenu = [...prevMenu];
+                    newMenu[index].isCompleted = !newMenu[index].isCompleted;
+                    return newMenu;
+                });
+
+                setAchieved((prevAchieved: any) => {
+                    const newAchieved = menuForToday[index].isCompleted
+                        ? prevAchieved.filter(
+                              (achievedItem: any) =>
+                                  achievedItem.title !== item.name
+                          )
+                        : [...prevAchieved, item];
+                    return newAchieved;
+                });
             } else {
-                // Add to achieved
-                return [...prevAchieved, item];
+                throw new Error("Failed to update achievement status");
             }
-        });
+        } catch (error) {
+            console.error("Error updating achievement status:", error);
+        }
     };
 
     const handleAskAI = () => {
@@ -193,14 +213,10 @@ const WorkoutHomeWrapper: React.FC = () => {
     const { handleSubmit } = useForm();
     const onSubmit = async () => {
         try {
-            const res = await axios.get('/api/get-user-id');
+            const res = await axios.get("/api/get-user-id");
             const { userId } = res.data;
 
-            await routeWorkoutHomeWrapperPost(
-                userId,
-                new Date(),
-                "Running"
-            );
+            await routeWorkoutHomeWrapperPost(userId, new Date(), "Running");
         } catch (error) {
             console.log(error);
         }
@@ -236,7 +252,7 @@ const WorkoutHomeWrapper: React.FC = () => {
                         <div className="flex items-center">
                             <span>🏋️</span>
                             <h2 className="text-xl font-bold ml-2">
-                                Menu for Today
+                                Workout for Today
                             </h2>
                         </div>
                         <span className="text-lg font-semibold">
@@ -319,8 +335,12 @@ const WorkoutHomeWrapper: React.FC = () => {
 export default WorkoutHomeWrapper;
 
 const filterWorkoutsByAchievement = (date: Date, workouts: any[]) => {
-    const achieved = workouts.filter((workout) => workout.date <= date && workout.isCompleted);
-    const onGoing = workouts.filter((workout) => workout.date > date || !workout.isCompleted);
+    const achieved = workouts.filter(
+        (workout) => workout.date <= date && workout.isCompleted
+    );
+    const onGoing = workouts.filter(
+        (workout) => workout.date > date || !workout.isCompleted
+    );
 
     return { achieved, onGoing };
 };
