@@ -158,11 +158,7 @@ export default function DietSummary() {
                 dietTextColor="text-black"
             />
             <div className="text-center">
-                <ScoreCircleBarWrapper score={80} percent={80} />
-                <AverageCalorieBanner
-                    title="Average Calories intake from"
-                    range={weekRange}
-                />
+                <AverageCalorieBanner title="Average Calories intake from" range={weekRange} />
                 <BarGraph
                     label="Average daily"
                     value={averageDailyCalories}
