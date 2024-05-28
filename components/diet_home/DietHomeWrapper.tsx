@@ -80,7 +80,8 @@ const DietHomeWrapper: React.FC = () => {
 
     const handleDelete = async (mealType: MealType, index: number) => {
         try {
-            const date = format(selectedDate, "yyyy-MM-dd");
+            const localDate = new Date(selectedDate.getUTCFullYear(), selectedDate.getUTCMonth(), selectedDate.getUTCDate());
+            const date = format(localDate, "yyyy-MM-dd");
             await axios.delete("/api/delete-meal", {
                 data: {
                     userId,
