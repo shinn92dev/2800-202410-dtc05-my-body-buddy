@@ -35,7 +35,8 @@ const workoutItemOptions = [
 export default function WorkoutAddingWrapper() {
     const [selectedCategory, setSelectedCategory] = useState<string>(""); // State to track selected category
     const [searchQuery, setSearchQuery] = useState<string>(""); // State to track search query
-    const [selectedItems, setSelectedItems] = useState<any[]>([]); // State to track selected items
+    const [selectedItem, setSelectedItem] = useState<any>(null); // State to track selected item
+    const [draftedItems, setDraftedItems] = useState<any[]>([]); // State to track drafted items
     const router = useRouter(); // Router for navigation
 
     // Handle category click event
@@ -47,7 +48,7 @@ export default function WorkoutAddingWrapper() {
         if (categoryName === "Walking" || categoryName === "Running" || categoryName === "Cycling") {
             const item = workoutItemOptions.find(option => option.category === categoryName);
             if (item) {
-                setSelectedItems([...selectedItems, { ...item, id: uuidv4(), selectedOption: { ...item.recordOptions[0], quantity: 10 } }]);
+                setSelectedItem({ ...item, id: uuidv4(), selectedOption: { ...item.recordOptions[0], quantity: 10 } });
             }
         }
     };
@@ -61,32 +62,38 @@ export default function WorkoutAddingWrapper() {
     const handleItemClick = (itemName: string) => {
         const item = workoutItemOptions.find(option => option.name === itemName);
         if (item) {
-            setSelectedItems([...selectedItems, { ...item, id: uuidv4(), selectedOption: { ...item.recordOptions[0], quantity: 10 } }]);
+            setSelectedItem({ ...item, id: uuidv4(), selectedOption: { ...item.recordOptions[0], quantity: 10 } });
         }
     };
 
     // Handle option change event
-    const handleOptionChange = (index: number, selectedOption: any) => {
-        const updatedItems = [...selectedItems];
-        updatedItems[index].selectedOption = { ...selectedOption, quantity: updatedItems[index].selectedOption.quantity };
-        setSelectedItems(updatedItems);
+    const handleOptionChange = (selectedOption: any) => {
+        if (selectedItem) {
+            setSelectedItem({ ...selectedItem, selectedOption: { ...selectedOption, quantity: selectedItem.selectedOption.quantity } });
+        }
     };
 
     // Handle quantity change event
-    const handleQuantityChange = (index: number, newQuantity: number) => {
-        const updatedItems = [...selectedItems];
-        updatedItems[index].selectedOption.quantity = newQuantity;
-        setSelectedItems(updatedItems);
+    const handleQuantityChange = (newQuantity: number) => {
+        if (selectedItem) {
+            setSelectedItem({ ...selectedItem, selectedOption: { ...selectedItem.selectedOption, quantity: newQuantity } });
+        }
     };
 
     // Handle remove item event
-    const handleRemoveItem = (index: number) => {
-        const updatedItems = selectedItems.filter((_, i) => i !== index);
-        setSelectedItems(updatedItems);
+    const handleRemoveItem = () => {
+        setSelectedItem(null);
     };
 
     // Handle add selected items event
-    const handleAddSelectedItems = () => {
+    const handleSaveDraftedItems = () => {
+        if (selectedItem) {
+            setDraftedItems([...draftedItems, selectedItem]);
+            setSelectedItem(null); // Clear the selected item after adding to drafts
+        }
+    };
+
+    const handleSaveItems = () => {
         router.push("/workout");
     };
 
@@ -108,7 +115,7 @@ export default function WorkoutAddingWrapper() {
                                 height={50}
                                 className="block mx-auto p-1"
                             />
-                            <span className={`block w-full text-center text-xs font-bold ${selectedCategory === category.name ? "text-white" : "text-gray-700"}`}>
+                            <span className={`block w-full text-center text-xs font-bold p-1 ${selectedCategory === category.name ? "text-white" : "text-gray-700"}`}>
                                 {category.name}
                             </span>
                         </button>
@@ -127,45 +134,71 @@ export default function WorkoutAddingWrapper() {
                 />
             )}
 
-            {/* Display selected items */}
-            {selectedItems.map((item, index) => (
-                <div key={item.id} className="p-2 border-y border-gray-300 bg-beige rounded-lg">
+            {/* Display selected item */}
+            {selectedItem && (
+                <div className="p-2 border-y border-gray-300 bg-beige rounded-lg">
                     <div className="flex justify-between items-center mb-2">
-                        <h2 className="font-bold">{item.name}</h2>
-                        <button onClick={() => handleRemoveItem(index)} className="text-red-500 text-2xl">×</button>
+                        <h2 className="font-bold">{selectedItem.name}</h2>
+                        <button onClick={handleRemoveItem} className="text-red-500 text-2xl">×</button>
                     </div>
-                    {item.recordOptions.map((option: any, i: number) => (
+                    {selectedItem.recordOptions.map((option: any, i: number) => (
                         <div key={i} className="flex items-center mb-2">
                             <input
                                 type="radio"
-                                name={`option-${item.id}`} // Use item.id for unique name
-                                checked={option.unit === item.selectedOption.unit}
-                                onChange={() => handleOptionChange(index, option)}
+                                name={`option-${selectedItem.id}`} // Use item.id for unique name
+                                checked={option.unit === selectedItem.selectedOption.unit}
+                                onChange={() => handleOptionChange(option)}
                                 className="mr-2"
                             />
                             <span className="mr-2">{option.unit}</span>
                             <input
                                 type="number"
-                                value={item.selectedOption.unit === option.unit ? item.selectedOption.quantity : 10}
-                                onChange={(e) => handleQuantityChange(index, parseInt(e.target.value))}
-                                className={`mr-2 p-1 border border-gray-300 rounded w-16 ${option.unit !== item.selectedOption.unit ? "text-gray-400" : ""}`}
-                                disabled={option.unit !== item.selectedOption.unit}
+                                value={selectedItem.selectedOption.unit === option.unit ? selectedItem.selectedOption.quantity : 10}
+                                onChange={(e) => handleQuantityChange(parseInt(e.target.value))}
+                                className={`mr-2 p-1 border border-gray-300 rounded w-16 ${option.unit !== selectedItem.selectedOption.unit ? "text-gray-400" : ""}`}
+                                disabled={option.unit !== selectedItem.selectedOption.unit}
                             />
-                            <span className={`${option.unit !== item.selectedOption.unit ? "text-gray-400" : ""}`}>{option.unit}</span>
-                            <span className={`ml-auto ${option.unit !== item.selectedOption.unit ? "text-gray-400" : ""}`}>{(item.selectedOption.quantity * option.kcalPerUnit).toFixed(1)} kcal</span>
+                            <span className={`${option.unit !== selectedItem.selectedOption.unit ? "text-gray-400" : ""}`}>{option.unit}</span>
+                            <span className={`ml-auto ${option.unit !== selectedItem.selectedOption.unit ? "text-gray-400" : ""}`}>{(selectedItem.selectedOption.quantity * option.kcalPerUnit).toFixed(1)} kcal</span>
                         </div>
                     ))}
+                    <div className="flex justify-center mt-2">
+                        <button
+                            onClick={handleSaveDraftedItems}
+                            className={`px-4 py-2 bg-dark-blue text-white ${!selectedItem ? "opacity-30" : ""} rounded`}
+                            disabled={!selectedItem}
+                        >
+                            Add to Draft
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* Drafted items */}
+            <h1 className="text-lg font-bold mt-4 mb-1">Drafted Items:</h1>
+            {draftedItems.map((item, index) => (
+                <div key={item.id} className="flex justify-between p-2 border-y border-gray-300 bg-beige rounded-lg mb-2">
+                    <div className="flex items-center">
+                        <span className="mr-2">・</span>
+                        <div>
+                            <h2 className="font-bold">{item.name}</h2>
+                            <h3 className="text-sm text-gray-500">{item.selectedOption.quantity} {item.selectedOption.unit}</h3>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 className="font-bold">{(item.selectedOption.quantity * item.selectedOption.kcalPerUnit).toFixed(1)} kcal</h2>
+                    </div>
                 </div>
             ))}
 
             {selectedCategory && (
                 <div className="flex justify-center mt-4">
                     <button
-                        onClick={handleAddSelectedItems}
-                        className={`px-4 py-2 bg-dark-blue text-white ${selectedItems.length === 0 ? "opacity-30" : ""} rounded`}
-                        disabled={selectedItems.length === 0}
+                        onClick={handleSaveItems}
+                        className={`px-4 py-2 bg-dark-blue text-white ${draftedItems.length === 0 ? "opacity-30" : ""} rounded`}
+                        disabled={draftedItems.length === 0}
                     >
-                        Add Selected Items
+                        Save Items
                     </button>
                 </div>
             )}
