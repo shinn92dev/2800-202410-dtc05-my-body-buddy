@@ -73,7 +73,7 @@ export default function WorkoutAiSupportInput({ onGenerateAlternative, onGenerat
     };
 
     return (
-        <div className="flex flex-col items-end p-2">
+        <div className="flex flex-col items-center p-2">
             <div className="relative speech-bubble-user bg-beige rounded-lg">
                 <h2 className="text-lg font-bold">{generated ? "Items to replace" : "Which items to replace?"}</h2>
                 {workoutMenuItems.map((item, index) => (
@@ -117,11 +117,13 @@ export default function WorkoutAiSupportInput({ onGenerateAlternative, onGenerat
                 <h2 className="text-lg font-bold border-t py-1 mt-1">{generated ? "Reasons to replace" : "Why would you like to replace?"}</h2>
                 {generated ? (
                     <div className="flex flex-wrap gap-2 mb-2">
-                        {selectedTagTitles.map((tag, index) => (
-                            <span key={index} className="px-2 py-1 rounded border bg-dark-blue text-white">
-                                {tag}
-                            </span>
-                        ))}
+                        <div>
+                            {selectedTagTitles.map((tag, index) => (
+                                <p key={index}>
+                                    ・{tag}
+                                </p>
+                            ))}
+                        </div>
                     </div>
                 ) : (
                     <TagsWithAddingField
