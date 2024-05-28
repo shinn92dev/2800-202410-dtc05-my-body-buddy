@@ -1,6 +1,6 @@
 .speech-bubble-ai {
   position: relative;
-  background: #f5f5dc; /* ベージュ色 */
+  background: #f5f5dc; /* beige colour */
   border-radius: .4em;
   padding: 10px;
   max-width: 300px;
@@ -15,4 +15,29 @@
   width: 0;
   height: 0;
   margin-top: -5px;
+}
+
+.speech-bubble-ai p {
+  margin-bottom: 1em;
+}
+
+.speech-bubble-ai h1,
+.speech-bubble-ai h2,
+.speech-bubble-ai h3,
+.speech-bubble-ai h4,
+.speech-bubble-ai h5,
+.speech-bubble-ai h6 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+@media (max-width: 768px) {
+  .speech-bubble-ai img {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  .support-ai-logo {
+    max-width: none !important;
+  }
 }
