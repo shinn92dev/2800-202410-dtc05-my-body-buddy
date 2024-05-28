@@ -47,7 +47,7 @@ export default function SearchWindow({
         <div className="relative mt-4">
             <input
                 type="text"
-                placeholder="Enter item to add"
+                placeholder="Enter workout name"
                 value={searchQuery}
                 onChange={handleSearchChange}
                 onFocus={handleFocus} // Set focus state on focus

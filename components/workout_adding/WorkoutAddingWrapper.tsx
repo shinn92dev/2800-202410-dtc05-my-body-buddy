@@ -183,7 +183,7 @@ export default function WorkoutAddingWrapper() {
             )}
 
             {/* Drafted items */}
-            <h1 className="text-lg font-bold mt-4 mb-1">Drafted Items:</h1>
+            <h1 className="text-lg font-bold mt-4 mb-1">Drafted Workout:</h1>
             <div className="bg-beige rounded-lg shadow border">
                 {draftedItems.map((item, index) => (
                     <div key={item.id} className={`flex justify-between p-2 border-gray-300 ${index == draftedItems.length - 1 ? "" : "border-b"}`}>
@@ -212,7 +212,7 @@ export default function WorkoutAddingWrapper() {
                         className={`px-3 py-2 bg-dark-blue text-white ${draftedItems.length === 0 ? "opacity-30" : ""} rounded`}
                         disabled={draftedItems.length === 0}
                     >
-                        Save Items
+                        Save Workout
                     </button>
                 </div>
             )}
