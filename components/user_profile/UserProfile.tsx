@@ -9,7 +9,7 @@ export interface UserData {
   height: number;
   weight: number;
   goalWeight: number;
-  goalDay: string;
+  goalDay: Date;
   goalCal: number;
 }
 

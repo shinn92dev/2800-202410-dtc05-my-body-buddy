@@ -2,17 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
-
-export interface UserData {
-  name: string;
-  age: number;
-  gender: string;
-  height: number;
-  weight: number;
-  goalWeight: number;
-  goalDay: string;
-  goalCal: number;
-}
+import { UserData } from "@/components/user_profile/UserProfile";
+import { goalCalCalc } from "@/app/_helper/goalCalCalc"; // should be updated helper function
 
 interface UserProfileWrapperProps {
   userData: UserData;
@@ -50,33 +41,6 @@ export default function UserProfileEditWrapper({
     } catch (error) {
       console.error("Error updating user data:", error);
     }
-  };
-
-  const goalCalCalc = () => {
-    let goalCal = 0;
-
-    // increase or decrease?
-    // female or male?
-    // 
-
-
-    if (formData.gender.toLowerCase() === "female") {
-      goalCal =
-        7.38 * formData.weight +
-        607 * formData.height -
-        2.31 * formData.age +
-        243;
-    } else if (formData.gender.toLowerCase() === "male") {
-      goalCal =
-        9.65 * formData.weight +
-        573 * formData.height -
-        5.08 * formData.age +
-        560;
-    }
-    setFormData((prevData) => ({
-      ...prevData,
-      goalCal: Math.round(goalCal), // rounding to avoid decimals
-    }));
   };
 
   return (
@@ -143,7 +107,7 @@ export default function UserProfileEditWrapper({
             <input
               type="text"
               name="goalDay"
-              value={formData.goalDay}
+              value={formData.goalDay} // type Date error
               onChange={handleChange}
             />
           </div>
@@ -168,6 +132,7 @@ export default function UserProfileEditWrapper({
         <div>
           To reach your goal of {formData.goalWeight} kg <br />
           until {formData.goalDay}, <br />
+          {/* type Date error */}
           you should take: <br />
           {formData.goalCal} Calories/day
         </div>
@@ -176,6 +141,7 @@ export default function UserProfileEditWrapper({
       <div className="flex justify-between w-1/3 m-10">
         <button
           type="submit"
+          onClick={goalCalCalc}
           className="bg-dark-blue rounded-md px-3 py-2 text-beige"
         >
           Save
