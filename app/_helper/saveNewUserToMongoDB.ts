@@ -5,7 +5,6 @@ import UserModel from "@/models/User";
 type newUserDataType = {
     email: string;
     username: string;
-    isLoggedIn: boolean;
     userId: string;
 };
 

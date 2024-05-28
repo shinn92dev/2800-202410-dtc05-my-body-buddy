@@ -9,7 +9,6 @@ export async function POST(req: any) {
         console.log(email);
         const user = await UserModel.findOneAndUpdate(
             { email: email },
-            { isLoggedIn: false },
             { new: true }
         );
         console.log("USER!!! ", user);

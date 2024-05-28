@@ -13,7 +13,6 @@ const routeLoginPostUser = async (userData: any) => {
         const newUserData = {
             email: userData.email,
             username: userData.username,
-            isLoggedIn: true,
         };
         const response = await axios.post("/api/login", newUserData, {
             headers: {

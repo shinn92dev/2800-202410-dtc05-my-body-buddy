@@ -84,7 +84,6 @@ export default function SignupForm() {
                 const userData = {
                     email: data.email,
                     username: data.username,
-                    isLoggedIn: true,
                     userId: userId,
                 };
                 await createNewUser(userData);

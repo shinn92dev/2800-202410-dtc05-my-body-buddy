@@ -7,12 +7,11 @@ import { NextResponse } from "next/server";
 export async function POST(req: any) {
     try {
         await connectMongoDB();
-        const { email, username, isLoggedIn, userId } = await req.json();
+        const { email, username, userId } = await req.json();
 
         const userData = {
             email: email,
             username: username,
-            isLoggedIn: isLoggedIn,
             userId: userId,
         };
         await saveNewUserToMongoDB(userData);

@@ -16,10 +16,6 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  isLoggedIn: {
-    type: Boolean,
-    required: true,
-  },
   age: {
     type: Number,
     required: false,
