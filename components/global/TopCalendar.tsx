@@ -58,7 +58,7 @@ const TopCalendar: React.FC<TopCalendarProps> = ({ onDateSelect }) => {
     return (
         <div className="bg-beige">
             <div className="flex flex-col items-center">
-                <div className="text-xl font-bold text-gray-700 flex items-center pt-2">
+                <div className="text-xl font-semibold text-gray-700 flex items-center pt-2">
                     {currentMonth}
                     <button
                         onClick={() => setShowCalendarPopup(!showCalendarPopup)}
