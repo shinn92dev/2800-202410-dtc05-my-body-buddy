@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import TopCalendar from "@/components/top_calendar/TopCalendar";
+import TopCalendar from "@/components/global/TopCalendar";
 import ScoreCircleBarWrapper from "@/components/summary_score_circle_bar/ScoreCircleBarWrapper";
 import BarGraph from "@/components/global/BarGraph";
 import WorkoutDietLink from "@/components/workout_diet_link/WorkoutDietLink";
