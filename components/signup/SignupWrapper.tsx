@@ -8,7 +8,7 @@ import GoogleIcon from "@/components/global/icons/GoogleIcon";
 import Image from "next/image";
 import SignupForm from "@/components/signup/SignupForm";
 
-export default function SignUpWrapper() {
+export default function SignupWrapper() {
     const [showModal, setShowModal] = useState(false);
 
     return (
