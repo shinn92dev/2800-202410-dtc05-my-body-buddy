@@ -8,7 +8,10 @@ import AskAiButton from "@/components/global/AskAiButton";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { format } from "date-fns";
-import { fetchWorkoutForSpecificDate } from "@/app/_helper/workout";
+import {
+    fetchWorkoutForSpecificDate,
+    calculateKcalForWorkout,
+} from "@/app/_helper/workout";
 
 const routeWorkoutHomeWrapperPost = async (
     userId: string,
@@ -197,14 +200,18 @@ const WorkoutHomeWrapper: React.FC = () => {
             console.log(error);
         }
     };
-
+    const totalCalories =
+        calculateKcalForWorkout(achievedWorkoutData) +
+        calculateKcalForWorkout(onGoingWorkoutData);
     return (
         <div className="p-4 items-center bg-white">
             <h1 className="text-center text-2xl font-bold">Your Progress</h1>
             <div className="flex justify-center mt-4">
                 <CircleBar
-                    title={totalCaloriesOfAchieved + " kcal"}
-                    subtitle={"/ " + totalCaloriesOfMenuForToday + " kcal"}
+                    title={
+                        calculateKcalForWorkout(achievedWorkoutData) + " kcal"
+                    }
+                    subtitle={"/ " + totalCalories + " kcal"}
                     percent={
                         (totalCaloriesOfAchieved /
                             totalCaloriesOfMenuForToday) *
@@ -232,8 +239,9 @@ const WorkoutHomeWrapper: React.FC = () => {
                             </h2>
                         </div>
                         {/* TODO: ADD calculate Kcal logic for ongoing workout */}
-
-                        <span className="text-lg font-semibold">kcal</span>
+                        <span className="text-lg font-semibold">
+                            {calculateKcalForWorkout(onGoingWorkoutData)}kcal
+                        </span>
                     </div>
                     <div>
                         {onGoingWorkoutData.map((item, index) => (
