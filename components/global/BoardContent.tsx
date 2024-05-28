@@ -24,14 +24,14 @@ const BoardContent: React.FC<BoardContentProps> = ({
                     className="flex justify-between items-center p-2 border-b"
                 >
                     <div>
-                        <p className="font-semibold">{item.title}</p>
+                        <p className="font-semibold">{item.name}</p>
                         <p className="text-sm text-gray-500">
-                            {item.count} {item.unit}
+                            {item.quantity} {item.unit}
                         </p>
                     </div>
                     <div className="flex items-center">
                         <span className="text-lg font-semibold mr-4">
-                            {item.cals} kcal
+                            {item.calories} kcal
                         </span>
                         <button
                             onClick={() => onEdit(index)}

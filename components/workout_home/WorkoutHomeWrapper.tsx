@@ -147,7 +147,6 @@ const WorkoutHomeWrapper: React.FC = () => {
     };
 
     const handleAddForAchieved = () => {
-        // Navigate to AddingItems page
         window.location.href = `workout/adding`;
     };
 
@@ -238,7 +237,6 @@ const WorkoutHomeWrapper: React.FC = () => {
                                 Workout for Today
                             </h2>
                         </div>
-                        {/* TODO: ADD calculate Kcal logic for ongoing workout */}
                         <span className="text-lg font-semibold">
                             {calculateKcalForWorkout(onGoingWorkoutData)}kcal
                         </span>
@@ -257,16 +255,16 @@ const WorkoutHomeWrapper: React.FC = () => {
                                                 : ""
                                         }`}
                                     >
-                                        {item.title}
+                                        {item.name}
                                     </p>
 
                                     <p className="text-sm text-gray-500">
-                                        {item.count} {item.unit}
+                                        {item.quantity} {item.unit}
                                     </p>
                                 </div>
                                 <div className="flex items-center">
                                     <span className="text-lg font-semibold mr-4">
-                                        {item.cals} kcal
+                                        {item.calories} kcal
                                     </span>
                                     <form
                                         method="post"

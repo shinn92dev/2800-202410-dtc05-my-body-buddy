@@ -35,7 +35,9 @@ export const fetchWorkoutForSpecificDate = (workoutDate: any, date: Date) => {
 export const calculateKcalForWorkout = (workouts: any) => {
     let totalKcal = 0;
     workouts.forEach((workout) => {
-        totalKcal += workout.cals;
+        totalKcal += workout.calories;
     });
     return totalKcal;
 };
+
+export const updateWorkoutStatus = (workouts: any, status: boolean) => {};
