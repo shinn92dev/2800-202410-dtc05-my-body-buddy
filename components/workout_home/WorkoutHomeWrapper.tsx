@@ -56,8 +56,56 @@ const WorkoutHomeWrapper: React.FC = () => {
         // Handle edit logic here
     };
 
-    const handleDeleteForAchieved = (index: number) => {
-        // Handle delete logic here
+    const handleDeleteForAchieved = async (index: number) => {
+        try {
+            const item = achievedWorkoutData[index];
+            const res = await axios.get("/api/get-user-id");
+            const { userId } = res.data;
+            console.log(item);
+            console.log("Update start:", userId);
+            // TODO: REPLACE DATE FROM CALENDAR DATE
+            const formattedDate = new Date().toISOString();
+            const newData = {
+                userId: userId,
+                date: formattedDate,
+                name: item.name,
+                achieved: !item.achieved,
+            };
+            const response = await fetch("/api/update-workout-achievement", {
+                method: "POST",
+                body: JSON.stringify(newData),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            console.log(response);
+            const responseData = await response.json();
+            console.log("Response data:", responseData);
+            fetchWorkoutData();
+            // setOnGoingWorkoutData((prevData) => {
+            //     const newData = [...prevData];
+            //     newData[index] = {
+            //         ...newData[index],
+            //         isCompleted: !newData[index].achieved,
+            //     };
+            //     return newData;
+            // });
+
+            // setAchievedWorkoutData((prevData) => {
+            //     if (item.isCompleted) {
+            //         return prevData.filter(
+            //             (workout) => workout.name !== item.name
+            //         );
+            //     } else {
+            //         return [
+            //             ...prevData,
+            //             { ...item, isCompleted: !item.isCompleted },
+            //         ];
+            //     }
+            // });
+        } catch (error) {
+            console.error("Error updating achievement status:", error);
+        }
     };
 
     const handleAddForAchieved = () => {
@@ -93,28 +141,28 @@ const WorkoutHomeWrapper: React.FC = () => {
             console.log(response);
             const responseData = await response.json();
             console.log("Response data:", responseData);
+            fetchWorkoutData();
+            // setOnGoingWorkoutData((prevData) => {
+            //     const newData = [...prevData];
+            //     newData[index] = {
+            //         ...newData[index],
+            //         isCompleted: !newData[index].achieved,
+            //     };
+            //     return newData;
+            // });
 
-            setOnGoingWorkoutData((prevData) => {
-                const newData = [...prevData];
-                newData[index] = {
-                    ...newData[index],
-                    isCompleted: !newData[index].achieved,
-                };
-                return newData;
-            });
-
-            setAchievedWorkoutData((prevData) => {
-                if (item.isCompleted) {
-                    return prevData.filter(
-                        (workout) => workout.name !== item.name
-                    );
-                } else {
-                    return [
-                        ...prevData,
-                        { ...item, isCompleted: !item.isCompleted },
-                    ];
-                }
-            });
+            // setAchievedWorkoutData((prevData) => {
+            //     if (item.isCompleted) {
+            //         return prevData.filter(
+            //             (workout) => workout.name !== item.name
+            //         );
+            //     } else {
+            //         return [
+            //             ...prevData,
+            //             { ...item, isCompleted: !item.isCompleted },
+            //         ];
+            //     }
+            // });
         } catch (error) {
             console.error("Error updating achievement status:", error);
         }
@@ -163,42 +211,48 @@ const WorkoutHomeWrapper: React.FC = () => {
                         </span>
                     </div>
                     <div>
-                        {onGoingWorkoutData.map((item, index) => (
-                            <div
-                                key={index}
-                                className={`flex justify-between items-center p-2 border-b`}
-                            >
-                                <div>
-                                    <p
-                                        className={`font-semibold ${
-                                            item.isCompleted
-                                                ? "line-through"
-                                                : ""
-                                        }`}
-                                    >
-                                        {item.name}
-                                    </p>
+                        {onGoingWorkoutData.length === 0 ? (
+                            <p className="font-semibold text-center">
+                                🎉You finished workout for today!
+                            </p>
+                        ) : (
+                            onGoingWorkoutData.map((item, index) => (
+                                <div
+                                    key={index}
+                                    className={`flex justify-between items-center p-2 border-b`}
+                                >
+                                    <div>
+                                        <p
+                                            className={`font-semibold ${
+                                                item.isCompleted
+                                                    ? "line-through"
+                                                    : ""
+                                            }`}
+                                        >
+                                            {item.name}
+                                        </p>
 
-                                    <p className="text-sm text-gray-500">
-                                        {item.quantity} {item.unit}
-                                    </p>
+                                        <p className="text-sm text-gray-500">
+                                            {item.quantity} {item.unit}
+                                        </p>
+                                    </div>
+                                    <div className="flex items-center">
+                                        <span className="text-lg font-semibold mr-4">
+                                            {item.calories} kcal
+                                        </span>
+                                        <button
+                                            type="button"
+                                            className="px-4 py-2 rounded-full bg-gray-500 text-white"
+                                            onClick={() =>
+                                                handleToggleComplete(index)
+                                            }
+                                        >
+                                            Done
+                                        </button>
+                                    </div>
                                 </div>
-                                <div className="flex items-center">
-                                    <span className="text-lg font-semibold mr-4">
-                                        {item.calories} kcal
-                                    </span>
-                                    <button
-                                        type="button"
-                                        className="px-4 py-2 rounded-full bg-gray-500 text-white"
-                                        onClick={() =>
-                                            handleToggleComplete(index)
-                                        }
-                                    >
-                                        Done
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
+                            ))
+                        )}
                     </div>
                     <div className="flex justify-center mt-4">
                         <AskAiButton
