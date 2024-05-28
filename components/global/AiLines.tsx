@@ -21,7 +21,7 @@ export default function AiLines({ messageTitle, messageBody }: AiLinesProps) {
         <div className="flex flex-col items-start p-2">
             <div className="flex items-start">
                 <div className="mr-2">
-                    <Image src="/my_boddy_buddy_support_ai_logo.png" alt="support AI logo" width={75} height={75} />
+                    <Image src="/my_boddy_buddy_support_ai_logo.png" className={"support-ai-logo"} alt="support AI logo" width={50} height={50} />
                 </div>
                 <div className="relative speech-bubble-ai bg-beige p-4 rounded-lg">
                     {messageTitle && <h2 className="font-bold text-lg">{messageTitle}</h2>}

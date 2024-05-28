@@ -6,8 +6,8 @@ const openai = new OpenAI({
 });
 
 // data to fetch from db
-const calorieForToday = 700;
-const calorieForADay = 2000;
+const remainingCalorieForToday = 700;
+const totalTargetCalories = 2000;
 
 const generateDietPlan = async (prompt: string) => {
     try {
@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return;
         }
 
-        const prompt = `Please consider a meal plan for ${servings} servings, taking into account the preferences provided.\n\nPreferences: ${preferences.join(', ')}\n\nThe meal plan must include the following ingredients: ${ingredients.map((ing: any) => `${ing.name} (${ing.quantity ?? 'as needed'})`).join(', ')}.\n\nThe total calories of the generated meal plan must also match ${servings === '1' ? calorieForToday : calorieForADay * servings}.\n\nFor each menu item, please include the necessary ingredients and quantities, the recipe (detailed steps), and the calories.`;
+        const prompt = `Please consider a meal plan for ${servings} servings, taking into account the preferences provided.\n\nPreferences: ${preferences.join(', ')}\n\nThe meal plan must include the following ingredients: ${ingredients.map((ing: any) => `${ing.name} (${ing.quantity ?? 'as needed'})`).join(', ')}.\n\nThe total calories of the generated meal plan must also match ${servings === '1' ? remainingCalorieForToday : totalTargetCalories * servings}.\n\nFor each menu item, please include the necessary ingredients and quantities, the recipe (detailed steps), and the calories.`;
 
         try {
             const result = await generateDietPlan(prompt);

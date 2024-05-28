@@ -20,6 +20,7 @@ export default function AiSupportWrapper() {
     const [selectedItems, setSelectedItems] = useState<any[]>([]); // State to store selected workout items
     const [selectedTags, setSelectedTags] = useState<string[]>([]); // State to store selected tags
     const [generatedItems, setGeneratedItems] = useState<any[]>([]); // State to store generated items from AI response
+    const [errorMessage, setErrorMessage] = useState<string | null>(null); // State to store error messages
     const router = useRouter();
 
     // Function to update states and mark suggestions as generated
@@ -34,8 +35,10 @@ export default function AiSupportWrapper() {
     };
 
     const handleRegenerateAlternative = async () => {
-        // Regenerate the alternative using the same items and tags
         setGenerated(false);
+        setGeneratedItems([]);
+        setErrorMessage(null);
+
         const prompt = `Please consider alternative options for the workout menu below, taking into account the reasons provided.\n\nWorkout menu to replace:\n${selectedItems.map(item => `・${item.title} - ${item.quantity} ${item.unit} (${Math.round(item.kcalPerUnit * item.quantity * 10) / 10} kcal)`).join('\n')}\n\nReasons why I want to replace:\n・${selectedTags.join('\n・')}\n\nThe alternative must include the same number of items and must have the same estimated calorie consumption in total.\nEach item must be output in the following format:\n・[item_name] - [quantity] [unit] ([estimated_calorie_consume] kcal)`;
 
         try {
@@ -62,17 +65,25 @@ export default function AiSupportWrapper() {
 
     // Function to parse AI response and update generatedItems
     const handleGenerateItems = (response: string) => {
-        const regex = /・(.+?)\s*-\s*(\d+)\s*(\w+)\s*\((\d+)\s*kcal\)/g;
-        const items = [];
-        let match;
-        while ((match = regex.exec(response)) !== null) {
-            const title = match[1];
-            const quantity = parseInt(match[2], 10);
-            const unit = match[3];
-            const kcalPerUnit = parseFloat(match[4]) / quantity;
-            items.push({ title, quantity, unit, kcalPerUnit });
+        try {
+            const regex = /・(.+?)\s*-\s*(\d+)\s*(\w+)\s*\((\d+)\s*kcal\)/g;
+            const items = [];
+            let match;
+            while ((match = regex.exec(response)) !== null) {
+                const title = match[1];
+                const quantity = parseInt(match[2], 10);
+                const unit = match[3];
+                const kcalPerUnit = parseFloat(match[4]) / quantity;
+                items.push({ title, quantity, unit, kcalPerUnit });
+            }
+            if (items.length > 0) {
+                setGeneratedItems(items);
+            } else {
+                setErrorMessage("Generated result could not be properly formatted. Please try again.");
+            }
+        } catch (error) {
+            setErrorMessage("An error occurred while processing the response. Please try again.");
         }
-        setGeneratedItems(items);
     };
 
     return (
@@ -80,12 +91,12 @@ export default function AiSupportWrapper() {
             <AiLines messageTitle={initialMessageTitle} messageBody={initialMessageBody} />
             <WorkoutAiSupportInput onGenerateAlternative={setGeneratedTrue} onGenerateItems={handleGenerateItems} />
             {generated && <AiLines messageBody={messageBodyWhenButtonClicked} />}
-            {generatedItems.length > 0 && (
+            {generatedItems.length > 0 ? (
                 <div>
                     <div className="flex flex-col items-start p-2">
                         <div className="flex items-start w-full">
                             <div className="mr-2">
-                                <Image src="/my_boddy_buddy_support_ai_logo.png" alt="support AI logo" width={51} height={51} />
+                                <div style={{width: '50px', height: '50px', backgroundColor: 'transparent'}}></div>
                             </div>
                             <div className="relative speech-bubble-ai bg-beige p-4 rounded-lg w-full">
                                 <p>Generated Items:</p>
@@ -99,7 +110,7 @@ export default function AiSupportWrapper() {
                                             </div>
                                         </div>
                                         <div>
-                                            <h2 className="font-bold">{(item.kcalPerUnit * item.quantity).toFixed(1)} kcal</h2>
+                                            <h2 className="font-bold">{(item.kcalPerUnit * item.quantity).toFixed(0)} kcal</h2>
                                         </div>
                                     </div>
                                 ))}
@@ -123,6 +134,31 @@ export default function AiSupportWrapper() {
                         </div>
                     </div>
                 </div>
+            ) : (
+                errorMessage && (
+                    <div>
+                        <div className="flex flex-col items-start p-2">
+                            <div className="flex items-start">
+                                <div className="mr-2">
+                                    <Image src="/my_boddy_buddy_support_ai_logo.png" alt="support AI logo" width={50} height={50}/>
+                                </div>
+                                <div className="relative speech-bubble-ai bg-beige p-4 rounded-lg">
+                                    <div>
+                                        <p>{errorMessage}</p>
+                                    </div>
+                                    <div className="flex justify-center pt-2">
+                                        <button
+                                            onClick={handleRegenerateAlternative}
+                                            className="px-4 py-2 bg-gray-500 text-white rounded-full"
+                                        >
+                                            ↻ Regenerate
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )
             )}
         </div>
     );

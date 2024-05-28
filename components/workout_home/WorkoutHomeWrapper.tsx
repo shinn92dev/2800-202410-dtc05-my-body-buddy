@@ -289,11 +289,11 @@ const WorkoutHomeWrapper: React.FC = () => {
                             forText={"Alternative"}
                             icon={
                                 <Image
-                                    src="/my_boddy_buddy_support_ai_logo.png"
+                                    src="/my_boddy_buddy_support_ai_logo_white.png"
                                     alt="AI Logo"
                                     className="ml-2"
-                                    width={24}
-                                    height={24}
+                                    width={30}
+                                    height={30}
                                 />
                             }
                             onClick={handleAskAI}

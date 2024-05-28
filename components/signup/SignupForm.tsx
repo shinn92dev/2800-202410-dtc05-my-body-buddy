@@ -6,26 +6,29 @@ import { useForm, SubmitHandler, Resolver } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useSignUp } from "@clerk/nextjs";
+import axios from "axios";
 
-const createNewUser = async (userData: any) => {
+const createNewUser = async (userData: any, retries = 3): Promise<any> => {
     try {
-        const response = await fetch("/api/signup", {
-            method: "POST",
-            body: JSON.stringify(userData),
+        const response = await axios.post("/api/signup", userData, {
             headers: {
                 "Content-Type": "application/json",
             },
         });
-        if (!response.ok) {
-            const errorData = await response.json();
-            console.error("Error Response: ", errorData);
+        if (response.status !== 200) {
+            console.error("Error Response: ", response.data);
             throw new Error("Not OK");
         }
-        const data = await response.json();
         window.location.href = "/summary/diet";
-        return data;
+        return response.data;
     } catch (error) {
+        if (axios.isAxiosError(error) && error.response?.status === 429 && retries > 0) {
+            console.warn(`Retrying... (${3 - retries + 1}/3)`);
+            await new Promise(resolve => setTimeout(resolve, 1000 * (4 - retries)));
+            return createNewUser(userData, retries - 1);
+        }
         console.error("Error in createNewUser: ", error);
+        throw error;
     }
 };
 
@@ -58,7 +61,7 @@ export default function SignupForm() {
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: { errors, isSubmitting },
     } = useForm<newUserInputs>({
         resolver: yupResolver(validationSchema) as unknown as Resolver<
             newUserInputs,
@@ -77,14 +80,14 @@ export default function SignupForm() {
             });
 
             if (signUpResult?.status === "complete") {
-                const userId = signUpResult.createdUserId; // Clerkで作成されたユーザーIDを取得
+                const userId = signUpResult.createdUserId;
                 const userData = {
                     email: data.email,
                     username: data.username,
                     isLoggedIn: true,
                     userId: userId,
                 };
-                createNewUser(userData);
+                await createNewUser(userData);
             } else {
                 console.error("Sign Up Incomplete: ", signUpResult);
             }
@@ -154,9 +157,37 @@ export default function SignupForm() {
             <button
                 className="mt-2 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
                 type="submit"
+                disabled={isSubmitting}
             >
-                <SignUpAndInIcon width={6} />
-                <span className="ml-3">Submit</span>
+                <div className="flex items-center justify-center">
+                    <SignUpAndInIcon width={6} />
+                    <span className="ml-3">
+                        {isSubmitting ? (
+                            <svg
+                                className="animate-spin h-5 w-5 text-white"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                            >
+                                <circle
+                                    className="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                ></circle>
+                                <path
+                                    className="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8v8H4z"
+                                ></path>
+                            </svg>
+                        ) : (
+                            "Submit"
+                        )}
+                    </span>
+                </div>
             </button>
         </form>
     );
