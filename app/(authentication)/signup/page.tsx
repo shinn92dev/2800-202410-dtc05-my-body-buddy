@@ -1,13 +1,11 @@
 "use client";
 
 import React, { useSignUp } from "@clerk/nextjs";
-
 import Modal from "@/components/global/Modal";
 import PolicyContent from "@/components/global/PolicyContent";
 import GoogleIcon from "@/components/global/icons/GoogleIcon";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import getTestUser from "@/app/_helper/testUser";
 import SignupForm from "@/components/signup/SignupForm";
 
 export default function SignUp() {
@@ -29,12 +27,6 @@ export default function SignUp() {
             console.log("Sign up failed: ", error);
         }
     };
-
-    // const handlePolicyClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    //   event.preventDefault();
-    //   setShowModal((prev) => !prev);
-    //   console.log(showModal);
-    // };
 
     return (
         <div className="min-h-screen">

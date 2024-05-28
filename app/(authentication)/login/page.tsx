@@ -1,7 +1,5 @@
 import LoginForm from "@/components/login/LoginForm";
-import InputBox from "@/components/global/InputBox";
 import GoogleIcon from "@/components/global/icons/GoogleIcon";
-import SignUpAndInIcon from "@/components/global/icons/SignUpAndInIcon";
 import Image from "next/image";
 
 export const metadata = {
