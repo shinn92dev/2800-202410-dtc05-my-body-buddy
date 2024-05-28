@@ -123,7 +123,7 @@ export default function WorkoutSummary() {
 
     const calculateTotalCalories = (workouts: WorkoutType[]) => {
         return workouts.reduce((total, day) => {
-            return total + day.workoutDetail.reduce((workoutTotal, item) => workoutTotal + item.calories, 0);
+            return Math.round(total + day.workoutDetail.reduce((workoutTotal, item) => workoutTotal + item.calories, 0));
         }, 0);
     };
 

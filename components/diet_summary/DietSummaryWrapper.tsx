@@ -136,7 +136,7 @@ export default function DietSummaryWrapper() {
             return total + (day[mealType] ? (day[mealType] as MealType[]).reduce((mealTotal, item) => mealTotal + item.calories, 0) : 0);
         }, 0);
         console.log(`Total ${mealType} calories for the week:`, totalCalories);
-        return totalCalories / weeklyMeals.length;
+        return Math.round(totalCalories / weeklyMeals.length);
     };
 
     const averageDailyCalories = calculateAverageCalories("breakfast") + calculateAverageCalories("lunch") + calculateAverageCalories("dinner") + calculateAverageCalories("snacks");
