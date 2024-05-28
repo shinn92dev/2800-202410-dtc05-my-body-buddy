@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import MealForm from './MealForm';
 import MealList from './MealList';
-import { getLocalDateStringInUTC } from '@/app/_helper/getLocalDateStringInUTC';
+import { fetchUserId } from '@/app/_helper/fetchUserId';
 
 interface MealItem {
   name: string;
@@ -20,32 +20,37 @@ const DietAddMealsWrapper: React.FC = () => {
   const [meals, setMeals] = useState<MealItem[]>([]);
   const [userId, setUserId] = useState<string>('');
   const [mealType, setMealType] = useState<string>('');
+  const [selectedDate, setSelectedDate] = useState<string>('');
   const [isSaveDisabled, setIsSaveDisabled] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchUserId = async () => {
-            try {
-                const response = await axios.get('/api/get-user-id');
-                console.log("User ID:", response.data.userId);
-                setUserId(response.data.userId);
-            } catch (error) {
-                console.error("Error fetching user ID:", (error as Error).message);
-            }
-        };
+    const getUserId = async () => {
+      try {
+        const userId = await fetchUserId();
+        console.log("User ID:", userId);
+        setUserId(userId);
+      } catch (error) {
+        console.error("Error fetching user ID:", error);
+      }
+    };
 
-    fetchUserId();
+    getUserId();
   }, []);
 
   useEffect(() => {
     const mealTypeParam = searchParams?.get('mealType');
+    const dateParam = searchParams?.get('date');
     if (mealTypeParam) {
       setMealType(mealTypeParam);
+    }
+    if (dateParam) {
+      setSelectedDate(dateParam);
     }
   }, [searchParams]);
 
   useEffect(() => {
-    setIsSaveDisabled(meals.length === 0 || mealType === '');
-  }, [meals, mealType]);
+    setIsSaveDisabled(meals.length === 0 || mealType === '' || selectedDate === '');
+  }, [meals, mealType, selectedDate]);
 
   const addMeal = (meal: MealItem) => {
     setMeals([...meals, meal]);
@@ -62,10 +67,9 @@ const DietAddMealsWrapper: React.FC = () => {
     }
 
     try {
-      const date = getLocalDateStringInUTC(); // Get the local date adjusted to UTC
       await axios.post('/api/add-meals', {
         userId,
-        date,
+        date: selectedDate,
         meals,
         mealType,
       });

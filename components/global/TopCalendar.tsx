@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
-import { format, addDays, startOfWeek, startOfMonth } from "date-fns";
+import React, { useState, useEffect } from "react";
+import { format, addDays, subDays, startOfWeek, startOfMonth } from "date-fns";
+import { FaCalendarAlt } from "react-icons/fa";
+import CalendarPopup from "./CalendarPopup";
 
 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -10,10 +12,10 @@ interface TopCalendarProps {
 }
 
 const TopCalendar: React.FC<TopCalendarProps> = ({ onDateSelect }) => {
-    const [currentWeek, setCurrentWeek] = useState<Date>(
-        startOfWeek(new Date())
-    );
+    const [currentDate, setCurrentDate] = useState<Date>(new Date());
+    const [currentWeek, setCurrentWeek] = useState<Date>(subDays(new Date(), 3));
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+    const [showCalendarPopup, setShowCalendarPopup] = useState<boolean>(false);
 
     const getWeekDates = (): Date[] => {
         return Array.from({ length: 7 }, (_, index) =>
@@ -21,20 +23,20 @@ const TopCalendar: React.FC<TopCalendarProps> = ({ onDateSelect }) => {
         );
     };
 
-    const currentMonth = format(startOfMonth(currentWeek), "MMMM yyyy");
+    const currentMonth = format(startOfMonth(selectedDate), "MMMM yyyy");
 
     const handlePreviousWeek = (): void => {
-        const previousWeekLastDay = addDays(currentWeek, -1);
-        setCurrentWeek(startOfWeek(previousWeekLastDay));
-        setSelectedDate(previousWeekLastDay);
-        onDateSelect(previousWeekLastDay);
+        const previousWeekStart = subDays(currentWeek, 7);
+        setCurrentWeek(previousWeekStart);
+        setSelectedDate(previousWeekStart);
+        onDateSelect(previousWeekStart);
     };
 
     const handleNextWeek = (): void => {
-        const nextWeekFirstDay = addDays(currentWeek, 7);
-        setCurrentWeek(startOfWeek(nextWeekFirstDay));
-        setSelectedDate(nextWeekFirstDay);
-        onDateSelect(nextWeekFirstDay);
+        const nextWeekStart = addDays(currentWeek, 7);
+        setCurrentWeek(nextWeekStart);
+        setSelectedDate(nextWeekStart);
+        onDateSelect(nextWeekStart);
     };
 
     const handleDateClick = (date: Date): void => {
@@ -42,11 +44,28 @@ const TopCalendar: React.FC<TopCalendarProps> = ({ onDateSelect }) => {
         onDateSelect(date);
     };
 
+    const handleDateSelect = (date: Date): void => {
+        setSelectedDate(date);
+        setCurrentWeek(startOfWeek(date));
+        setShowCalendarPopup(false);
+        onDateSelect(date);
+    };
+
+    useEffect(() => {
+        setCurrentDate(currentWeek);
+    }, [currentWeek]);
+
     return (
         <div className="bg-orange">
             <div className="flex flex-col items-center">
-                <div className="text-base font-semibold text-gray-700">
+                <div className="text-base font-semibold text-gray-700 flex items-center">
                     {currentMonth}
+                    <button
+                        onClick={() => setShowCalendarPopup(!showCalendarPopup)}
+                        className="ml-2 text-xl text-gray-600 hover:text-gray-800"
+                    >
+                        <FaCalendarAlt />
+                    </button>
                 </div>
                 <div className="flex items-center justify-between w-full px-2 py-2">
                     <button
@@ -84,6 +103,13 @@ const TopCalendar: React.FC<TopCalendarProps> = ({ onDateSelect }) => {
                         &gt;
                     </button>
                 </div>
+                {showCalendarPopup && (
+                    <CalendarPopup
+                        selectedDate={selectedDate}
+                        onDateSelect={handleDateSelect}
+                        onClose={() => setShowCalendarPopup(false)}
+                    />
+                )}
             </div>
         </div>
     );

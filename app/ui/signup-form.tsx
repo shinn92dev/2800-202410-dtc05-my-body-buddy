@@ -47,11 +47,9 @@ const validationSchema = yup.object({
         .required("Username is required"),
     password: yup
         .string()
-        .min(6, "Password must be at least 6 characters")
-        .matches(
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-            "Password must contain uppercase, lowercase, number and special symbol"
-        ),
+        .min(8, "Password must be at least 8 characters")
+        .max(30, "Password must be less than 30 characters")
+        .required("Password is required"),
 });
 
 export default function SignupForm() {
@@ -68,7 +66,9 @@ export default function SignupForm() {
         >,
     });
 
-    const onSubmit: SubmitHandler<newUserInputs> = async (data: newUserInputs) => {
+    const onSubmit: SubmitHandler<newUserInputs> = async (
+        data: newUserInputs
+    ) => {
         try {
             const signUpResult = await signUp?.create({
                 emailAddress: data.email,
@@ -77,7 +77,7 @@ export default function SignupForm() {
             });
 
             if (signUpResult?.status === "complete") {
-                const userId = signUpResult.createdUserId;  // Clerkで作成されたユーザーIDを取得
+                const userId = signUpResult.createdUserId; // Clerkで作成されたユーザーIDを取得
                 const userData = {
                     email: data.email,
                     username: data.username,

@@ -5,21 +5,22 @@ import React, { useState, useEffect } from "react";
 import CircleBar from "@/components/global/CircleBar";
 import Board from "@/components/global/Board";
 import AskAiButton from "@/components/global/AskAiButton";
-import { useForm, SubmitHandler } from "react-hook-form";
+import axios from "axios";
+import { useForm } from "react-hook-form";
 
 const routeWorkoutHomeWrapperPost = async (
-    username: string,
+    userId: string,
     date: Date,
     workoutTitle: string
 ) => {
     try {
         const formattedDate = new Date(
-            `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
+            `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()}`
         );
         const response = await fetch("/api/workout-wrapper", {
             method: "POST",
             body: JSON.stringify({
-                username: username,
+                userId: userId,
                 date: formattedDate,
                 title: workoutTitle,
             }),
@@ -33,23 +34,16 @@ const routeWorkoutHomeWrapperPost = async (
         }
         const data = await response.json();
         console.log("Server Response:", data);
-        // window.location.href = "/workout";
     } catch (error) {
         console.log(error);
     }
 };
 
-export default function WorkoutHomeWrapper({
-    totalWorkoutData,
-    achievedWorkoutData,
-}: {
-    totalWorkoutData: any;
-    achievedWorkoutData: any;
-}) {
-    const parsedTotalWorkoutData = JSON.parse(totalWorkoutData);
-    const parsedAchievedWorkoutData = JSON.parse(achievedWorkoutData);
-    const [menuForToday, setMenuForToday] = useState(parsedTotalWorkoutData);
-    const [achieved, setAchieved] = useState(parsedAchievedWorkoutData);
+const WorkoutHomeWrapper: React.FC = () => {
+    const [menuForToday, setMenuForToday] = useState<any[]>([]);
+    const [achieved, setAchieved] = useState<any[]>([]);
+    const [totalWorkoutData, setTotalWorkoutData] = useState<any[]>([]);
+    const [achievedWorkoutData, setAchievedWorkoutData] = useState<any[]>([]);
 
     const calculateTotalCalories = (
         items: { quantity: number; kcalPerUnit: number }[]
@@ -59,12 +53,7 @@ export default function WorkoutHomeWrapper({
             0
         );
     };
-    const [totalCaloriesOfMenuForToday, setTotalCaloriesOfMenuForToday] =
-        useState(calculateTotalCalories(menuForToday));
-    const [totalCaloriesOfAchieved, setTotalCaloriesOfAchieved] = useState(
-        calculateTotalCalories(achieved)
-    );
-    // console.log("OUTPUT FROM HOMEWRAPPER", workoutData);
+
     const convertToItems = (
         items: {
             title: string;
@@ -85,6 +74,47 @@ export default function WorkoutHomeWrapper({
             };
         });
     };
+
+    const fetchWorkoutData = async () => {
+        try {
+            const res = await axios.get('/api/get-user-id');
+            const { userId } = res.data;
+
+            const dataRes = await axios.get(`/api/get-workout?userId=${userId}`);
+            const data = dataRes.data;
+
+            if (!data) {
+                await axios.post('/api/save-new-workout', {
+                    userId: userId,
+                    workouts: []
+                });
+            } else {
+                const currentDate = new Date();
+                const filteredData = filterWorkoutsByAchievement(
+                    currentDate,
+                    data.workouts
+                );
+                const finalData = [...filteredData.achieved, ...filteredData.onGoing];
+
+                setTotalWorkoutData(finalData);
+                setAchievedWorkoutData(filteredData.achieved);
+                setMenuForToday(finalData);
+                setAchieved(filteredData.achieved);
+            }
+        } catch (error) {
+            console.error("Error fetching workout data:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchWorkoutData();
+    }, []);
+
+    const [totalCaloriesOfMenuForToday, setTotalCaloriesOfMenuForToday] =
+        useState(calculateTotalCalories(menuForToday));
+    const [totalCaloriesOfAchieved, setTotalCaloriesOfAchieved] = useState(
+        calculateTotalCalories(achieved)
+    );
 
     const [menuForTodayItems, setMenuForTodayItems] = useState(
         convertToItems(menuForToday)
@@ -159,11 +189,15 @@ export default function WorkoutHomeWrapper({
     const handleAskAI = () => {
         window.location.href = "workout/ai-support";
     };
+
     const { handleSubmit } = useForm();
     const onSubmit = async () => {
         try {
+            const res = await axios.get('/api/get-user-id');
+            const { userId } = res.data;
+
             await routeWorkoutHomeWrapperPost(
-                "john.doe",
+                userId,
                 new Date(),
                 "Running"
             );
@@ -171,6 +205,7 @@ export default function WorkoutHomeWrapper({
             console.log(error);
         }
     };
+
     return (
         <div className="p-4 items-center bg-white">
             <h1 className="text-center text-2xl font-bold">Your Progress</h1>
@@ -279,4 +314,13 @@ export default function WorkoutHomeWrapper({
             </div>
         </div>
     );
-}
+};
+
+export default WorkoutHomeWrapper;
+
+const filterWorkoutsByAchievement = (date: Date, workouts: any[]) => {
+    const achieved = workouts.filter((workout) => workout.date <= date && workout.isCompleted);
+    const onGoing = workouts.filter((workout) => workout.date > date || !workout.isCompleted);
+
+    return { achieved, onGoing };
+};

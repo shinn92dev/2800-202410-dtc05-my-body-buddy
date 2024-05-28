@@ -1,47 +1,22 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
+
+const workoutDetailSchema = new mongoose.Schema({
+    title: { type: String, required: true },
+    cals: { type: Number, required: true },
+    unit: { type: String, required: true },
+    count: { type: Number, required: true },
+    achieved: { type: Boolean, default: false },
+});
 
 const workoutSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        required: true,
-        unique: true,
-    },
+    userId: { type: String, ref: 'User', required: true },
     workouts: [
         {
-            date: {
-                type: Date,
-                required: true,
-            },
-            workoutDetail: [
-                {
-                    title: {
-                        type: String,
-                        required: true,
-                    },
-                    cals: {
-                        type: Number,
-                        required: true,
-                    },
-                    unit: {
-                        type: String,
-                        required: true,
-                    },
-                    count: {
-                        type: Number,
-                        required: true,
-                    },
-                    achieved: {
-                        type: Boolean,
-                        required: true,
-                    },
-                },
-            ],
+            date: { type: Date, required: true },
+            workoutDetail: [workoutDetailSchema],
         },
     ],
 });
 
-if (mongoose.models && mongoose.models["Workout"]) {
-    delete mongoose.models["Workout"];
-}
-const WorkoutModel = mongoose.model("Workout", workoutSchema);
+const WorkoutModel = mongoose.models.Workout || mongoose.model('Workout', workoutSchema);
 export default WorkoutModel;

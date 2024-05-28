@@ -3,9 +3,14 @@
 import React, { useState, useEffect } from "react";
 import Board from "@/components/global/Board";
 import AskAiButton from "@/components/global/AskAiButton";
-import axios from "axios";
 import Image from "next/image";
 import CalorieDistributionChart from "@/components/global/CalorieDistributionChart";
+import TopCalendar from "@/components/global/TopCalendar";
+import { fetchUserId } from "@/app/_helper/fetchUserId";
+import { fetchMeals } from "@/app/_helper/fetchMeals";
+import { handleDateSelect } from "@/app/_helper/handleDate";
+import { format } from "date-fns";
+import axios from "axios";
 
 interface Meal {
     name: string;
@@ -23,6 +28,7 @@ const DietHomeWrapper: React.FC = () => {
     const [snacks, setSnacks] = useState<Meal[]>([]);
     const [userId, setUserId] = useState<string>("");
     const [totalTargetCalories, setTotalTargetCalories] = useState<number>(2200);
+    const [selectedDate, setSelectedDate] = useState<Date>(new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())));
 
     const icon = (
         <Image
@@ -34,36 +40,39 @@ const DietHomeWrapper: React.FC = () => {
     );
 
     useEffect(() => {
-        const fetchUserId = async () => {
+        const getUserId = async () => {
             try {
-                const response = await axios.get('/api/get-user-id');
-                setUserId(response.data.userId);
+                const userId = await fetchUserId();
+                setUserId(userId);
             } catch (error) {
-                console.error("Error fetching user ID:", (error as Error).message);
+                console.error("Error fetching user ID:", error);
             }
         };
 
-        fetchUserId();
+        getUserId();
     }, []);
 
     useEffect(() => {
-        const fetchMeals = async () => {
+        const getMeals = async () => {
             if (!userId) return;
-            const date = new Date().toISOString().split("T")[0];
             try {
-                const response = await axios.get(`/api/get-meals?userId=${userId}&date=${date}`);
-                const data = response.data;
-                setBreakfasts(data.breakfast || []);
-                setLunches(data.lunch || []);
-                setDinners(data.dinner || []);
-                setSnacks(data.snacks || []);
+                const { breakfast, lunch, dinner, snacks } = await fetchMeals(userId, selectedDate);
+                setBreakfasts(breakfast);
+                setLunches(lunch);
+                setDinners(dinner);
+                setSnacks(snacks);
             } catch (error) {
-                console.error("Error fetching meals:", (error as Error).message);
+                console.error("Error fetching meals:", error);
+                // Set to empty arrays if an error occurs
+                setBreakfasts([]);
+                setLunches([]);
+                setDinners([]);
+                setSnacks([]);
             }
         };
 
-        fetchMeals();
-    }, [userId]);
+        getMeals();
+    }, [userId, selectedDate]);
 
     const handleEdit = (mealType: MealType, index: number) => {
         // Handle edit logic here
@@ -71,7 +80,8 @@ const DietHomeWrapper: React.FC = () => {
 
     const handleDelete = async (mealType: MealType, index: number) => {
         try {
-            const date = new Date().toISOString().split("T")[0];
+            const localDate = new Date(selectedDate.getUTCFullYear(), selectedDate.getUTCMonth(), selectedDate.getUTCDate());
+            const date = format(localDate, "yyyy-MM-dd");
             await axios.delete("/api/delete-meal", {
                 data: {
                     userId,
@@ -96,17 +106,26 @@ const DietHomeWrapper: React.FC = () => {
     };
 
     const handleAdd = (mealType: MealType) => {
-        window.location.href = `/diet/add-meals?mealType=${mealType}`;
+        const localDate = new Date(selectedDate.getUTCFullYear(), selectedDate.getUTCMonth(), selectedDate.getUTCDate());
+        const date = format(localDate, "yyyy-MM-dd");
+        window.location.href = `/diet/add-meals?mealType=${mealType}&date=${date}`;
     };
 
     const handleOnClick = () => {
         window.location.href = "/diet/ai-support";
     };
 
+    const onDateSelect = (date: Date) => {
+        handleDateSelect(date, (formattedDate: string) => {
+            setSelectedDate(new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())));
+        });
+    };
+
     const totalCalories = (meals: Meal[]) => meals.reduce((sum, meal) => sum + meal.calories, 0);
 
     return (
         <div className="bg-white min-h-screen p-4">
+            <TopCalendar onDateSelect={onDateSelect} />
             <h1 className="text-3xl font-bold flex flex-col items-center p-2 m-2">
                 Diet Management Plan
             </h1>
@@ -138,7 +157,7 @@ const DietHomeWrapper: React.FC = () => {
             </div>
             <div className="p-4">
                 <Board
-                    icon={<span>🌞</span>}
+                    icon={<span>🍱</span>}
                     title="Lunch"
                     items={lunches}
                     onEdit={(index) => handleEdit("lunch", index)}
@@ -148,7 +167,7 @@ const DietHomeWrapper: React.FC = () => {
             </div>
             <div className="p-4">
                 <Board
-                    icon={<span>🌜</span>}
+                    icon={<span>🍲</span>}
                     title="Dinner"
                     items={dinners}
                     onEdit={(index) => handleEdit("dinner", index)}
