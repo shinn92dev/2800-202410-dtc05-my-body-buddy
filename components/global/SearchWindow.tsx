@@ -44,7 +44,7 @@ export default function SearchWindow({
     };
 
     return (
-        <div className="mb-4 relative">
+        <div className="relative mt-4">
             <input
                 type="text"
                 placeholder="Enter item to add"

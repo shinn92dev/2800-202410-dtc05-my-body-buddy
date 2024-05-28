@@ -33,9 +33,12 @@ const workoutItemOptions = [
 ];
 
 export default function WorkoutAddingWrapper() {
-    const [selectedCategory, setSelectedCategory] = useState<string>(""); // State to track selected category
+    const [selectedCategory, setSelectedCategory] = useState<string>("Walking"); // State to track selected category
     const [searchQuery, setSearchQuery] = useState<string>(""); // State to track search query
-    const [selectedItem, setSelectedItem] = useState<any>(null); // State to track selected item
+    const [selectedItem, setSelectedItem] = useState<any>(() => {
+        const item = workoutItemOptions.find(option => option.category === "Walking");
+        return item ? { ...item, id: uuidv4(), selectedOption: { ...item.recordOptions[0], quantity: 10 } } : null;
+    });
     const [draftedItems, setDraftedItems] = useState<any[]>([]); // State to track drafted items
     const router = useRouter(); // Router for navigation
 
@@ -43,6 +46,11 @@ export default function WorkoutAddingWrapper() {
     const handleCategoryClick = (categoryName: string) => {
         setSelectedCategory(categoryName);
         setSearchQuery(""); // Clear search query when a new category is selected
+
+        // Clear selected item when "Gym training" or "Other sports" is selected
+        if (categoryName === "Gym training" || categoryName === "Other sports") {
+            setSelectedItem(null);
+        }
 
         // Add default item for Walking, Running, and Cycling
         if (categoryName === "Walking" || categoryName === "Running" || categoryName === "Cycling") {
@@ -80,12 +88,13 @@ export default function WorkoutAddingWrapper() {
         }
     };
 
-    // Handle remove item event
-    const handleRemoveItem = () => {
-        setSelectedItem(null);
+    // Handle remove drafted item event
+    const handleRemoveDraftedItem = (index: number) => {
+        const updatedItems = draftedItems.filter((_, i) => i !== index);
+        setDraftedItems(updatedItems);
     };
 
-    // Handle add selected items event
+    // Handle add selected item to draft event
     const handleSaveDraftedItems = () => {
         if (selectedItem) {
             setDraftedItems([...draftedItems, selectedItem]);
@@ -100,7 +109,7 @@ export default function WorkoutAddingWrapper() {
     return (
         <div className="p-4">
             <h1 className="text-lg font-bold mb-1">Category</h1>
-            <div className="flex justify-center mb-4">
+            <div className="flex justify-center mt-4">
                 <div className="grid grid-cols-5 gap-0">
                     {categories.map((category, index) => (
                         <button
@@ -136,10 +145,9 @@ export default function WorkoutAddingWrapper() {
 
             {/* Display selected item */}
             {selectedItem && (
-                <div className="p-2 border-y border-gray-300 bg-beige rounded-lg">
+                <div className="p-2 border-x border-b border-gray-300 shadow rounded-b-xl">
                     <div className="flex justify-between items-center mb-2">
                         <h2 className="font-bold">{selectedItem.name}</h2>
-                        <button onClick={handleRemoveItem} className="text-red-500 text-2xl">×</button>
                     </div>
                     {selectedItem.recordOptions.map((option: any, i: number) => (
                         <div key={i} className="flex items-center mb-2">
@@ -165,7 +173,7 @@ export default function WorkoutAddingWrapper() {
                     <div className="flex justify-center mt-2">
                         <button
                             onClick={handleSaveDraftedItems}
-                            className={`px-4 py-2 bg-dark-blue text-white ${!selectedItem ? "opacity-30" : ""} rounded`}
+                            className={`px-3 py-2 bg-dark-blue text-white ${!selectedItem ? "opacity-30" : ""} rounded`}
                             disabled={!selectedItem}
                         >
                             Add to Draft
@@ -176,26 +184,32 @@ export default function WorkoutAddingWrapper() {
 
             {/* Drafted items */}
             <h1 className="text-lg font-bold mt-4 mb-1">Drafted Items:</h1>
-            {draftedItems.map((item, index) => (
-                <div key={item.id} className="flex justify-between p-2 border-y border-gray-300 bg-beige rounded-lg mb-2">
-                    <div className="flex items-center">
-                        <span className="mr-2">・</span>
+            <div className="bg-beige rounded-lg shadow border">
+                {draftedItems.map((item, index) => (
+                    <div key={item.id} className={`flex justify-between p-2 border-gray-300 ${index == draftedItems.length - 1 ? "" : "border-b"}`}>
+                        <div className="flex items-center">
+                            <span className="mr-2">・</span>
+                            <div>
+                                <h2 className="font-bold">{item.name}</h2>
+                                <h3 className="text-sm text-gray-500">{item.selectedOption.quantity} {item.selectedOption.unit}</h3>
+                            </div>
+                        </div>
                         <div>
-                            <h2 className="font-bold">{item.name}</h2>
-                            <h3 className="text-sm text-gray-500">{item.selectedOption.quantity} {item.selectedOption.unit}</h3>
+                            <h2 className="font-bold">{(item.selectedOption.quantity * item.selectedOption.kcalPerUnit).toFixed(1)} kcal
+                                <button onClick={() => handleRemoveDraftedItem(index)}
+                                        className="text-red-500 text-2xl ml-2">×
+                                </button>
+                            </h2>
                         </div>
                     </div>
-                    <div>
-                        <h2 className="font-bold">{(item.selectedOption.quantity * item.selectedOption.kcalPerUnit).toFixed(1)} kcal</h2>
-                    </div>
-                </div>
-            ))}
+                ))}
+            </div>
 
             {selectedCategory && (
                 <div className="flex justify-center mt-4">
                     <button
                         onClick={handleSaveItems}
-                        className={`px-4 py-2 bg-dark-blue text-white ${draftedItems.length === 0 ? "opacity-30" : ""} rounded`}
+                        className={`px-3 py-2 bg-dark-blue text-white ${draftedItems.length === 0 ? "opacity-30" : ""} rounded`}
                         disabled={draftedItems.length === 0}
                     >
                         Save Items
