@@ -65,7 +65,7 @@ const WorkoutHomeWrapper: React.FC = () => {
 
         if (response.ok) {
             const data = await response.json();
-            console.log(data.result);
+            console.log(`Original generated response from ChatGPT:\n${data.result}`);
             const menus = parseWorkoutMenu(data.result);
 
             const isValidMenu = menus.every(dayMenu =>
@@ -79,7 +79,8 @@ const WorkoutHomeWrapper: React.FC = () => {
 
             if (isValidMenu) {
                 setGeneratedWorkoutMenus(menus);
-                console.log(menus);
+                console.log(`Formatted menus:`);
+                console.log(menus)
             } else {
                 console.error("Generated workout menus could not be formatted properly.");
                 setFormattingMenuFailed(true);
