@@ -11,11 +11,86 @@ import { fetchUserId } from "@/app/_helper/fetchUserId";
 
 import { calculateKcalForWorkout } from "@/app/_helper/workout";
 import { handleDateSelect } from "@/app/_helper/handleDate";
+import LoadingAnimation from "@/components/global/LoadingAnimation";
 
 const WorkoutHomeWrapper: React.FC = () => {
     const [achievedWorkoutData, setAchievedWorkoutData] = useState<any[]>([]);
     const [onGoingWorkoutData, setOnGoingWorkoutData] = useState<any[]>([]);
     const [userId, setUserId] = useState<string>("");
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [generatingMenuFailed, setGeneratingMenuFailed] = useState<boolean>(false);
+    const [formattingMenuFailed, setFormattingMenuFailed] = useState<boolean>(false);
+    const [generatedWorkoutMenus, setGeneratedWorkoutMenus] = useState<any[][]>([]);
+
+    const parseWorkoutMenu = (data: string) => {
+        const dayRegExp = /Day \d+:/g;
+        const itemRegExp = /・(.+?) - (\d+) (\w+).+\((\d+) kcal\)/g;
+
+        // Remove any leading text before "Day 1" to ensure the first element is correct
+        const cleanData = data.replace(/^[\s\S]*?(?=Day 1:)/, '');
+
+        const days = data.split(dayRegExp).filter(Boolean);
+        const menus = days.map(day => {
+            const items = [];
+            let match;
+            while ((match = itemRegExp.exec(day)) !== null) {
+                const title = match[1];
+                const quantity = parseInt(match[2]);
+                const unit = match[3];
+                const kcal = parseInt(match[4]);
+                items.push({ title, quantity, unit, kcalPerUnit: kcal / quantity });
+            }
+            return items;
+        });
+        // Remove the first element if it's empty
+        if (menus.length > 0 && menus[0].length === 0) {
+            menus.shift();
+        }
+
+        return menus;
+    };
+
+    const generateWorkoutMenu = async () => {
+        setIsLoading(true);
+        setGeneratingMenuFailed(false);
+        setFormattingMenuFailed(false);
+
+        const response = await fetch("/api/generate-workout-menu", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({}),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data.result);
+            const menus = parseWorkoutMenu(data.result);
+
+            const isValidMenu = menus.every(dayMenu =>
+                dayMenu.every(item =>
+                    typeof item.title === "string" &&
+                    typeof item.quantity === "number" &&
+                    typeof item.unit === "string" &&
+                    typeof item.kcalPerUnit === "number"
+                )
+            ) && menus.length === 7;
+
+            if (isValidMenu) {
+                setGeneratedWorkoutMenus(menus);
+                console.log(menus);
+            } else {
+                console.error("Generated workout menus could not be formatted properly.");
+                setFormattingMenuFailed(true);
+            }
+        } else {
+            console.error("Failed to generate workout menu");
+            setGeneratingMenuFailed(true);
+        }
+
+        setIsLoading(false);
+    }
 
     useEffect(() => {
         const getUserId = async () => {
@@ -29,6 +104,7 @@ const WorkoutHomeWrapper: React.FC = () => {
         };
         getUserId();
     }, []);
+
     const fetchWorkoutData = async () => {
         try {
             const res = await axios.get("/api/get-user-id");
@@ -196,9 +272,21 @@ const WorkoutHomeWrapper: React.FC = () => {
                     </div>
                     <div>
                         {onGoingWorkoutData.length === 0 ? (
-                            <p className="font-semibold text-center">
-                                🎉You finished workout for today!
-                            </p>
+                            formattingMenuFailed ? (
+                                <p className="font-semibold text-center">
+                                    Failed to format generated workout
+                                </p>
+                            ) : (
+                                generatingMenuFailed ? (
+                                    <p className="font-semibold text-center">
+                                        Failed to generate workout
+                                    </p>
+                                ) : (
+                                    <p className="font-semibold text-center">
+                                        No workout set yet
+                                    </p>
+                                )
+                            )
                         ) : (
                             onGoingWorkoutData.map((item, index) => (
                                 <div
@@ -208,9 +296,7 @@ const WorkoutHomeWrapper: React.FC = () => {
                                     <div>
                                         <p
                                             className={`font-semibold ${
-                                                item.isCompleted
-                                                    ? "line-through"
-                                                    : ""
+                                                item.isCompleted ? "line-through" : ""
                                             }`}
                                         >
                                             {item.name}
@@ -221,15 +307,13 @@ const WorkoutHomeWrapper: React.FC = () => {
                                         </p>
                                     </div>
                                     <div className="flex items-center">
-                                        <span className="text-lg font-semibold mr-4">
-                                            {item.calories} kcal
-                                        </span>
+                    <span className="text-lg font-semibold mr-4">
+                        {item.calories} kcal
+                    </span>
                                         <button
                                             type="button"
                                             className="px-4 py-2 rounded-full bg-gray-500 text-white"
-                                            onClick={() =>
-                                                handleToggleComplete(index)
-                                            }
+                                            onClick={() => handleToggleComplete(index)}
                                         >
                                             Done
                                         </button>
@@ -239,19 +323,37 @@ const WorkoutHomeWrapper: React.FC = () => {
                         )}
                     </div>
                     <div className="flex justify-center mt-4">
-                        <AskAiButton
-                            forText={"Alternative"}
-                            icon={
-                                <Image
-                                    src="/my_boddy_buddy_support_ai_logo_white.png"
-                                    alt="AI Logo"
-                                    className="ml-2"
-                                    width={30}
-                                    height={30}
-                                />
-                            }
-                            onClick={handleAskAI}
-                        />
+                        {onGoingWorkoutData.length === 0 ? (
+                                <AskAiButton
+                                    forText={`${(formattingMenuFailed || generatingMenuFailed) ? "Regenerate": "Generate Workout"}`}
+                                    icon={
+                                        <Image
+                                            src="/my_boddy_buddy_support_ai_logo_white.png"
+                                            alt="AI Logo"
+                                            className="ml-2"
+                                            width={30}
+                                            height={30}
+                                        />
+                                    }
+                                    onClick={generateWorkoutMenu}
+                                />) :
+                            (<AskAiButton
+                                forText={`Alternative`}
+                                icon={
+                                    <Image
+                                        src="/my_boddy_buddy_support_ai_logo_white.png"
+                                        alt="AI Logo"
+                                        className="ml-2"
+                                        width={30}
+                                        height={30}
+                                    />
+                                }
+                                onClick={handleAskAI}
+                            />)
+                        }
+                    </div>
+                    <div>
+                        {isLoading && <LoadingAnimation></LoadingAnimation>}
                     </div>
                 </div>
             </div>
