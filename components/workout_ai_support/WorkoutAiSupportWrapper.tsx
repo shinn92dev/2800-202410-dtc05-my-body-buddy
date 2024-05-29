@@ -2,9 +2,9 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import AiLines from '@/components/global/AiLines';
+import AiLines from "@/components/global/AiLines";
 import LoadingAnimation from "@/components/global/LoadingAnimation";
-import WorkoutAiSupportInput from '@/components/workout_ai_support/WorkoutAiSupportInput';
+import WorkoutAiSupportInput from "@/components/workout_ai_support/WorkoutAiSupportInput";
 import "@/components/global/AiLines.scss";
 import "@/components/workout_ai_support/WorkoutAiSupportInput.scss";
 import axios from "axios";
@@ -110,39 +110,57 @@ export default function AiSupportWrapper() {
     const handleGenerateItems = (response: string) => {
         try {
             const regex = /・(.+?)\s*-\s*(\d+)\s*(\w+)\s*\((\d+)\s*kcal\)/g;
-        const items = [];
-        let match;
-        while ((match = regex.exec(response)) !== null) {
-            const title = match[1];
-            const quantity = parseInt(match[2], 10);
-            const unit = match[3];
-            const kcalPerUnit = parseFloat(match[4]) / quantity;
-            items.push({ title, quantity, unit, kcalPerUnit });
-        }
-        if (items.length > 0) {
-            setGeneratedItems(items);
-        } else {
-            setErrorMessage("Generated result could not be properly formatted. Please try again.");
-        }
-        
+            const items = [];
+            let match;
+            while ((match = regex.exec(response)) !== null) {
+                const name = match[1];
+                const quantity = parseInt(match[2], 10);
+                const unit = match[3];
+                // const kcalPerUnit = parseFloat(match[4]) / quantity;
+                const calories = parseFloat(match[4]);
+                items.push({ name, quantity, unit, calories });
+            }
+            if (items.length > 0) {
+                setGeneratedItems(items);
+            } else {
+                setErrorMessage(
+                    "Generated result could not be properly formatted. Please try again."
+                );
+            }
         } catch (error) {
-            setErrorMessage("An error occurred while processing the response. Please try again.");
+            setErrorMessage(
+                "An error occurred while processing the response. Please try again."
+            );
         }
         setIsLoading(false);
     };
-
+    console.log(generatedItems);
     return (
         <div>
-            <AiLines messageTitle={initialMessageTitle} messageBody={initialMessageBody} />
-            <WorkoutAiSupportInput onGenerateAlternative={setGeneratedTrue} onGenerateItems={handleGenerateItems} />
-            {generated && <AiLines messageBody={messageBodyWhenButtonClicked} />}
+            <AiLines
+                messageTitle={initialMessageTitle}
+                messageBody={initialMessageBody}
+            />
+            <WorkoutAiSupportInput
+                onGenerateAlternative={setGeneratedTrue}
+                onGenerateItems={handleGenerateItems}
+            />
+            {generated && (
+                <AiLines messageBody={messageBodyWhenButtonClicked} />
+            )}
             {isLoading && <LoadingAnimation />}
-            {generatedItems.length > 0 && (
+            {generatedItems.length > 0 ? (
                 <div>
                     <div className="flex flex-col items-start p-2">
                         <div className="flex items-start w-full">
                             <div className="mr-2">
-                                <div style={{width: '50px', height: '50px', backgroundColor: 'transparent'}}></div>
+                                <div
+                                    style={{
+                                        width: "50px",
+                                        height: "50px",
+                                        backgroundColor: "transparent",
+                                    }}
+                                ></div>
                             </div>
                             <div className="relative speech-bubble-ai bg-beige p-4 rounded-lg w-full">
                                 <p>Generated Items:</p>
@@ -195,7 +213,12 @@ export default function AiSupportWrapper() {
                         <div className="flex flex-col items-start p-2">
                             <div className="flex items-start">
                                 <div className="mr-2">
-                                    <Image src="/my_boddy_buddy_support_ai_logo_dark_blue.png" alt="support AI logo" width={50} height={50}/>
+                                    <Image
+                                        src="/my_boddy_buddy_support_ai_logo_dark_blue.png"
+                                        alt="support AI logo"
+                                        width={50}
+                                        height={50}
+                                    />
                                 </div>
                                 <div className="relative speech-bubble-ai bg-beige p-4 rounded-lg">
                                     <div>
@@ -203,7 +226,9 @@ export default function AiSupportWrapper() {
                                     </div>
                                     <div className="flex justify-center pt-2">
                                         <button
-                                            onClick={handleRegenerateAlternative}
+                                            onClick={
+                                                handleRegenerateAlternative
+                                            }
                                             className="px-4 py-2 bg-gray-500 text-white rounded-full"
                                         >
                                             ↻ Regenerate

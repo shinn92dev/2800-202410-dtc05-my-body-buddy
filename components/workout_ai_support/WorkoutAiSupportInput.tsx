@@ -189,14 +189,11 @@ export default function WorkoutAiSupportInput({
                 </h2>
                 {generated ? (
                     <div className="flex flex-wrap gap-2 mb-2">
-                        {selectedTagTitles.map((tag, index) => (
-                            <span
-                                key={index}
-                                className="px-2 py-1 rounded border bg-dark-blue text-white"
-                            >
-                                ・{tag}
-                            </span>
-                        ))}
+                        <div>
+                            {selectedTagTitles.map((tag, index) => (
+                                <p key={index}>・{tag}</p>
+                            ))}
+                        </div>
                     </div>
                 ) : (
                     <TagsWithAddingField
