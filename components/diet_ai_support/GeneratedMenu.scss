@@ -15,7 +15,8 @@
 
   ul li::before {
     content: "・";
-    margin-right: 0.5em;
+    font-weight: bolder;
+    //margin-right: 0.5em;
   }
 
   ol {
@@ -28,7 +29,8 @@
 
   ol li::before {
     content: counter(list-counter) ". ";
-    margin-right: 0.5em;
+    font-weight: bolder;
+    //margin-right: 0.5em;
   }
 
   h3::before {
