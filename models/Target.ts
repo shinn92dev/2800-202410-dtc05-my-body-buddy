@@ -25,16 +25,16 @@ const targetSchema = new Schema({
 });
 
 targetSchema.path('targetWeight').validate(function(value) {
-    // Both should be either set or unset
-    return (value != null && this.targetDate != null) || (value == null && this.targetDate == null);
+  // Both should be either set or unset
+  return (value != null && this.targetDate != null) || (value == null && this.targetDate == null);
 }, 'Both targetWeight and targetDate must be set together or both unset.');
 
 targetSchema.path('targetDate').validate(function(value) {
-    // Both should be either set or unset
-    return (value != null && this.targetWeight != null) || (value == null && this.targetWeight == null);
+  // Both should be either set or unset
+  return (value != null && this.targetWeight != null) || (value == null && this.targetWeight == null);
 }, 'Both targetWeight and targetDate must be set together or both unset.');
 
-
-const Target = models.Calorie || model('Target', targetSchema);
+// Check if the model already exists, and if not, define it
+const Target = models.Target || model('Target', targetSchema);
 
 export default Target;

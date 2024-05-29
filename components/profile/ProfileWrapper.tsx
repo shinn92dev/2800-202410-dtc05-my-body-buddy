@@ -28,7 +28,7 @@ const ProfileWrapper: React.FC = () => {
       }
     };
     fetchData();
-  },);
+  }, []);
 
   return <Profile user={userData} profile={profileData} target={targetData} />;
 };

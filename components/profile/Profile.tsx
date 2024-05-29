@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 
 interface ProfileProps {
-  user : {
+  user: {
     username: string;
     email: string;
   } | null;
@@ -14,6 +14,8 @@ interface ProfileProps {
     gender: string;
     height: number;
     weight: number;
+    activityLevel: number;
+    preference: string;
   } | null;
   target: {
     targetCaloriesIntake: number;
@@ -28,6 +30,14 @@ const Profile: React.FC<ProfileProps> = ({ user, profile, target }) => {
     return <div>User profile not found</div>;
   }
 
+  let preferenceToBeDisplayed;
+
+  if (profile.preference === "workout") {
+    preferenceToBeDisplayed = "Increase calories burn";
+  } else {
+    preferenceToBeDisplayed = "Reduce calories intake";
+  }
+
   return (
     <div className="flex flex-col items-center">
       <div className="bg-orange m-5 tracking-wide leading-8 font-semibold text-center w-2/3">
@@ -39,6 +49,8 @@ const Profile: React.FC<ProfileProps> = ({ user, profile, target }) => {
           <div>Gender: {profile.gender}</div>
           <div>Height: {profile.height} cm</div>
           <div>Weight: {profile.weight} kg</div>
+          <div>Activity Level: {profile.activityLevel}</div>
+          <div>Preference: {preferenceToBeDisplayed}</div>
         </div>
       </div>
       {target && (

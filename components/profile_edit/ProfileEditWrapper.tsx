@@ -11,6 +11,8 @@ const ProfileEditWrapper: React.FC = () => {
     gender: "",
     height: "",
     weight: "",
+    activityLevel: "",
+    preference: "",
   });
 
   useEffect(() => {
@@ -27,11 +29,11 @@ const ProfileEditWrapper: React.FC = () => {
     fetchProfile();
   }, [userId]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: name === "activityLevel" ? parseInt(value, 10) : value,
     }));
   };
 
@@ -98,6 +100,35 @@ const ProfileEditWrapper: React.FC = () => {
             className="w-full px-3 py-2 border rounded-lg"
             required
           />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Activity Level</label>
+          <select
+            name="activityLevel"
+            value={formData.activityLevel}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-lg"
+            required
+          >
+            <option value="">Select Activity Level</option>
+            <option value={1}>Low</option>
+            <option value={2}>Medium</option>
+            <option value={3}>High</option>
+          </select>
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Preference</label>
+          <select
+            name="preference"
+            value={formData.preference}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-lg"
+            required
+          >
+            <option value="">Select Preference</option>
+            <option value="workout">Increase calories burn</option>
+            <option value="diet">Decrease calories intake</option>
+          </select>
         </div>
         <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
           Save

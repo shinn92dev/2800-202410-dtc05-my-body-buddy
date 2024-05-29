@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import React, { useState, useEffect } from "react";
 import { handleDateSelect } from "@/app/_helper/handleDate";
@@ -9,32 +9,30 @@ const SetTargetForm: React.FC = () => {
   const [formData, setFormData] = useState({
     targetWeight: "",
     targetDate: "",
-    activityLevel: "",
-    preference: "",
   });
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchProfileAndTarget = async () => {
       try {
-        const res = await fetch(`/api/profile/${userId}`);
+        const res = await fetch(`/api/targets`);
         const data = await res.json();
         setFormData({
-          ...formData,
-          ...data,
+          targetWeight: data.target?.targetWeight || "",
+          targetDate: data.target?.targetDate || "",
         });
       } catch (error) {
-        console.error("Error fetching profile data:", error);
+        console.error("Error fetching profile and target data:", error);
       }
     };
 
-    fetchProfile();
-  }, [formData, userId]);
+    fetchProfileAndTarget();
+  }, [userId]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: name === "activityLevel" ? parseInt(value) : value,
+      [name]: value,
     }));
   };
 
@@ -94,35 +92,6 @@ const SetTargetForm: React.FC = () => {
             className="w-full px-3 py-2 border rounded-lg"
             required
           />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Activity Level</label>
-          <select
-            name="activityLevel"
-            value={formData.activityLevel}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded-lg"
-            required
-          >
-            <option value="">Select Activity Level</option>
-            <option value="1">Low</option>
-            <option value="2">Medium</option>
-            <option value="3">High</option>
-          </select>
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Preference</label>
-          <select
-            name="preference"
-            value={formData.preference}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded-lg"
-            required
-          >
-            <option value="">Select Preference</option>
-            <option value="workout">More Workout</option>
-            <option value="diet">Less Diet</option>
-          </select>
         </div>
         <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
           Save Target

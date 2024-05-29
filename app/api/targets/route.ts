@@ -45,20 +45,23 @@ export async function POST(req: NextRequest) {
     const activityFactor = factorByActivityLevel(age, activityLevel);
     const energyRequirements = calculateEnergyRequirementsPerDay(bmr, activityFactor);
 
-    let targetCaloriesIntake;
-    let targetCaloriesBurn;
+    let targetCaloriesIntake = energyRequirements;
+    let targetCaloriesBurn = energyRequirements;
 
     if (targetWeight && targetDate) {
       const numberOfDaysLeft = calculateNumberOfDaysLeft(targetDate);
       const weightGap = weight - targetWeight;
-      const result = calculateCaloriesPerDay(energyRequirements, numberOfDaysLeft, weightGap, preference);
-      targetCaloriesIntake = result.targetCaloriesIntake
-      targetCaloriesBurn = result.targetCaloriesBurn
-    } else {
-      targetCaloriesIntake = energyRequirements
-      targetCaloriesBurn = energyRequirements
+
+      if (numberOfDaysLeft > 0 && !isNaN(weightGap)) {
+        const result = calculateCaloriesPerDay(energyRequirements, numberOfDaysLeft, weightGap, preference);
+        targetCaloriesIntake = result.targetCaloriesIntake;
+        targetCaloriesBurn = result.targetCaloriesBurn;
+      }
     }
 
+    if (isNaN(targetCaloriesIntake) || isNaN(targetCaloriesBurn)) {
+      throw new Error("Invalid calculation result");
+    }
 
     await Target.updateOne(
       { userId: user.id },

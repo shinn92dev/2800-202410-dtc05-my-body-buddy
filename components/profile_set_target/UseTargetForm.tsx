@@ -3,16 +3,12 @@ import { useState, useEffect } from "react";
 interface SetTargetFormData {
   targetWeight: number | null;
   targetDate: Date | null;
-  activityLevel: number;
-  preference: string;
 }
 
 const useTargetForm = (userId: string) => {
   const [formData, setFormData] = useState<SetTargetFormData>({
     targetWeight: null,
     targetDate: null,
-    activityLevel: 1,
-    preference: 'workout',
   });
 
   useEffect(() => {
@@ -24,8 +20,6 @@ const useTargetForm = (userId: string) => {
           setFormData({
             targetWeight: data.targetWeight || null,
             targetDate: data.targetDate ? new Date(data.targetDate) : null,
-            activityLevel: data.activityLevel || 1,
-            preference: data.preference || 'workout',
           });
         }
       } catch (error) {
