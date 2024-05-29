@@ -49,7 +49,8 @@ const validationSchema = yup.object({
 
 export default function LoginForm() {
   const { signIn } = useSignIn();
-  const [loginErrors, setLoginErrors] = React.useState<ClerkAPIError[]>();
+  //   const [loginErrors, setLoginErrors] = React.useState<ClerkAPIError[]>();
+  const [loginErrors, setLoginErrors] = React.useState<string | undefined>();
 
   const {
     register,
@@ -80,17 +81,16 @@ export default function LoginForm() {
       }
     } catch (err) {
       if (isClerkAPIResponseError(err)) {
-        setLoginErrors(err.errors);
+        const errorMessages = err.errors
+          .map((error) => error.longMessage)
+          .join("\n");
+
+        setLoginErrors(errorMessages);
         console.error(JSON.stringify(err, null, 2));
-        alert(err.errors[0].longMessage, "Please check your email and password again.");
       } else {
         console.error("Error: ", err);
       }
     }
-
-    // catch (error) {
-    //   console.log("Error: ", error);
-    // }
   };
 
   return (
@@ -171,13 +171,17 @@ export default function LoginForm() {
         </button>
       </form>
 
-      {/* {errors && (
-        <ul>
-          {loginErrors.map((el, index) => (
-            <li key={index}>{el.longMessage}</li>
+      {loginErrors && (
+        <div className="mt-4 text-red-500 text-sm">
+          {loginErrors.split("\n").map((message, index) => (
+            <p key={index}>
+              {message}
+              <br />
+              Please check your email and password again.
+            </p>
           ))}
-        </ul>
-      )} */}
+        </div>
+      )}
     </>
   );
 }
