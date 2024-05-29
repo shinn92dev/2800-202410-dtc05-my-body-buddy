@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Profile from "@/components/profile/Profile";
+import axios from "axios";
 
 const ProfileWrapper: React.FC = () => {
   const [profileData, setProfileData] = useState(null);
@@ -10,12 +11,12 @@ const ProfileWrapper: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const profileResponse = await fetch("/api/profile");
-        const profile = await profileResponse.json();
+        const profileResponse = await axios("/api/profile");
+        const profile = profileResponse.data;
         setProfileData(profile);
 
-        const targetResponse = await fetch(`/api/targets/${profile.userId}`);
-        const target = await targetResponse.json();
+        const targetResponse = await axios(`/api/targets/${profile.userId}`);
+        const target = targetResponse.data;
         setTargetData(target);
       } catch (error) {
         console.error("Error fetching profile or target data:", error);

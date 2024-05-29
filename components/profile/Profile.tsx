@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 
 interface ProfileProps {
   profile: {
@@ -46,6 +47,14 @@ const Profile: React.FC<ProfileProps> = ({ profile, target }) => {
           </div>
         </div>
       )}
+      <div className="flex space-x-4">
+        <Link href="/profile/edit">
+          <button className="bg-blue-500 text-white p-2 rounded">Edit Profile</button>
+        </Link>
+        <Link href="/profile/set-target">
+          <button className="bg-green-500 text-white p-2 rounded">Set Target</button>
+        </Link>
+      </div>
     </div>
   );
 };

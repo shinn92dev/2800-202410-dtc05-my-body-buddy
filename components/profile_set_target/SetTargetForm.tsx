@@ -2,48 +2,50 @@
 
 import React, { useState, useEffect } from "react";
 import { handleDateSelect } from "@/app/_helper/handleDate";
+import { useAuth } from "@clerk/nextjs";
 
-interface SetTargetFormProps {
-  target: {
-    targetWeight: number;
-    targetDate: string;
-    activityLevel: string;
-    preference: string;
-  } | null;
-}
-
-const SetTargetForm: React.FC<SetTargetFormProps> = ({ target }) => {
+const SetTargetForm: React.FC = () => {
+  const { userId } = useAuth();
   const [formData, setFormData] = useState({
-    targetWeight: target?.targetWeight || "",
-    targetDate: target?.targetDate || "",
-    activityLevel: target?.activityLevel || "Low",
-    preference: target?.preference || "More Workout",
+    targetWeight: "",
+    targetDate: "",
+    activityLevel: "",
+    preference: "",
   });
 
   useEffect(() => {
-    if (target) {
-      setFormData({
-        targetWeight: target.targetWeight,
-        targetDate: target.targetDate,
-        activityLevel: target.activityLevel,
-        preference: target.preference,
-      });
-    }
-  }, [target]);
+    const fetchProfile = async () => {
+      try {
+        const res = await fetch(`/api/profile/${userId}`);
+        const data = await res.json();
+        setFormData({
+          ...formData,
+          ...data,
+        });
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+      }
+    };
+
+    fetchProfile();
+  }, [formData, userId]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: name === "activityLevel" ? parseInt(value) : value,
     }));
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    handleDateSelect(new Date(e.target.value), (date) => setFormData((prevData) => ({
-      ...prevData,
-      targetDate: date,
-    })));
+    const selectedDate = new Date(e.target.value);
+    handleDateSelect(selectedDate, (dateString) => {
+      setFormData((prevData) => ({
+        ...prevData,
+        targetDate: dateString,
+      }));
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -60,66 +62,73 @@ const SetTargetForm: React.FC<SetTargetFormProps> = ({ target }) => {
         throw new Error("Error updating target data");
       }
       const result = await res.json();
-      console.log(result.message);
+      alert(result.message);
+      window.location.href = "/profile";
     } catch (error) {
       console.error("Error updating target data:", error);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col justify-center items-center">
-      <div className="bg-orange m-5 tracking-wide leading-8 font-semibold text-center w-2/3">
-        <p className="text-4xl p-2">🎯</p>
-        <div>
-          <label>
-            Target Weight (kg):
-            <input
-              type="number"
-              name="targetWeight"
-              value={formData.targetWeight}
-              onChange={handleChange}
-              className="m-2 p-1 border"
-            />
-          </label>
-          <label>
-            Target Date:
-            <input
-              type="date"
-              name="targetDate"
-              value={formData.targetDate}
-              onChange={handleDateChange}
-              className="m-2 p-1 border"
-            />
-          </label>
-          <label>
-            Activity Level:
-            <select
-              name="activityLevel"
-              value={formData.activityLevel}
-              onChange={handleChange}
-              className="m-2 p-1 border"
-            >
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-            </select>
-          </label>
-          <label>
-            Preference:
-            <select
-              name="preference"
-              value={formData.preference}
-              onChange={handleChange}
-              className="m-2 p-1 border"
-            >
-              <option value="More Workout">More Workout</option>
-              <option value="Less Diet">Less Diet</option>
-            </select>
-          </label>
+    <div className="flex justify-center items-center min-h-screen">
+      <form className="bg-white p-6 rounded-lg shadow-md" onSubmit={handleSubmit}>
+        <h2 className="text-2xl font-bold mb-4">Set Target</h2>
+        <div className="mb-4">
+          <label className="block text-gray-700">Target Weight (kg)</label>
+          <input
+            type="number"
+            name="targetWeight"
+            value={formData.targetWeight}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-lg"
+            required
+          />
         </div>
-      </div>
-      <button type="submit" className="bg-blue-500 text-white p-2 rounded">Save</button>
-    </form>
+        <div className="mb-4">
+          <label className="block text-gray-700">Target Date</label>
+          <input
+            type="date"
+            name="targetDate"
+            value={formData.targetDate}
+            onChange={handleDateChange}
+            className="w-full px-3 py-2 border rounded-lg"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Activity Level</label>
+          <select
+            name="activityLevel"
+            value={formData.activityLevel}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-lg"
+            required
+          >
+            <option value="">Select Activity Level</option>
+            <option value="1">Low</option>
+            <option value="2">Medium</option>
+            <option value="3">High</option>
+          </select>
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Preference</label>
+          <select
+            name="preference"
+            value={formData.preference}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-lg"
+            required
+          >
+            <option value="">Select Preference</option>
+            <option value="workout">More Workout</option>
+            <option value="diet">Less Diet</option>
+          </select>
+        </div>
+        <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
+          Save Target
+        </button>
+      </form>
+    </div>
   );
 };
 

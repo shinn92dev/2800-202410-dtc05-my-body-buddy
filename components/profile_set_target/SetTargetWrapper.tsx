@@ -1,26 +1,31 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { redirect } from "next/navigation";
+import axios from "axios";
 import SetTargetForm from "@/components/profile_set_target/SetTargetForm";
 
 const SetTargetWrapper: React.FC = () => {
-  const [targetData, setTargetData] = useState(null);
+  const [profileExists, setProfileExists] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const checkProfile = async () => {
       try {
-        const response = await fetch("/api/targets");
-        const data = await response.json();
-        setTargetData(data);
+        const profileResponse = await axios.get("/api/profile");
+        if (profileResponse.status === 404) {
+          redirect("/profile/edit");
+        } else {
+          setProfileExists(true);
+        }
       } catch (error) {
-        console.error("Error fetching target data:", error);
+        console.error("Error checking profile existence:", error);
       }
     };
 
-    fetchData();
+    checkProfile();
   }, []);
 
-  return <SetTargetForm target={targetData} />;
+  return profileExists ? <SetTargetForm /> : null;
 };
 
 export default SetTargetWrapper;

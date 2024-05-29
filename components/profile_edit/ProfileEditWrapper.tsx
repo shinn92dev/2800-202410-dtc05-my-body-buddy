@@ -1,8 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { redirect } from "next/navigation";
+import { useAuth } from "@clerk/nextjs";
+import axios from "axios";
 
 const ProfileEditWrapper: React.FC = () => {
+  const { userId } = useAuth();
   const [formData, setFormData] = useState({
     name: "",
     age: "",
@@ -12,20 +16,18 @@ const ProfileEditWrapper: React.FC = () => {
   });
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchProfile = async () => {
       try {
-        const response = await fetch("/api/profile");
-        const data = await response.json();
-        if (data) {
-          setFormData(data);
-        }
+        const res = await axios(`/api/profile/${userId}`);
+        const data = res.data;
+        setFormData(data);
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error("Error fetching profile data:", error);
       }
     };
 
-    fetchData();
-  }, []);
+    fetchProfile();
+  }, [userId]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -38,82 +40,88 @@ const ProfileEditWrapper: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch("/api/profile", {
-        method: "POST",
+      const res = await fetch(`/api/profile/${userId}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
       if (!res.ok) {
-        throw new Error("Error updating user data");
+        throw new Error("Error updating profile data");
       }
       const result = await res.json();
-      console.log(result.message);
+      alert(result.message);
+      redirect("/profile");
     } catch (error) {
-      console.error("Error updating user data:", error);
+      console.error("Error updating profile data:", error);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col justify-center items-center">
-      <div className="bg-orange m-5 tracking-wide leading-8 font-semibold text-center w-2/3">
-        <p className="text-4xl p-2">👤</p>
-        <div>
-          <label>
-            Name:
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              className="m-2 p-1 border"
-            />
-          </label>
-          <label>
-            Age:
-            <input
-              type="number"
-              name="age"
-              value={formData.age}
-              onChange={handleChange}
-              className="m-2 p-1 border"
-            />
-          </label>
-          <label>
-            Gender:
-            <input
-              type="text"
-              name="gender"
-              value={formData.gender}
-              onChange={handleChange}
-              className="m-2 p-1 border"
-            />
-          </label>
-          <label>
-            Height (cm):
-            <input
-              type="number"
-              name="height"
-              value={formData.height}
-              onChange={handleChange}
-              className="m-2 p-1 border"
-            />
-          </label>
-          <label>
-            Weight (kg):
-            <input
-              type="number"
-              name="weight"
-              value={formData.weight}
-              onChange={handleChange}
-              className="m-2 p-1 border"
-            />
-          </label>
+    <div className="flex justify-center items-center min-h-screen">
+      <form className="bg-white p-6 rounded-lg shadow-md" onSubmit={handleSubmit}>
+        <h2 className="text-2xl font-bold mb-4">Edit Profile</h2>
+        <div className="mb-4">
+          <label className="block text-gray-700">Name</label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-lg"
+            required
+          />
         </div>
-      </div>
-      <button type="submit" className="bg-blue-500 text-white p-2 rounded">Save</button>
-    </form>
+        <div className="mb-4">
+          <label className="block text-gray-700">Age</label>
+          <input
+            type="number"
+            name="age"
+            value={formData.age}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-lg"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Gender</label>
+          <input
+            type="text"
+            name="gender"
+            value={formData.gender}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-lg"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Height (cm)</label>
+          <input
+            type="number"
+            name="height"
+            value={formData.height}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-lg"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Weight (kg)</label>
+          <input
+            type="number"
+            name="weight"
+            value={formData.weight}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-lg"
+            required
+          />
+        </div>
+        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+          Save
+        </button>
+      </form>
+    </div>
   );
 };
 
