@@ -4,6 +4,10 @@ import React from "react";
 import Link from "next/link";
 
 interface ProfileProps {
+  user : {
+    username: string;
+    email: string;
+  } | null;
   profile: {
     name: string;
     age: number;
@@ -19,8 +23,8 @@ interface ProfileProps {
   } | null;
 }
 
-const Profile: React.FC<ProfileProps> = ({ profile, target }) => {
-  if (!profile) {
+const Profile: React.FC<ProfileProps> = ({ user, profile, target }) => {
+  if (!profile || !user) {
     return <div>User profile not found</div>;
   }
 
@@ -29,7 +33,8 @@ const Profile: React.FC<ProfileProps> = ({ profile, target }) => {
       <div className="bg-orange m-5 tracking-wide leading-8 font-semibold text-center w-2/3">
         <p className="text-4xl p-2">👤</p>
         <div>
-          <div>Name: {profile.name}</div>
+          <div>Name: {user.username}</div>
+          <div>Email: {user.email}</div>
           <div>Age: {profile.age}</div>
           <div>Gender: {profile.gender}</div>
           <div>Height: {profile.height} cm</div>

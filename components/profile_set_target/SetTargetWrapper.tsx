@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { redirect } from "next/navigation";
 import axios from "axios";
+import { redirect } from "next/navigation";
 import SetTargetForm from "@/components/profile_set_target/SetTargetForm";
 
 const SetTargetWrapper: React.FC = () => {

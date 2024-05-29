@@ -1,14 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { redirect } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
 
 const ProfileEditWrapper: React.FC = () => {
   const { userId } = useAuth();
   const [formData, setFormData] = useState({
-    name: "",
     age: "",
     gender: "",
     height: "",
@@ -18,7 +16,7 @@ const ProfileEditWrapper: React.FC = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios(`/api/profile/${userId}`);
+        const res = await axios.get(`/api/profile`);
         const data = res.data;
         setFormData(data);
       } catch (error) {
@@ -40,19 +38,12 @@ const ProfileEditWrapper: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch(`/api/profile/${userId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      if (!res.ok) {
+      const res = await axios.post(`/api/profile`, formData);
+      if (res.status !== 200) {
         throw new Error("Error updating profile data");
       }
-      const result = await res.json();
-      alert(result.message);
-      redirect("/profile");
+      alert(res.data.message);
+      window.location.href = "/profile";
     } catch (error) {
       console.error("Error updating profile data:", error);
     }
@@ -63,15 +54,6 @@ const ProfileEditWrapper: React.FC = () => {
       <form className="bg-white p-6 rounded-lg shadow-md" onSubmit={handleSubmit}>
         <h2 className="text-2xl font-bold mb-4">Edit Profile</h2>
         <div className="mb-4">
-          <label className="block text-gray-700">Name</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded-lg"
-            required
-          />
         </div>
         <div className="mb-4">
           <label className="block text-gray-700">Age</label>
