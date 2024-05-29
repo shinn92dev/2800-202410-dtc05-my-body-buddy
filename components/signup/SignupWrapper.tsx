@@ -1,11 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { useSignUp } from "@clerk/nextjs";
 import Modal from "@/components/global/Modal";
 import PolicyContent from "@/components/global/PolicyContent";
 import GoogleIcon from "@/components/global/icons/GoogleIcon";
-import Image from "next/image";
 import SignupForm from "@/components/signup/SignupForm";
 
 export default function SignupWrapper() {
@@ -17,14 +15,6 @@ export default function SignupWrapper() {
                 <div className="max-w-screen-xl m-0 sm:m-20 bg-white shadow sm:rounded-lg flex justify-center flex-1">
                     <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
                         <div>
-                            <Image
-                                src="/images/logo/my_body_buddy_logo.png"
-                                alt="My Body Buddy Logo"
-                                width={32}
-                                height={32}
-                                className="w-32 mx-auto"
-                                quality={100}
-                            />
                         </div>
                         <div className="mt-12 flex flex-col items-center">
                             <h1 className="text-2xl xl:text-3xl font-extrabold">
