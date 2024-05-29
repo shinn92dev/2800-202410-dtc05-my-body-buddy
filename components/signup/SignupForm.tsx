@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useSignUp } from "@clerk/nextjs";
 import axios from "axios";
+import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 
 const createNewUser = async (userData: any, retries = 3): Promise<any> => {
   try {
@@ -21,7 +22,6 @@ const createNewUser = async (userData: any, retries = 3): Promise<any> => {
     }
     window.location.href = "/summary/diet";
     window.location.href = "/summary/workout";
-
     return response.data;
   } catch (error) {
     if (
@@ -64,6 +64,7 @@ const validationSchema = yup.object({
 export default function SignupForm() {
   const { signUp } = useSignUp();
   const [loading, setLoading] = useState(true);
+  const [signUpErrors, setSignUpErrors] = useState<string | null>(null);
 
   const {
     register,
@@ -98,6 +99,8 @@ export default function SignupForm() {
         password: data.password,
       });
 
+      setSignUpErrors(String || null); // clear previous errors
+
       if (signUpResult?.status === "complete") {
         const userId = signUpResult.createdUserId;
         const userData = {
@@ -110,8 +113,18 @@ export default function SignupForm() {
       } else {
         console.error("Sign Up Incomplete: ", signUpResult);
       }
-    } catch (error) {
-      console.log("Error in onSubmit: ", error);
+    } catch (error: any) {
+      if (isClerkAPIResponseError(error)) {
+        const errorMessage = error.errors[0]?.message;
+        if (errorMessage === "That username is taken. Please try another.") {
+          setSignUpErrors(errorMessage);
+        } else {
+          setSignUpErrors("An unexpected error occurred. Please try again.");
+        }
+      } else {
+        setSignUpErrors("An unexpected error occurred. Please try again.");
+      }
+      console.error("Error: ", error);
     }
   };
 
@@ -198,6 +211,14 @@ export default function SignupForm() {
           </span>
         )}
       </div>
+
+      {signUpErrors && (
+        <div className="mt-2 text-red-500 text-sm">
+          {signUpErrors.split("\n").map((message, index) => (
+            <p key={index}>{message}</p>
+          ))}
+        </div>
+      )}
 
       <button
         className="mt-2 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
