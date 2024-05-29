@@ -6,6 +6,8 @@ import CircleBar from "@/components/global/CircleBar";
 import Board from "@/components/global/Board";
 import AskAiButton from "@/components/global/AskAiButton";
 import axios from "axios";
+import TopCalendar from "@/components/global/TopCalendar";
+import { fetchUserId } from "@/app/_helper/fetchUserId";
 import { useForm } from "react-hook-form";
 import { format, formatDate } from "date-fns";
 import {
@@ -14,43 +16,73 @@ import {
     updateWorkoutStatus,
     formatDateFromInput,
 } from "@/app/_helper/workout";
+import { handleDateSelect } from "@/app/_helper/handleDate";
+import { SSG_GET_INITIAL_PROPS_CONFLICT } from "next/dist/lib/constants";
 
 const WorkoutHomeWrapper: React.FC = () => {
     const [achievedWorkoutData, setAchievedWorkoutData] = useState<any[]>([]);
     const [onGoingWorkoutData, setOnGoingWorkoutData] = useState<any[]>([]);
+    const [userId, setUserId] = useState<string>("");
 
+    useEffect(() => {
+        const getUserId = async () => {
+            try {
+                const userId = await fetchUserId();
+                setUserId(userId);
+                console.log("userId fetched successfully.");
+            } catch (error) {
+                console.error("Error fetching user ID:", error);
+            }
+        };
+        getUserId();
+    }, []);
     const fetchWorkoutData = async () => {
         try {
             const res = await axios.get("/api/get-user-id");
             const { userId } = res.data;
             console.log(userId);
 
-            const dataRes = await axios.get(
-                `/api/get-workout?userId=${userId}`
-            );
+            const dataRes = await axios.get(`/api/get-workout`, {
+                params: {
+                    userId,
+                    date: selectedDate.toISOString().split("T")[0],
+                },
+            });
             const data = dataRes.data;
-
-            if (!data || data.workouts.length === 0) {
-                await axios.post("/api/save-new-workout", {
-                    userId: userId,
-                    workouts: [],
-                });
-            } else {
-                const workoutDataForDate = fetchWorkoutForSpecificDate(
-                    data,
-                    new Date()
-                );
-                setOnGoingWorkoutData(workoutDataForDate.onGoing);
-                setAchievedWorkoutData(workoutDataForDate.achieved);
-            }
+            setOnGoingWorkoutData(data.onGoing);
+            setAchievedWorkoutData(data.achieved);
         } catch (error) {
             console.error("Error fetching workout data:", error);
         }
     };
 
+    const [selectedDate, setSelectedDate] = useState<Date>(
+        new Date(
+            Date.UTC(
+                new Date().getFullYear(),
+                new Date().getMonth(),
+                new Date().getDate()
+            )
+        )
+    );
+
+    const onDateSelect = (date: Date) => {
+        handleDateSelect(date, (formattedDate: string) => {
+            setSelectedDate(
+                new Date(
+                    Date.UTC(
+                        date.getFullYear(),
+                        date.getMonth(),
+                        date.getDate()
+                    )
+                )
+            );
+        });
+    };
+
     useEffect(() => {
         fetchWorkoutData();
-    }, []);
+    }, [selectedDate]);
 
     const handleEditForAchieved = (index: number) => {
         // Handle edit logic here
@@ -64,7 +96,7 @@ const WorkoutHomeWrapper: React.FC = () => {
             console.log(item);
             console.log("Update start:", userId);
             // TODO: REPLACE DATE FROM CALENDAR DATE
-            const formattedDate = new Date().toISOString();
+            const formattedDate = selectedDate.toISOString();
             const newData = {
                 userId: userId,
                 date: formattedDate,
@@ -82,27 +114,6 @@ const WorkoutHomeWrapper: React.FC = () => {
             const responseData = await response.json();
             console.log("Response data:", responseData);
             fetchWorkoutData();
-            // setOnGoingWorkoutData((prevData) => {
-            //     const newData = [...prevData];
-            //     newData[index] = {
-            //         ...newData[index],
-            //         isCompleted: !newData[index].achieved,
-            //     };
-            //     return newData;
-            // });
-
-            // setAchievedWorkoutData((prevData) => {
-            //     if (item.isCompleted) {
-            //         return prevData.filter(
-            //             (workout) => workout.name !== item.name
-            //         );
-            //     } else {
-            //         return [
-            //             ...prevData,
-            //             { ...item, isCompleted: !item.isCompleted },
-            //         ];
-            //     }
-            // });
         } catch (error) {
             console.error("Error updating achievement status:", error);
         }
@@ -124,7 +135,7 @@ const WorkoutHomeWrapper: React.FC = () => {
             console.log(item);
             console.log("Update start:", userId);
             // TODO: REPLACE DATE FROM CALENDAR DATE
-            const formattedDate = new Date().toISOString();
+            const formattedDate = selectedDate.toISOString();
             const newData = {
                 userId: userId,
                 date: formattedDate,
@@ -142,27 +153,6 @@ const WorkoutHomeWrapper: React.FC = () => {
             const responseData = await response.json();
             console.log("Response data:", responseData);
             fetchWorkoutData();
-            // setOnGoingWorkoutData((prevData) => {
-            //     const newData = [...prevData];
-            //     newData[index] = {
-            //         ...newData[index],
-            //         isCompleted: !newData[index].achieved,
-            //     };
-            //     return newData;
-            // });
-
-            // setAchievedWorkoutData((prevData) => {
-            //     if (item.isCompleted) {
-            //         return prevData.filter(
-            //             (workout) => workout.name !== item.name
-            //         );
-            //     } else {
-            //         return [
-            //             ...prevData,
-            //             { ...item, isCompleted: !item.isCompleted },
-            //         ];
-            //     }
-            // });
         } catch (error) {
             console.error("Error updating achievement status:", error);
         }
@@ -173,6 +163,7 @@ const WorkoutHomeWrapper: React.FC = () => {
         calculateKcalForWorkout(onGoingWorkoutData);
     return (
         <div className="p-4 items-center bg-white">
+            <TopCalendar onDateSelect={onDateSelect} />
             <h1 className="text-center text-2xl font-bold">Your Progress</h1>
             <div className="flex justify-center mt-4">
                 <CircleBar
