@@ -167,7 +167,9 @@ export default function WorkoutAddingWrapper() {
                                 disabled={option.unit !== selectedItem.selectedOption.unit}
                             />
                             <span className={`${option.unit !== selectedItem.selectedOption.unit ? "text-gray-400" : ""}`}>{option.unit}</span>
-                            <span className={`ml-auto ${option.unit !== selectedItem.selectedOption.unit ? "text-gray-400" : ""}`}>{(selectedItem.selectedOption.quantity * option.kcalPerUnit).toFixed(0)} kcal</span>
+                            <span className={`ml-auto ${option.unit !== selectedItem.selectedOption.unit ? "text-gray-400" : ""}`}>
+                                {(selectedItem.selectedOption.unit === option.unit ? selectedItem.selectedOption.quantity : 10) * option.kcalPerUnit} kcal
+                            </span>
                         </div>
                     ))}
                     <div className="flex justify-center mt-2">
