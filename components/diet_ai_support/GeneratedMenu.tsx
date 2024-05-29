@@ -20,7 +20,6 @@ const GeneratedMenu: React.FC<GeneratedMenuProps> = ({ generatedMenu }) => {
 
     return (
         <div>
-            <AiLines messageBody={"Generating meal menus that meet your preferences..."}/>
             <div className="flex flex-col items-start p-2">
                 <div className="flex items-start">
                     <div className="mr-2">
