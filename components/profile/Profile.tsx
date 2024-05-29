@@ -38,29 +38,39 @@ const Profile: React.FC<ProfileProps> = ({ user, profile, target }) => {
     preferenceToBeDisplayed = "Reduce calories intake";
   }
 
+  let activityLevelToBeDisplayed;
+
+  if (profile.activityLevel === 1) {
+    activityLevelToBeDisplayed = "Low";
+  } else if (profile.activityLevel === 2) {
+    activityLevelToBeDisplayed = "Medium";
+  } else {
+    activityLevelToBeDisplayed = "High";
+  }
+
   return (
     <div className="flex flex-col items-center">
       <div className="bg-orange m-5 tracking-wide leading-8 font-semibold text-center w-2/3">
         <p className="text-4xl p-2">👤</p>
         <div>
-          <div>Name: {user.username}</div>
-          <div>Email: {user.email}</div>
-          <div>Age: {profile.age}</div>
-          <div>Gender: {profile.gender}</div>
-          <div>Height: {profile.height} cm</div>
-          <div>Weight: {profile.weight} kg</div>
-          <div>Activity Level: {profile.activityLevel}</div>
-          <div>Preference: {preferenceToBeDisplayed}</div>
+          <div><span className="font-bold">Name</span>: {user.username}</div>
+          <div><span className="font-bold">Email</span>: {user.email}</div>
+          <div><span className="font-bold">Age</span>: {profile.age}</div>
+          <div><span className="font-bold">Gender</span>: {profile.gender}</div>
+          <div><span className="font-bold">Height</span>: {profile.height} cm</div>
+          <div><span className="font-bold">Weight</span>: {profile.weight} kg</div>
+          <div><span className="font-bold">Activity Level</span>: {activityLevelToBeDisplayed}</div>
+          <div><span className="font-bold">Preference</span>: {preferenceToBeDisplayed}</div>
         </div>
       </div>
       {target && (
         <div className="bg-orange m-5 tracking-wide leading-8 font-semibold text-center w-2/3">
           <p className="text-4xl p-2">🎯</p>
           <div>
-            <div>Target Date: {target.targetDate}</div>
-            <div>Target Weight: {target.targetWeight} kg</div>
-            <div>Calories Intake: {target.targetCaloriesIntake} kcal/day</div>
-            <div>Calories Burn: {target.targetCaloriesBurn} kcal/day</div>
+            <div><span className="font-bold">Target Date</span>: {target.targetDate}</div>
+            <div><span className="font-bold">Target Weight</span>: {target.targetWeight} kg</div>
+            <div><span className="font-bold">Calories Intake</span>: {target.targetCaloriesIntake} kcal/day</div>
+            <div><span className="font-bold">Calories Burn</span>: {target.targetCaloriesBurn} kcal/day</div>
           </div>
         </div>
       )}
