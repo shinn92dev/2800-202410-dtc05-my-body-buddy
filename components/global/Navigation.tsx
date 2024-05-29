@@ -8,7 +8,6 @@ import { useUser } from "@clerk/clerk-react";
 
 export default function Navigation() {
   const path = usePathname();
-  console.log(path);
 
   // for hamburger menu
   const [isOpen, setIsOpen] = useState(false);
@@ -64,7 +63,7 @@ export default function Navigation() {
   };
 
   return (
-    <nav className="flex items-center justify-between px-4">
+    <nav className="relative flex items-center justify-between px-4">
       <button
         className="block ml-4"
         onClick={toggleHBGmenu}
@@ -83,12 +82,12 @@ export default function Navigation() {
         </svg>
       </button>
 
-      <ul
-        className={`absolute left-1 top-1 w-1/3 bg-white border border-logo-pumpkin shadow-lg rounded-md ${
-          isOpen ? "block" : "hidden"
+      <div
+        className={`fixed top-0 left-0 h-full w-2/3 bg-white border-r border-logo-pumpkin shadow-lg transform transition-transform ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <button onClick={toggleHBGmenu}>
+        <button onClick={toggleHBGmenu} className="absolute top-4 right-4">
           <svg
             className="mt-3 h-10 w-10 fill-current text-logo-pumpkin"
             xmlns="http://www.w3.org/2000/svg"
@@ -101,24 +100,29 @@ export default function Navigation() {
           </svg>
         </button>
 
-        {!isLoading && loggedUsername ? (
-          <Link href={`/user/${loggedUsername}`} onClick={toggleHBGmenu}>
-            <li
-              className={`text-white text-center font-bold py-2 px-4 rounded-full m-2 ${
-                path === `/user/${loggedUsername}`
-                  ? "bg-blue-500 hover:bg-blue-700"
-                  : "bg-gray-500 hover:bg-gray-700"
-              }`}
-            >
-              Profile
+        <ul className="mt-16">
+          {!isLoading && loggedUsername ? (
+            <li>
+              <Link
+                href={`/user/${loggedUsername}`}
+                onClick={toggleHBGmenu}
+                className={`text-beige block text-center font-bold py-2 px-4 rounded-full m-2 ${
+                  path === `/user/${loggedUsername}`
+                    ? "bg-dark-blue hover:bg-dark-blue"
+                    : "bg-gray-500 hover:bg-gray-700"
+                }`}
+              >
+                Profile
+              </Link>
             </li>
-          </Link>
-        ) : (
-          <li className="text-center py-2 px-4">Loading...</li>
-        )}
-
-        <SignOutButton />
-      </ul>
+          ) : (
+            <li className="text-center py-2 px-4">Loading...</li>
+          )}
+          <li>
+            <SignOutButton />
+          </li>
+        </ul>
+      </div>
 
       <div className="flex-grow text-center">
         <Link href="/summary/diet">
@@ -129,7 +133,7 @@ export default function Navigation() {
             className={`h-20 w-20 mx-auto ${isHide ? "hidden" : ""}`}
           />
           <img
-            src="/person_only_transparent.png"
+            src="/spin_person_only_transparent.png"
             alt="person only logo"
             onClick={handleLogoClick}
             className={`h-20 w-20 mx-auto ${isHide ? "block" : "hidden"} ${

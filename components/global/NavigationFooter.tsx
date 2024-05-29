@@ -8,12 +8,12 @@ export default function NavigationFooter() {
 
     const getButtonClasses = (buttonPath: string) => {
         return path?.startsWith(buttonPath)
-            ? "text-white font-bold"
-            : "text-gray-400";
+            ? "text-logo-pumpkin font-bold"
+            : "text-orange font-bold";
     };
 
     return (
-        <div className="grid grid-flow-col justify-stretch fixed inset-x-0 bottom-0 h-20 bg-logo-pumpkin text-beige text-center">
+        <div className="grid grid-flow-col justify-stretch fixed inset-x-0 bottom-0 h-20 bg-beige text-orange text-center">
             <Link
                 className={`flex flex-col justify-center items-center ${getButtonClasses(
                     "/diet"
