@@ -171,12 +171,17 @@ export default function DietSummaryWrapper() {
             (day.dinner && day.dinner.length > 0) ||
             (day.snacks && day.snacks.length > 0)
         )).length;
-        
-        const averageDailyCalories = totalDailyCalories / daysWithData;
+
+        if (daysWithData === 0) {
+            console.log("No data found for any day");
+            return 0;
+        } else {
+            const averageDailyCalories = totalDailyCalories / daysWithData;
         console.log(`Total daily calories over ${weeklyMeals.length} days: ${totalDailyCalories}`);
         console.log(`Average daily calories over ${daysWithData} days: ${averageDailyCalories}`);
         
         return Math.round(averageDailyCalories);
+        }
     };
     
 
