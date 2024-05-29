@@ -30,11 +30,11 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { age, gender, height, weight } = await req.json();
+    const { age, gender, height, weight, activityLevel, preference } = await req.json();
 
     await Profile.updateOne(
       { userId: user.id },
-      { age, gender, height, weight },
+      { age, gender, height, weight, activityLevel, preference},
       { upsert: true }
     );
 

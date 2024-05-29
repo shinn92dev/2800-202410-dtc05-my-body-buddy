@@ -4,6 +4,7 @@ import Target from "@/models/Target";
 import Profile from "@/models/Profile";
 import { currentUser } from "@clerk/nextjs/server";
 import { calculateCaloriesPerDay, calculateBmr, factorByActivityLevel, calculateEnergyRequirementsPerDay } from "@/app/_helper/calorie";
+import { calculateNumberOfDaysLeft } from "@/app/_helper/handleDate";
 
 export async function GET(req: NextRequest) {
   await connectMongoDB();
@@ -32,24 +33,36 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { targetWeight, targetDate, activityLevel, preference } = await req.json();
+    const { targetWeight, targetDate } = await req.json();
     const profile = await Profile.findOne({ userId: user.id });
 
     if (!profile) {
       return NextResponse.json({ message: "Profile data not found" }, { status: 404 });
     }
 
-    const { age, gender, height, weight } = profile;
+    const { age, gender, height, weight, activityLevel, preference } = profile;
     const bmr = calculateBmr(age, height, weight, gender);
     const activityFactor = factorByActivityLevel(age, activityLevel);
     const energyRequirements = calculateEnergyRequirementsPerDay(bmr, activityFactor);
-    const weightGap = weight - targetWeight;
 
-    const { targetCaloriesIntake, targetCaloriesBurn } = calculateCaloriesPerDay(energyRequirements, 30, weightGap, preference);
+    let targetCaloriesIntake;
+    let targetCaloriesBurn;
+
+    if (targetWeight && targetDate) {
+      const numberOfDaysLeft = calculateNumberOfDaysLeft(targetDate);
+      const weightGap = weight - targetWeight;
+      const result = calculateCaloriesPerDay(energyRequirements, numberOfDaysLeft, weightGap, preference);
+      targetCaloriesIntake = result.targetCaloriesIntake
+      targetCaloriesBurn = result.targetCaloriesBurn
+    } else {
+      targetCaloriesIntake = energyRequirements
+      targetCaloriesBurn = energyRequirements
+    }
+
 
     await Target.updateOne(
       { userId: user.id },
-      { targetCaloriesIntake, targetCaloriesBurn, targetWeight, targetDate: targetDate ? new Date(targetDate) : null, activityLevel, preference },
+      { targetCaloriesIntake, targetCaloriesBurn, targetWeight, targetDate: targetDate ? new Date(targetDate) : null },
       { upsert: true }
     );
 
