@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from "next/navigation";
 import AiLines from '@/components/global/AiLines';
+import LoadingAnimation from "@/components/global/LoadingAnimation";
 import WorkoutAiSupportInput from '@/components/workout_ai_support/WorkoutAiSupportInput';
 import "@/components/global/AiLines.scss";
 import "@/components/workout_ai_support/WorkoutAiSupportInput.scss";
@@ -17,6 +18,7 @@ const messageBodyWhenButtonClicked = "Generating alternative exercise menus base
 // AiSupportWrapper component
 export default function AiSupportWrapper() {
     const [generated, setGenerated] = useState(false); // State to track if alternative suggestions are generated
+    const [isLoading, setIsLoading] = useState(false); // State to track if the AI is generating suggestions
     const [selectedItems, setSelectedItems] = useState<any[]>([]); // State to store selected workout items
     const [selectedTags, setSelectedTags] = useState<string[]>([]); // State to store selected tags
     const [generatedItems, setGeneratedItems] = useState<any[]>([]); // State to store generated items from AI response
@@ -28,6 +30,7 @@ export default function AiSupportWrapper() {
         setSelectedItems(selectedItems);
         setSelectedTags(selectedTags);
         setGenerated(true);
+        setIsLoading(true);
     };
 
     const handleAdoptAlternative = () => {
@@ -35,7 +38,7 @@ export default function AiSupportWrapper() {
     };
 
     const handleRegenerateAlternative = async () => {
-        setGenerated(false);
+        setIsLoading(true);
         setGeneratedItems([]);
         setErrorMessage(null);
 
@@ -58,9 +61,9 @@ export default function AiSupportWrapper() {
             handleGenerateItems(data.result);
         } catch (error) {
             console.error('Error generating alternative:', error);
-        } finally {
-            setGenerated(true);
         }
+
+        setIsLoading(false);
     };
 
     // Function to parse AI response and update generatedItems
@@ -84,6 +87,8 @@ export default function AiSupportWrapper() {
         } catch (error) {
             setErrorMessage("An error occurred while processing the response. Please try again.");
         }
+
+        setIsLoading(false);
     };
 
     return (
@@ -91,6 +96,7 @@ export default function AiSupportWrapper() {
             <AiLines messageTitle={initialMessageTitle} messageBody={initialMessageBody} />
             <WorkoutAiSupportInput onGenerateAlternative={setGeneratedTrue} onGenerateItems={handleGenerateItems} />
             {generated && <AiLines messageBody={messageBodyWhenButtonClicked} />}
+            {isLoading && <LoadingAnimation />}
             {generatedItems.length > 0 ? (
                 <div>
                     <div className="flex flex-col items-start p-2">
