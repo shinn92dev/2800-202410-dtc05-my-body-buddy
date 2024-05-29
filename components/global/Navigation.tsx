@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import SignOutButton from "./signOutButton";
 import { useState, useRef, useEffect } from "react";
 import { useUser } from "@clerk/clerk-react";
+import Image from "next/image";
 
 export default function Navigation() {
   const path = usePathname();
@@ -20,7 +21,6 @@ export default function Navigation() {
   const [isBounce, setIsBounce] = useState(false);
 
   // for url path fetch
-  const [loggedUsername, setLoggedUsername] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { isLoaded, isSignedIn, user } = useUser();
 
@@ -29,7 +29,6 @@ export default function Navigation() {
 
   useEffect(() => {
     if (isLoaded && isSignedIn && user) {
-      setLoggedUsername(user.username);
       setIsLoading(false);
     } else {
       setIsLoading(false);
@@ -101,11 +100,11 @@ export default function Navigation() {
           </svg>
         </button>
 
-        {!isLoading && loggedUsername ? (
-          <Link href={`/user/${loggedUsername}`} onClick={toggleHBGmenu}>
+        {!isLoading ? (
+          <Link href={`/user/`} onClick={toggleHBGmenu}>
             <li
               className={`text-white text-center font-bold py-2 px-4 rounded-full m-2 ${
-                path === `/user/${loggedUsername}`
+                path === `/user/`
                   ? "bg-blue-500 hover:bg-blue-700"
                   : "bg-gray-500 hover:bg-gray-700"
               }`}
@@ -122,17 +121,21 @@ export default function Navigation() {
 
       <div className="flex-grow text-center">
         <Link href="/summary/diet">
-          <img
+          <Image
             src="/my_body_buddy_logo_transparent.png"
             alt="logo"
             onClick={handleLogoClick}
-            className={`h-20 w-20 mx-auto ${isHide ? "hidden" : ""}`}
+            width={80} // Specify the width
+            height={80} // Specify the height
+            className={`mx-auto ${isHide ? "hidden" : ""}`}
           />
-          <img
+          <Image
             src="/person_only_transparent.png"
             alt="person only logo"
             onClick={handleLogoClick}
-            className={`h-20 w-20 mx-auto ${isHide ? "block" : "hidden"} ${
+            width={80} // Specify the width
+            height={80} // Specify the height
+            className={`mx-auto ${isHide ? "block" : "hidden"} ${
               isDance ? "animate-spin" : ""
             } ${isBounce ? "animate-bounce" : ""}`}
           />
