@@ -105,10 +105,10 @@ export default function Navigation() {
           {!isLoading && loggedUsername ? (
             <li>
               <Link
-                href={`/user/${loggedUsername}`}
+                href={`/profile`}
                 onClick={toggleHBGmenu}
                 className={`text-beige block text-center font-bold py-2 px-4 rounded-full m-2 ${
-                  path === `/user/${loggedUsername}`
+                  path === `/profile`
                     ? "bg-dark-blue hover:bg-dark-blue"
                     : "bg-gray-500 hover:bg-gray-700"
                 }`}
@@ -139,7 +139,7 @@ export default function Navigation() {
             height={80} // Specify the height
             className={`mx-auto ${isHide ? "hidden" : ""}`}
           />
-          <img
+          <Image
             src="/spin_person_only_transparent.png"
             alt="person only logo"
             onClick={handleLogoClick}
