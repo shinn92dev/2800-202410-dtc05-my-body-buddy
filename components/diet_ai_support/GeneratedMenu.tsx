@@ -3,6 +3,7 @@ import AiLines from '@/components/global/AiLines';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import "@/components/global/AiLines.scss";
+import "@/components/diet_ai_support/GeneratedMenu.scss";
 
 import Image from "next/image";
 
