@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SignUpAndInIcon from "@/components/global/icons/SignUpAndInIcon";
 import { useForm, SubmitHandler, Resolver } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -63,6 +63,7 @@ const validationSchema = yup.object({
 
 export default function SignupForm() {
   const { signUp } = useSignUp();
+  const [loading, setLoading] = useState(true);
 
   const {
     register,
@@ -74,6 +75,18 @@ export default function SignupForm() {
       any
     >,
   });
+
+  useEffect(() => {
+    // Setting loading to false once the component mounts
+    const handleLoad = () => setLoading(false);
+
+    if (document.readyState === "complete") {
+      handleLoad();
+    } else {
+      window.addEventListener("load", handleLoad);
+      return () => window.removeEventListener("load", handleLoad);
+    }
+  }, []);
 
   const onSubmit: SubmitHandler<newUserInputs> = async (
     data: newUserInputs
@@ -101,6 +114,34 @@ export default function SignupForm() {
       console.log("Error in onSubmit: ", error);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="mt-8 flex flex-row justify-center">
+        Page is loading...
+        <svg
+          className="ml-1 animate-spin h-5 w-5 mr-3 text-logo-pumpkin"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            className="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
+          ></circle>
+          <path
+            className="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8v8H4z"
+          ></path>
+        </svg>
+      </div>
+    );
+  }
 
   return (
     <form
