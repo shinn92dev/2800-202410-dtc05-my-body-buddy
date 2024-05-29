@@ -30,9 +30,9 @@ export default function NavigationBeforeAuth() {
         </svg>
       </button>
 
-      <ul
-        className={`absolute left-1 top-1 w-1/3 bg-white border border-logo-pumpkin shadow-lg rounded-md ${
-          isOpen ? "block" : "hidden"
+      <div
+        className={`fixed top-0 left-0 h-full w-2/3 bg-white border-r border-logo-pumpkin shadow-lg transform transition-transform ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <button onClick={toggleHBGmenu}>
@@ -48,7 +48,7 @@ export default function NavigationBeforeAuth() {
           </svg>
         </button>
 
-        <li
+        <ul
           className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
             path === "/login"
               ? "bg-dark-blue hover:bg-dark-blue"
@@ -58,8 +58,8 @@ export default function NavigationBeforeAuth() {
           <Link href="/login" onClick={toggleHBGmenu}>
             Log In
           </Link>
-        </li>
-        <li
+        </ul>
+        <ul
           className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
             path === "/signup"
               ? "bg-dark-blue hover:bg-dark-blue"
@@ -69,10 +69,10 @@ export default function NavigationBeforeAuth() {
           <Link href="/signup" onClick={toggleHBGmenu}>
             Sign Up
           </Link>
-        </li>
-      </ul>
+        </ul>
+      </div>
 
-      <div className="flex-grow text-center">
+      <div className={`flex-grow text-center ${isOpen ? "blur-sm" : ""}`}>
         <Link href="/">
           <img
             src="/my_body_buddy_logo_transparent.png"
