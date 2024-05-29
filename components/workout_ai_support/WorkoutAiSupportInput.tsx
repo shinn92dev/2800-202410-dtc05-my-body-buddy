@@ -10,12 +10,6 @@ type WorkoutAiSupportInputProps = {
     onGenerateItems: (response: string) => void;
 };
 
-// Sample workout menu items
-const workoutMenuItems = [
-    { title: "Crunches", quantity: 50, unit: "reps", kcalPerUnit: 4.92 },
-    { title: "Cycling", quantity: 4, unit: "km", kcalPerUnit: 30 },
-];
-
 // Default tags for reasons to replace workout items
 const defaultTags = [
     "Looks too hard",
@@ -39,22 +33,24 @@ export default function WorkoutAiSupportInput({
     // Handle click event for generating alternative suggestions
 
     const handleGenerateAlternative = async () => {
-        const selectedItems = workoutMenuItems.filter((item) =>
-            selectedItemTitles.includes(item.title)
+        console.log(onGoingWorkoutData);
+        const selectedItems = onGoingWorkoutData.filter((item) =>
+            selectedItemTitles.includes(item.name)
         );
         const selectedTags = defaultTags.filter((tag) =>
             selectedTagTitles.includes(tag)
         );
         onGenerateAlternative(selectedItems, selectedTags);
         setGenerated(true);
+        console.log(generated);
 
         // Create the prompt and fetch AI response
         const prompt = `Please consider alternative options for the workout menu below, taking into account the reasons provided.\n\nWorkout menu to replace:\n${selectedItems
             .map(
                 (item) =>
-                    `・${item.title} - ${item.quantity} ${item.unit} (${
-                        Math.round(item.kcalPerUnit * item.quantity * 10) / 10
-                    } kcal)`
+                    `・${item.name} - ${item.quantity} ${
+                        item.unit
+                    } (${Math.round(item.calories)} kcal)`
             )
             .join(
                 "\n"

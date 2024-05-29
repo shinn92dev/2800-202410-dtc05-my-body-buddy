@@ -6,6 +6,7 @@ import AiLines from "@/components/global/AiLines";
 import WorkoutAiSupportInput from "@/components/workout_ai_support/WorkoutAiSupportInput";
 import "@/components/global/AiLines.scss";
 import "@/components/workout_ai_support/WorkoutAiSupportInput.scss";
+import axios from "axios";
 import Image from "next/image";
 
 // Initial messages
@@ -28,10 +29,34 @@ export default function AiSupportWrapper() {
     const setGeneratedTrue = (selectedItems: any[], selectedTags: string[]) => {
         setSelectedItems(selectedItems);
         setSelectedTags(selectedTags);
+        console.log(generated);
         setGenerated(true);
     };
 
-    const handleAdoptAlternative = () => {
+    const handleAdoptAlternative = async () => {
+        try {
+            const res = await axios.get("/api/get-user-id");
+            const { userId } = res.data;
+            const params = new URLSearchParams(window.location.search);
+            const date = params.get("date");
+
+            const dataRes = await axios.post(
+                "/api/update-workout-to-alternative",
+                {
+                    params: {
+                        userId,
+                        date,
+                        selectedItems,
+                        newWorkout: generatedItems,
+                    },
+                }
+            );
+            const data = dataRes.data;
+        } catch (error) {
+            console.error("Error adopting alternative: ", error);
+        }
+
+        console.log(generatedItems);
         router.push("/workout");
     };
 
@@ -79,11 +104,11 @@ export default function AiSupportWrapper() {
         const items = [];
         let match;
         while ((match = regex.exec(response)) !== null) {
-            const title = match[1];
+            const name = match[1];
             const quantity = parseInt(match[2], 10);
             const unit = match[3];
-            const kcalPerUnit = parseFloat(match[4]) / quantity;
-            items.push({ title, quantity, unit, kcalPerUnit });
+            const calories = parseFloat(match[4]);
+            items.push({ name, quantity, unit, calories });
         }
         setGeneratedItems(items);
     };
@@ -124,7 +149,7 @@ export default function AiSupportWrapper() {
                                             <span className="mr-2">・</span>
                                             <div>
                                                 <h2 className="font-bold">
-                                                    {item.title}
+                                                    {item.name}
                                                 </h2>
                                                 <h3 className="text-sm text-gray-500">
                                                     {item.quantity} {item.unit}
@@ -133,11 +158,7 @@ export default function AiSupportWrapper() {
                                         </div>
                                         <div>
                                             <h2 className="font-bold">
-                                                {(
-                                                    item.kcalPerUnit *
-                                                    item.quantity
-                                                ).toFixed(1)}{" "}
-                                                kcal
+                                                {item.calories.toFixed(1)} kcal
                                             </h2>
                                         </div>
                                     </div>
