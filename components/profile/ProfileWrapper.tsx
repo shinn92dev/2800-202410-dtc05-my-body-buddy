@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import UserProfile from "@/components/user_profile/UserProfile";
+import UserProfile from "@/components/profile/Profile";
 import { fetchUserId } from "@/app/_helper/fetchUserId"; 
 
 export interface UserData {
@@ -16,7 +16,7 @@ export interface UserData {
   targetCaloriesBurn: number;
 }
 
-const UserProfileWrapper: React.FC = () => {
+const ProfileWrapper: React.FC = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
 
   useEffect(() => {
@@ -39,4 +39,4 @@ const UserProfileWrapper: React.FC = () => {
   return <UserProfile userData={userData} />;
 };
 
-export default UserProfileWrapper;
+export default ProfileWrapper;

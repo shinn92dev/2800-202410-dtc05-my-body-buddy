@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { UserData } from "@/components/user_profile/UserProfileWrapper";
+import { UserData } from "@/components/profile/ProfileWrapper";
 
-const UserProfileEditWrapper: React.FC = () => {
+const ProfileEditWrapper: React.FC = () => {
   const [formData, setFormData] = useState<UserData | null>(null);
 
   useEffect(() => {
@@ -165,7 +165,7 @@ const UserProfileEditWrapper: React.FC = () => {
           <button type="submit" className="bg-dark-blue rounded-md px-3 py-2 text-beige">
             Save
           </button>
-          <Link className="bg-dark-blue rounded-md px-3 py-2 text-beige" href={`/user`}>
+          <Link className="bg-dark-blue rounded-md px-3 py-2 text-beige" href={`/profile`}>
             Done
           </Link>
         </div>
@@ -174,4 +174,4 @@ const UserProfileEditWrapper: React.FC = () => {
   );
 };
 
-export default UserProfileEditWrapper;
+export default ProfileEditWrapper;

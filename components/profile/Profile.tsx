@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import React from "react";
-import { UserData } from "@/components/user_profile/UserProfileWrapper";
+import { UserData } from "@/components/profile/ProfileWrapper";
 
-interface UserProfileProps {
+interface ProfileProps {
   userData: UserData | null;
 }
 
-const UserProfile: React.FC<UserProfileProps> = ({ userData }) => {
+const Profile: React.FC<ProfileProps> = ({ userData }) => {
   if (!userData) {
     return <h2 className="text-center font-bold">User not found</h2>;
   } else {
@@ -39,7 +39,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ userData }) => {
           </div>
         </div>
         <div className="flex justify-center m-10">
-          <Link href={`/user/edit`} className="bg-dark-blue rounded-md px-3 py-2 text-beige">
+          <Link href={`/profile/edit`} className="bg-dark-blue rounded-md px-3 py-2 text-beige">
             Edit
           </Link>
         </div>
@@ -48,4 +48,4 @@ const UserProfile: React.FC<UserProfileProps> = ({ userData }) => {
   }
 };
 
-export default UserProfile;
+export default Profile;

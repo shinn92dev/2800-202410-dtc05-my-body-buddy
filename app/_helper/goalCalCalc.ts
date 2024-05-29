@@ -1,5 +1,5 @@
 // // app/_helper/goalCalCalc.ts
-// import { UserData } from "@/components/user_profile/UserProfile";
+// import { UserData } from "@/components/profile/Profile";
 
 // export const goalCalCalc = (formData: UserData, setFormData: (value: React.SetStateAction<UserData>) => void) => {
 //   let goalCal = 0;
