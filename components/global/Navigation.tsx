@@ -85,7 +85,7 @@ export default function Navigation() {
       <div
         className={`fixed top-0 left-0 h-full w-2/3 bg-white border-r border-logo-pumpkin shadow-lg transform transition-transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        } z-50 slide-out-menu`}
       >
         <button onClick={toggleHBGmenu}>
           <svg
@@ -124,7 +124,11 @@ export default function Navigation() {
         </ul>
       </div>
 
-      <div className={`flex-grow text-center ${isOpen ? "blur-sm" : ""}`}>
+      <div
+        className={`flex-grow text-center ${
+          isOpen ? "blur-sm" : ""
+        } relative z-40`}
+      >
         <Link href="/summary/diet">
           <img
             src="/my_body_buddy_logo_transparent.png"

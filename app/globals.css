@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.slide-out-menu {
+  z-index: 1000;
+}
+
+.main-content {
+  z-index: 1;
+}
