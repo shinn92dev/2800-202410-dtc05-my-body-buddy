@@ -197,6 +197,8 @@ export default function DietSummaryWrapper() {
                 dietText="Diet"
                 workoutTextColor="text-gray-300"
                 dietTextColor="text-black"
+                workoutUnderline="underline decoration-gray-300"
+                dietUnderline="underline decoration-black"
             />
             <div className="text-center">
                 {/* <ScoreCircleBarWrapper score={80} percent={80} /> */}

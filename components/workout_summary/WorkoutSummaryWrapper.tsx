@@ -220,6 +220,8 @@ export default function WorkoutSummary() {
                 dietText="Diet"
                 workoutTextColor="text-black"
                 dietTextColor="text-gray-300"
+                workoutUnderline="underline decoration-black"
+                dietUnderline="underline decoration-gray-300"
             />
             <div className="text-center">
                 <AverageCalorieBanner title="Total calories burned from:" range={weekRange} />
