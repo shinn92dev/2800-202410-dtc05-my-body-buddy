@@ -27,14 +27,14 @@ const UserProfile: React.FC<UserProfileProps> = ({ userData }) => {
         <div className="bg-orange m-5 tracking-wide leading-8 font-semibold text-center w-2/3">
           <p className="text-4xl p-2">🎯</p>
           <div>
-            <div>Target Date: {new Date(userData.goalDay).toLocaleDateString()}</div>
+            <div>Target Date: {new Date(userData.goalDate).toISOString().split("T")[0]}</div>
             <div>Target Weight: {userData.goalWeight} kg</div>
           </div>
         </div>
         <div className="bg-orange m-5 tracking-wide leading-8 font-semibold text-center w-2/3">
           <p className="text-4xl p-2">🚀</p>
           <div>
-            To reach your goal of {userData.goalWeight} kg until {new Date(userData.goalDay).toLocaleDateString()}, you should take {userData.goalCal} Calories/day.
+            To reach your goal of {userData.goalWeight} kg until {new Date(userData.goalDate).toISOString().split("T")[0]}, you should take {userData.goalCal} Calories/day.
           </div>
         </div>
         <div className="flex justify-center m-10">

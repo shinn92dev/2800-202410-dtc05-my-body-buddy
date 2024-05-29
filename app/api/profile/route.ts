@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       ...profile.toObject(),
       name: userInfo.username,
-      goalDay: profile.goalDay ? profile.goalDay.toISOString().split("T")[0] : null,
+      goalDate: profile.goalDate ? profile.goalDate.toISOString().split("T")[0] : null,
     });
   } catch (error) {
     console.error("Error fetching profile:", error);
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
         height,
         weight,
         goalWeight,
-        goalDate: goalDate ? new Date(Date.UTC(new Date(goalDate).getFullYear(), new Date(goalDate).getMonth(), new Date(goalDate).getDate())) : null,
+        goalDate: goalDate ? new Date(goalDate) : null,
       },
       { upsert: true }
     );

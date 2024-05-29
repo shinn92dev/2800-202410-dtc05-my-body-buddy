@@ -12,13 +12,13 @@ export default async function handler(
 
   await connectMongoDB();
 
-  const { name, age, gender, height, weight, goalWeight, goalDay, goalCal } =
+  const { name, age, gender, height, weight, goalWeight, goalDate, goalCal } =
     req.body;
 
   try {
     const user = await UserModel.findOneAndUpdate(
       { username: name },
-      { age, gender, height, weight, goalWeight, goalDay, goalCal },
+      { age, gender, height, weight, goalWeight, goalDate, goalCal },
       { new: true, upsert: true }
     );
 

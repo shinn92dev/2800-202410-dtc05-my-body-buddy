@@ -30,8 +30,6 @@ const profileSchema = new Schema({
         type: Date,
         required: false,
     },
-}, {
-    timestamps: true, // Adds createdAt and updatedAt fields
 });
 
 profileSchema.path('goalWeight').validate(function(value) {

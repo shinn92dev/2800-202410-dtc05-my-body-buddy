@@ -14,8 +14,6 @@ const calorieSchema = new Schema({
     type: Number,
     required: true,
   },
-}, {
-  timestamps: true,
 });
 
 const Calorie = models.Calorie || model('Calorie', calorieSchema);

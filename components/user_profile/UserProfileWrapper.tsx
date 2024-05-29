@@ -11,7 +11,7 @@ export interface UserData {
   height: number;
   weight: number;
   goalWeight: number;
-  goalDay: Date;
+  goalDate: Date;
   goalCal: number;
 }
 
@@ -25,7 +25,7 @@ const UserProfileWrapper: React.FC = () => {
         const data = await response.json();
         setUserData({
           ...data,
-          goalDay: new Date(data.goalDay), // Ensure date is converted properly
+          goalDate: new Date(data.goalDate), // Ensure date is converted properly
         });
       } catch (error) {
         console.error("Error fetching user data:", error);

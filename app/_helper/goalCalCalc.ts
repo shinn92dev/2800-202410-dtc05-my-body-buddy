@@ -4,7 +4,7 @@ import { UserData } from "@/components/user_profile/UserProfile";
 export const goalCalCalc = (formData: UserData, setFormData: (value: React.SetStateAction<UserData>) => void) => {
   let goalCal = 0;
 
-  const goalPeriod = (new Date(formData.goalDay).getTime() - new Date().getTime()) / (1000 * 3600 * 24);
+  const goalPeriod = (new Date(formData.goalDate).getTime() - new Date().getTime()) / (1000 * 3600 * 24);
   const dailyCal = 2000; // Adjust based on age, gender, etc.
   const femaleBmr = 10 * formData.weight + 6.25 * formData.height - 5 * formData.age - 161;
   const maleBmr = 10 * formData.weight + 6.25 * formData.height - 5 * formData.age + 5;

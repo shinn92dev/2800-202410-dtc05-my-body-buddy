@@ -15,7 +15,7 @@ const UserProfileEditWrapper: React.FC = () => {
         const data = await response.json();
         setFormData({
           ...data,
-          goalDay: data.goalDay ? new Date(data.goalDay) : null,
+          goalDate: data.goalDate ? new Date(data.goalDate) : null,
         });
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -29,11 +29,11 @@ const UserProfileEditWrapper: React.FC = () => {
     if (!formData) return;
 
     const { name, value } = e.target;
-    if (name === "goalDay") {
+    if (name === "goalDate") {
       const newDate = new Date(value);
       setFormData((prevData) => ({
         ...prevData!,
-        goalDay: newDate,
+        goalDate: newDate,
       }));
     } else {
       setFormData((prevData) => ({
@@ -56,7 +56,7 @@ const UserProfileEditWrapper: React.FC = () => {
         },
         body: JSON.stringify({
           ...formData,
-          goalDay: formData.goalDay ? formData.goalDay.toISOString().split("T")[0] : null,
+          goalDate: formData.goalDate ? formData.goalDate.toISOString().split("T")[0] : null,
         }),
       });
       if (!res.ok) {
@@ -81,7 +81,7 @@ const UserProfileEditWrapper: React.FC = () => {
     return `${year}-${month}-${day}`;
   };
 
-  const goalDayValue = formatDate(formData.goalDay);
+  const goalDateValue = formatDate(formData.goalDate);
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col justify-center items-center">
@@ -138,8 +138,8 @@ const UserProfileEditWrapper: React.FC = () => {
               Target Date: <br />
               <input
                 type="date"
-                name="goalDay"
-                value={goalDayValue}
+                name="goalDate"
+                value={goalDateValue}
                 onChange={handleChange}
               />
             </div>
@@ -159,7 +159,7 @@ const UserProfileEditWrapper: React.FC = () => {
         <div className="bg-orange m-5 tracking-wide leading-8 font-semibold text-center w-2/3">
           <p className="text-4xl p-2">🚀</p>
           <div>
-            To reach your goal of {formData.goalWeight} kg until {goalDayValue}, you should take {formData.goalCal} Calories/day.
+            To reach your goal of {formData.goalWeight} kg until {goalDateValue}, you should take {formData.goalCal} Calories/day.
           </div>
         </div>
 
