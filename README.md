@@ -40,7 +40,7 @@ TBD
     </tr>
     <tr>
       <td align="center" width="150px"><a href=""><img src="/public/images/our_team/momo.jpeg" width="100px" alt=""/><br /><sub><b>Developer: <br />Momona Wada</b></sub></a><br /></td>
-      <td>Add your introduction here!</td>
+      <td>Hi🙌I'm Momona from Japan, now living in Vancouver. Recently, I lost 5kg due to some stressful time... BUT now I'm ready to start a healthier journey☘️ Want to join with me My Body Buddy? Let's get fit and healthy together!</td>
     </tr>
     <tr>
       <td align="center" width="150px"><a href=""><img src="/public/images/our_team/tatsunori.jpg" width="100px" alt=""/><br /><sub><b>Developer: <br />Tatsunori Marumo</b></sub></a><br /></td>
