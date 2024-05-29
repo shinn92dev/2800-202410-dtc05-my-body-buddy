@@ -85,11 +85,11 @@ export default function WorkoutSummary() {
     const [errorStatus, setErrorStatus] = useState<number | null>(null); 
     const [weeklyWorkouts, setWeeklyWorkouts] = useState<WorkoutType[]>([]);
     const [weekRange, setWeekRange] = useState<string>("");
-    const [monthlyAverageCalories, setMonthlyAverageCalories] = useState<number>(0); // Changed to monthly average
-    const [weeklyTotalCalories, setWeeklyTotalCalories] = useState<number>(0);
-    const [dailyTotalCalories, setDailyTotalCalories] = useState<number>(0);
+    const [monthlyAverageCalories, setMonthlyAverageCalories] = useState<number>(0); 
+    const [weeklyAverageCalories, setWeeklyAverageCalories] = useState<number>(0); 
+    const [dailyAverageCalories, setDailyAverageCalories] = useState<number>(0); 
     const [totalCalories, setTotalCalories] = useState<number>(0);
-    const maxCalories = 5000;
+    const maxCalories = 500;
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -121,13 +121,13 @@ export default function WorkoutSummary() {
             //             setWeekRange(`${weekDates[0]} to ${weekDates[6]}`);
 
             //             const weeklyCalories = calculateTotalCalories(weeklyWorkoutsData);
-            //             setWeeklyTotalCalories(weeklyCalories);
+            //             setWeeklyAverageCalories(Math.round(weeklyCalories / 7)); 
 
             //             const monthlyAverageCalories = calculateMonthlyAverageCalories(response.data.workouts, date);
             //             setMonthlyAverageCalories(monthlyAverageCalories);
 
             //             const dailyCalories = calculateDailyCalories(response.data.workouts, date);
-            //             setDailyTotalCalories(dailyCalories);
+            //             setDailyAverageCalories(Math.round(dailyCalories / 1)); 
 
             //             const totalCalories = calculateTotalCalories(response.data.workouts);
             //             setTotalCalories(totalCalories);
@@ -160,13 +160,13 @@ export default function WorkoutSummary() {
             setWeekRange(`${weekDates[0]} to ${weekDates[6]}`);
 
             const weeklyCalories = calculateTotalCalories(weeklyWorkoutsData);
-            setWeeklyTotalCalories(weeklyCalories);
+            setWeeklyAverageCalories(Math.round(weeklyCalories / 7)); 
 
             const monthlyAverageCalories = calculateMonthlyAverageCalories(mockWorkoutsData.workouts, date);
             setMonthlyAverageCalories(monthlyAverageCalories);
 
             const dailyCalories = calculateDailyCalories(mockWorkoutsData.workouts, date);
-            setDailyTotalCalories(dailyCalories);
+            setDailyAverageCalories(Math.round(dailyCalories / 1)); 
 
             const totalCalories = calculateTotalCalories(mockWorkoutsData.workouts);
             setTotalCalories(totalCalories);
@@ -210,6 +210,14 @@ export default function WorkoutSummary() {
         return calculateTotalCalories(dailyWorkouts);
     };
 
+    const getMonthName = (monthIndex: number) => {
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        return monthNames[monthIndex];
+    };
+
+    const selectedMonth = new Date(date).getMonth();
+    const selectedMonthName = getMonthName(selectedMonth);
+
     return (
         <div>
             <TopCalendar onDateSelect={(date) => handleDateSelect(date, setDate)} />
@@ -224,20 +232,20 @@ export default function WorkoutSummary() {
                 dietUnderline="underline decoration-gray-300"
             />
             <div className="text-center">
-                <AverageCalorieBanner title="Total calories burned from:" range={weekRange} />
+                <AverageCalorieBanner title="Average calories burned from:" range={weekRange} />
                 <BarGraph
-                    label="Monthly average"
+                    label={`Monthly Average (${selectedMonthName})`}
                     value={monthlyAverageCalories}
                     maxValue={maxCalories}
                 />
                 <BarGraph
-                    label="Weekly total"
-                    value={weeklyTotalCalories}
+                    label="Weekly Average"
+                    value={weeklyAverageCalories}
                     maxValue={maxCalories}
                 />
                 <BarGraph
-                    label="Daily total"
-                    value={dailyTotalCalories}
+                    label="Daily Average"
+                    value={dailyAverageCalories}
                     maxValue={maxCalories}
                 />
             </div>

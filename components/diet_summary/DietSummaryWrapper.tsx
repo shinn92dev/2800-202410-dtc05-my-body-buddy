@@ -190,7 +190,7 @@ export default function DietSummaryWrapper() {
     const averageLunchCalories = calculateAverageCalories("lunch");
     const averageDinnerCalories = calculateAverageCalories("dinner");
     const averageSnackCalories = calculateAverageCalories("snacks");
-    const maxCalories = 5000;
+    const maxCalories = 3000;
 
     return (
         <div>
@@ -209,27 +209,27 @@ export default function DietSummaryWrapper() {
                 {/* <ScoreCircleBarWrapper score={80} percent={80} /> */}
                 <AverageCalorieBanner title="Average Calories intake from" range={weekRange} />
                 <BarGraph
-                    label="Average daily"
+                    label="Daily Average"
                     value={averageDailyCalories}
                     maxValue={maxCalories}
                 />
                 <BarGraph
-                    label="Average Breakfast"
+                    label="Breakfast Average"
                     value={averageBreakfastCalories}
                     maxValue={maxCalories}
                 />
                 <BarGraph
-                    label="Average lunch"
+                    label="Lunch Average"
                     value={averageLunchCalories}
                     maxValue={maxCalories}
                 />
                 <BarGraph
-                    label="Average dinner"
+                    label="Dinner Average"
                     value={averageDinnerCalories}
                     maxValue={maxCalories}
                 />
                 <BarGraph
-                    label="Average snacks"
+                    label="Snacks Average"
                     value={averageSnackCalories}
                     maxValue={maxCalories}
                 />
