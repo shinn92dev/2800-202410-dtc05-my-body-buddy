@@ -239,6 +239,14 @@ const WorkoutHomeWrapper: React.FC = () => {
                         )}
                     </div>
                     <div className="flex justify-center mt-4">
+                        <button
+                            // TODO: ADD ON CLICK EVENT
+                            className="text-2xl text-gray-500 hover:text-gray-700 font-semibold"
+                        >
+                            +
+                        </button>
+                    </div>
+                    <div className="flex justify-center mt-4">
                         <AskAiButton
                             forText={"Alternative"}
                             icon={
