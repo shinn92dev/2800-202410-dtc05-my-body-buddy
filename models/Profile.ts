@@ -35,11 +35,13 @@ const profileSchema = new Schema({
 });
 
 profileSchema.path('goalWeight').validate(function(value) {
-    return (value && this.goalDate) || (!value && !this.goalDate);
+    // Both should be either set or unset
+    return (value != null && this.goalDate != null) || (value == null && this.goalDate == null);
 }, 'Both goalWeight and goalDate must be set together or both unset.');
 
 profileSchema.path('goalDate').validate(function(value) {
-    return (value && this.goalWeight) || (!value && !this.goalWeight);
+    // Both should be either set or unset
+    return (value != null && this.goalWeight != null) || (value == null && this.goalWeight == null);
 }, 'Both goalWeight and goalDate must be set together or both unset.');
 
 const Profile = models.Profile || model('Profile', profileSchema);

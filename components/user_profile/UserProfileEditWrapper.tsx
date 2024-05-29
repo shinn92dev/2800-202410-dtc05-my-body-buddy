@@ -1,31 +1,52 @@
-// components/user_profile/UserProfileEditWrapper.tsx
 "use client";
 
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useState } from "react";
-import { UserData } from "@/components/user_profile/UserProfile";
+import { UserData } from "@/components/user_profile/UserProfileWrapper";
 import { goalCalCalc } from "@/app/_helper/goalCalCalc";
 
-interface UserProfileEditWrapperProps {
-  userData: UserData;
-}
+const UserProfileEditWrapper: React.FC = () => {
+  const [formData, setFormData] = useState<UserData | null>(null);
 
-export default function UserProfileEditWrapper({ userData }: UserProfileEditWrapperProps) {
-  const [formData, setFormData] = useState<UserData>({
-    ...userData,
-    goalDay: new Date(userData.goalDay) // Ensure date is converted properly
-  });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/profile");
+        const data = await response.json();
+        setFormData({
+          ...data,
+          goalDay: data.goalDay ? new Date(data.goalDay) : null,
+        });
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!formData) return;
+
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: name === "goalDay" ? new Date(value) : value,
-    }));
+    if (name === "goalDay") {
+      const newDate = new Date(value);
+      setFormData((prevData) => ({
+        ...prevData!,
+        goalDay: newDate,
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData!,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!formData) return;
+
     goalCalCalc(formData, setFormData); // Calculate the goal calories before saving
     try {
       const res = await fetch("/api/profile", {
@@ -33,7 +54,10 @@ export default function UserProfileEditWrapper({ userData }: UserProfileEditWrap
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          goalDay: formData.goalDay ? formData.goalDay.toISOString().split("T")[0] : null,
+        }),
       });
       if (!res.ok) {
         throw new Error("Error updating user data");
@@ -44,6 +68,20 @@ export default function UserProfileEditWrapper({ userData }: UserProfileEditWrap
       console.error("Error updating user data:", error);
     }
   };
+
+  if (!formData) {
+    return <div>Loading...</div>;
+  }
+
+  const formatDate = (date: Date | null) => {
+    if (!date) return '';
+    const year = date.getUTCFullYear();
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(date.getUTCDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const goalDayValue = formatDate(formData.goalDay);
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col justify-center items-center">
@@ -101,7 +139,7 @@ export default function UserProfileEditWrapper({ userData }: UserProfileEditWrap
               <input
                 type="date"
                 name="goalDay"
-                value={formData.goalDay.toISOString().split('T')[0]}
+                value={goalDayValue}
                 onChange={handleChange}
               />
             </div>
@@ -121,7 +159,7 @@ export default function UserProfileEditWrapper({ userData }: UserProfileEditWrap
         <div className="bg-orange m-5 tracking-wide leading-8 font-semibold text-center w-2/3">
           <p className="text-4xl p-2">🚀</p>
           <div>
-            To reach your goal of {formData.goalWeight} kg until {formData.goalDay.toLocaleDateString()}, you should take {formData.goalCal} Calories/day.
+            To reach your goal of {formData.goalWeight} kg until {goalDayValue}, you should take {formData.goalCal} Calories/day.
           </div>
         </div>
 
@@ -129,11 +167,13 @@ export default function UserProfileEditWrapper({ userData }: UserProfileEditWrap
           <button type="submit" className="bg-dark-blue rounded-md px-3 py-2 text-beige">
             Save
           </button>
-          <Link className="bg-dark-blue rounded-md px-3 py-2 text-beige" href={`/user/${userData.name}`}>
+          <Link className="bg-dark-blue rounded-md px-3 py-2 text-beige" href={`/user`}>
             Done
           </Link>
         </div>
       </div>
     </form>
   );
-}
+};
+
+export default UserProfileEditWrapper;

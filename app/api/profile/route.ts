@@ -1,44 +1,62 @@
-// pages/api/profile.ts
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "@/config/db";
 import Profile from "@/models/Profile";
+import UserModel from "@/models/User";
+import { currentUser } from "@clerk/nextjs/server";
+
+export async function GET(req: NextRequest) {
+  await connectMongoDB();
+  const user = await currentUser();
+  if (!user) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const profile = await Profile.findOne({ userId: user.id });
+    if (!profile) {
+      return NextResponse.json({ message: "Profile not found" }, { status: 404 });
+    }
+    const userInfo = await UserModel.findOne({ userId: user.id });
+    if (!userInfo) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+    return NextResponse.json({
+      ...profile.toObject(),
+      name: userInfo.username,
+      goalDay: profile.goalDay ? profile.goalDay.toISOString().split("T")[0] : null,
+    });
+  } catch (error) {
+    console.error("Error fetching profile:", error);
+    return NextResponse.json({ message: "Error fetching profile" }, { status: 500 });
+  }
+}
 
 export async function POST(req: NextRequest) {
   await connectMongoDB();
+  const user = await currentUser();
+  if (!user) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
 
   try {
-    const { userId, age, gender, height, weight, goalWeight, goalDate } = await req.json();
+    const { age, gender, height, weight, goalWeight, goalDate } = await req.json();
 
-    if (!userId) {
-      return NextResponse.json(
-        { message: "Missing required parameter: userId" },
-        { status: 400 }
-      );
-    }
-
-    // Update or insert profile information
     await Profile.updateOne(
-      { userId },
+      { userId: user.id },
       {
         age,
         gender,
         height,
         weight,
         goalWeight,
-        goalDate,
+        goalDate: goalDate ? new Date(Date.UTC(new Date(goalDate).getFullYear(), new Date(goalDate).getMonth(), new Date(goalDate).getDate())) : null,
       },
       { upsert: true }
     );
 
-    return NextResponse.json(
-      { message: "Profile info added/updated successfully" },
-      { status: 201 }
-    );
+    return NextResponse.json({ message: "Profile info added/updated successfully" }, { status: 201 });
   } catch (error) {
     console.error("Error editing profile:", error);
-    return NextResponse.json(
-      { message: "Error editing profile info" },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: "Error editing profile info" }, { status: 500 });
   }
 }

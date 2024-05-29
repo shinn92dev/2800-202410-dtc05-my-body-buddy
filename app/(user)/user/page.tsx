@@ -4,6 +4,6 @@ export const metadata = {
   title: "User Profile",
 };
 
-export default async function UserProfilePage() {
+export default function UserProfilePage() {
   return <UserProfileWrapper />;
 }

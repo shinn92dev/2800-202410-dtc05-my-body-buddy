@@ -1,19 +1,8 @@
-// components/user_profile/UserProfile.tsx
 "use client";
 
 import Link from "next/link";
 import React from "react";
-
-export interface UserData {
-  name: string;
-  age: number;
-  gender: string;
-  height: number;
-  weight: number;
-  goalWeight: number;
-  goalDay: Date;
-  goalCal: number;
-}
+import { UserData } from "@/components/user_profile/UserProfileWrapper";
 
 interface UserProfileProps {
   userData: UserData | null;
@@ -49,7 +38,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ userData }) => {
           </div>
         </div>
         <div className="flex justify-center m-10">
-          <Link href={`/user/${userData.name}/edit`} className="bg-dark-blue rounded-md px-3 py-2 text-beige">
+          <Link href={`/user/edit`} className="bg-dark-blue rounded-md px-3 py-2 text-beige">
             Edit
           </Link>
         </div>
