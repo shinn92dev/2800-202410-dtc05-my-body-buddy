@@ -5,8 +5,8 @@ export const metadata = {
     title: "Diet Summary",
 };
 
-export default function DietSummary() {
-    authenticateUser();
+export default async function DietSummary() {
+    await authenticateUser();
     return (
         <div className="flex flex-col w-full">
             <DietSummaryWrapper />

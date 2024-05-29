@@ -5,8 +5,8 @@ export const metadata = {
     title: "Workout Summary",
 };
 
-export default function WorkoutSummary() {
-    authenticateUser();
+export default async function WorkoutSummary() {
+    await authenticateUser();
     return (
         <div className="flex flex-col w-full">
             <WorkoutSummaryWrapper />

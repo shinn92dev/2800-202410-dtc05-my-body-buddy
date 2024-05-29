@@ -6,9 +6,7 @@ export const metadata = {
 };
 
 export default async function DietHome() {
-    authenticateUser();
-
-    const tempFunc = (date: Date) => console.log();
+    await authenticateUser();
 
     return (
         <div className="flex flex-col w-full">
