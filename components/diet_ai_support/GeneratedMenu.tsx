@@ -9,16 +9,10 @@ import Image from "next/image";
 
 type GeneratedMenuProps = {
     generatedMenu: string;
+    onRegenerate?:() => void;
 };
 
-const GeneratedMenu: React.FC<GeneratedMenuProps> = ({ generatedMenu }) => {
-    // const formattedGeneratedMenu = generatedMenu.split('\n').map((line, index) => (
-    //     <span key={index}>
-    //         {line}
-    //         <br />
-    //     </span>
-    // ));
-
+const GeneratedMenu: React.FC<GeneratedMenuProps> = ({ generatedMenu , onRegenerate}) => {
     return (
         <div>
             <div className="flex flex-col items-start p-2">
@@ -28,7 +22,14 @@ const GeneratedMenu: React.FC<GeneratedMenuProps> = ({ generatedMenu }) => {
                     </div>
                     <div className="relative speech-bubble-ai bg-beige p-4 rounded-lg">
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>{generatedMenu}</ReactMarkdown>
-                        {/*<span>{formattedGeneratedMenu}</span>*/}
+                        <div className="flex justify-center pt-2">
+                            <button
+                                onClick={onRegenerate}
+                                className="px-4 py-2 bg-gray-500 text-white rounded-full"
+                            >
+                                ↻ Regenerate
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

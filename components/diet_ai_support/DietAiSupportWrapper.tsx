@@ -40,6 +40,31 @@ const DietAiSupportWrapper: React.FC = () => {
         setIsLoading(false);
     };
 
+    const handleRegenerate = async () => {
+        setGenerated(true);
+        setIsLoading(true);
+
+        // Call the API to generate the diet plan
+        const response = await fetch('/api/generate-diet-plan', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(preferences),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data.result);
+            setGeneratedMenu(data.result);
+        } else {
+            console.error('Failed to generate diet plan');
+            setGeneratedMenu('Failed to generate diet plan');
+        }
+
+        setIsLoading(false);
+    };
+
     const initialMessageTitle: string = "Hi! I'm BODY BUDDY AI.";
     const initialMessageBody: string = "I'll suggest a menu that includes the nutrients you should be taking.\n\nPlease fill out your preferences in the form below.";
 
@@ -50,7 +75,7 @@ const DietAiSupportWrapper: React.FC = () => {
             {preferences && <PreferencesSummary preferences={preferences} />}
             {generated && <AiLines messageBody={"Generating meal menus that meet your preferences..."}/>}
             {(generated && isLoading) && <LoadingAnimation/>}
-            {(generated && !isLoading) && <GeneratedMenu generatedMenu={generatedMenu} />}
+            {(generated && !isLoading) && <GeneratedMenu generatedMenu={generatedMenu} onRegenerate={handleRegenerate}/>}
         </div>
     );
 };
