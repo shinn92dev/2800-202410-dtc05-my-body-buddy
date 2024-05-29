@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       ...profile.toObject(),
       name: userInfo.username,
-      goalDate: profile.goalDate ? profile.goalDate.toISOString().split("T")[0] : null,
+      targetDate: profile.targetDate ? profile.targetDate.toISOString().split("T")[0] : null,
     });
   } catch (error) {
     console.error("Error fetching profile:", error);
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { age, gender, height, weight, goalWeight, goalDate } = await req.json();
+    const { age, gender, height, weight, targetWeight, targetDate } = await req.json();
 
     await Profile.updateOne(
       { userId: user.id },
@@ -48,8 +48,8 @@ export async function POST(req: NextRequest) {
         gender,
         height,
         weight,
-        goalWeight,
-        goalDate: goalDate ? new Date(goalDate) : null,
+        targetWeight,
+        targetDate: targetDate ? new Date(targetDate) : null,
       },
       { upsert: true }
     );

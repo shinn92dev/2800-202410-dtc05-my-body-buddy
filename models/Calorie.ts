@@ -14,6 +14,10 @@ const calorieSchema = new Schema({
     type: Number,
     required: true,
   },
+  activityLevel: {
+    type: Number,
+    required: true,
+  },
 });
 
 const Calorie = models.Calorie || model('Calorie', calorieSchema);

@@ -22,25 +22,25 @@ const profileSchema = new Schema({
         type: Number,
         required: true,
     },
-    goalWeight: {
+    targetWeight: {
         type: Number,
         required: false,
     },
-    goalDate: {
+    targetDate: {
         type: Date,
         required: false,
     },
 });
 
-profileSchema.path('goalWeight').validate(function(value) {
+profileSchema.path('targetWeight').validate(function(value) {
     // Both should be either set or unset
-    return (value != null && this.goalDate != null) || (value == null && this.goalDate == null);
-}, 'Both goalWeight and goalDate must be set together or both unset.');
+    return (value != null && this.targetDate != null) || (value == null && this.targetDate == null);
+}, 'Both targetWeight and targetDate must be set together or both unset.');
 
-profileSchema.path('goalDate').validate(function(value) {
+profileSchema.path('targetDate').validate(function(value) {
     // Both should be either set or unset
-    return (value != null && this.goalWeight != null) || (value == null && this.goalWeight == null);
-}, 'Both goalWeight and goalDate must be set together or both unset.');
+    return (value != null && this.targetWeight != null) || (value == null && this.targetWeight == null);
+}, 'Both targetWeight and targetDate must be set together or both unset.');
 
 const Profile = models.Profile || model('Profile', profileSchema);
 

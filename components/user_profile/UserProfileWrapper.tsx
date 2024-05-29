@@ -10,14 +10,15 @@ export interface UserData {
   gender: string;
   height: number;
   weight: number;
-  goalWeight: number;
-  goalDate: Date;
-  goalCal: number;
+  targetWeight?: number;
+  targetDate?: Date | null;
+  targetCaloriesIntake: number;
+  targetCaloriesBurn: number;
 }
 
 const UserProfileWrapper: React.FC = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -25,7 +26,7 @@ const UserProfileWrapper: React.FC = () => {
         const data = await response.json();
         setUserData({
           ...data,
-          goalDate: new Date(data.goalDate), // Ensure date is converted properly
+          targetDate: data.targetDate ? new Date(data.targetDate) : null, // Ensure date is converted properly
         });
       } catch (error) {
         console.error("Error fetching user data:", error);

@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { UserData } from "@/components/user_profile/UserProfileWrapper";
-import { goalCalCalc } from "@/app/_helper/goalCalCalc";
 
 const UserProfileEditWrapper: React.FC = () => {
   const [formData, setFormData] = useState<UserData | null>(null);
@@ -15,7 +14,7 @@ const UserProfileEditWrapper: React.FC = () => {
         const data = await response.json();
         setFormData({
           ...data,
-          goalDate: data.goalDate ? new Date(data.goalDate) : null,
+          targetDate: data.targetDate ? new Date(data.targetDate) : null,
         });
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -29,11 +28,11 @@ const UserProfileEditWrapper: React.FC = () => {
     if (!formData) return;
 
     const { name, value } = e.target;
-    if (name === "goalDate") {
+    if (name === "targetDate") {
       const newDate = new Date(value);
       setFormData((prevData) => ({
         ...prevData!,
-        goalDate: newDate,
+        targetDate: newDate,
       }));
     } else {
       setFormData((prevData) => ({
@@ -47,7 +46,6 @@ const UserProfileEditWrapper: React.FC = () => {
     e.preventDefault();
     if (!formData) return;
 
-    goalCalCalc(formData, setFormData); // Calculate the goal calories before saving
     try {
       const res = await fetch("/api/profile", {
         method: "POST",
@@ -56,7 +54,7 @@ const UserProfileEditWrapper: React.FC = () => {
         },
         body: JSON.stringify({
           ...formData,
-          goalDate: formData.goalDate ? formData.goalDate.toISOString().split("T")[0] : null,
+          targetDate: formData.targetDate ? formData.targetDate.toISOString().split("T")[0] : null,
         }),
       });
       if (!res.ok) {
@@ -73,7 +71,7 @@ const UserProfileEditWrapper: React.FC = () => {
     return <div>Loading...</div>;
   }
 
-  const formatDate = (date: Date | null) => {
+  const formatDate = (date: Date | null | undefined) => {
     if (!date) return '';
     const year = date.getUTCFullYear();
     const month = String(date.getUTCMonth() + 1).padStart(2, '0');
@@ -81,7 +79,7 @@ const UserProfileEditWrapper: React.FC = () => {
     return `${year}-${month}-${day}`;
   };
 
-  const goalDateValue = formatDate(formData.goalDate);
+  const targetDateValue = formatDate(formData.targetDate);
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col justify-center items-center">
@@ -138,8 +136,8 @@ const UserProfileEditWrapper: React.FC = () => {
               Target Date: <br />
               <input
                 type="date"
-                name="goalDate"
-                value={goalDateValue}
+                name="targetDate"
+                value={targetDateValue}
                 onChange={handleChange}
               />
             </div>
@@ -147,8 +145,8 @@ const UserProfileEditWrapper: React.FC = () => {
               Target Weight: <br />
               <input
                 type="number"
-                name="goalWeight"
-                value={formData.goalWeight}
+                name="targetWeight"
+                value={formData.targetWeight}
                 onChange={handleChange}
               />{" "}
               <br /> kg
@@ -159,7 +157,7 @@ const UserProfileEditWrapper: React.FC = () => {
         <div className="bg-orange m-5 tracking-wide leading-8 font-semibold text-center w-2/3">
           <p className="text-4xl p-2">🚀</p>
           <div>
-            To reach your goal of {formData.goalWeight} kg until {goalDateValue}, you should take {formData.goalCal} Calories/day.
+            To reach your goal of {formData.targetWeight} kg until {targetDateValue}, you should take {formData.targetCaloriesIntake} kcal/day and burn {formData.targetCaloriesBurn} kcal/day.
           </div>
         </div>
 
