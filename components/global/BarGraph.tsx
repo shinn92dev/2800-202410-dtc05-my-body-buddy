@@ -1,3 +1,4 @@
+import { max } from 'date-fns';
 import React from 'react';
 
 type BarGraphProps = {
@@ -7,7 +8,8 @@ type BarGraphProps = {
 };
 
 const BarGraph: React.FC<BarGraphProps> = ({ label, value, maxValue }) => {
-    const percentage = (value / maxValue) * 100;
+    const percentage = Math.min((value / maxValue) * 100, 100);
+    const barColor = value > maxValue ? "bg-red-500" : "bg-logo-pumpkin";
 
     return (
         <div className="w-full mb-4 px-8">
@@ -19,7 +21,7 @@ const BarGraph: React.FC<BarGraphProps> = ({ label, value, maxValue }) => {
                 {value === 0 ? (
                     <div className="bg-gray-300 h-full rounded"></div>
                 ) : (
-                    <div className="bg-logo-pumpkin h-full rounded" style={{ width: `${percentage}%` }}></div>
+                    <div className={`${barColor} h-full rounded`} style={{ width: `${percentage}%` }}></div>
                 )}
             </div>
         </div>
