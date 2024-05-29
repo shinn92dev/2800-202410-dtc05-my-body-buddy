@@ -17,19 +17,19 @@ const categories = [
 
 // Workout item options data
 const workoutItemOptions = [
-    { category: "Walking", name: "Walking", recordOptions: [{ unit: "min", kcalPerUnit: 3.5 }, { unit: "km", kcalPerUnit: 70 }] },
-    { category: "Running", name: "Running", recordOptions: [{ unit: "min", kcalPerUnit: 7.5 }, { unit: "km", kcalPerUnit: 100 }] },
-    { category: "Cycling", name: "Cycling", recordOptions: [{ unit: "min", kcalPerUnit: 4.5 }, { unit: "km", kcalPerUnit: 30 }] },
-    { category: "Gym training", name: "Push-ups", recordOptions: [{ unit: "min", kcalPerUnit: 1.6 }, { unit: "reps", kcalPerUnit: 0.32 }] },
-    { category: "Gym training", name: "Crunches", recordOptions: [{ unit: "min", kcalPerUnit: 0.8 }, { unit: "reps", kcalPerUnit: 0.16 }] },
-    { category: "Other sports", name: "Swimming", recordOptions: [{ unit: "min", kcalPerUnit: 2.4 }, { unit: "m", kcalPerUnit: 0.08 }] },
-    { category: "Other sports", name: "Basketball", recordOptions: [{ unit: "min", kcalPerUnit: 2.8 }] },
-    { category: "Other sports", name: "Soccer", recordOptions: [{ unit: "min", kcalPerUnit: 2.4 }] },
-    { category: "Other sports", name: "Tennis", recordOptions: [{ unit: "min", kcalPerUnit: 2.4 }] },
-    { category: "Other sports", name: "Volleyball", recordOptions: [{ unit: "min", kcalPerUnit: 1.5 }] },
-    { category: "Table tennis", recordOptions: [{ unit: "min", kcalPerUnit: 1.5 }] },
-    { category: "Badminton", recordOptions: [{ unit: "min", kcalPerUnit: 2.8 }] },
-    { category: "Baseball", recordOptions: [{ unit: "min", kcalPerUnit: 1.0 }] }
+    { category: "Walking", name: "Walking", recordOptions: [{ unit: "min", kcalPerUnit: 3.5, quantity: 10 }, { unit: "km", kcalPerUnit: 70, quantity: 1 }] },
+    { category: "Running", name: "Running", recordOptions: [{ unit: "min", kcalPerUnit: 7.5, quantity: 10 }, { unit: "km", kcalPerUnit: 100, quantity: 1 }] },
+    { category: "Cycling", name: "Cycling", recordOptions: [{ unit: "min", kcalPerUnit: 4.5, quantity: 10 }, { unit: "km", kcalPerUnit: 30, quantity: 1 }] },
+    { category: "Gym training", name: "Push-ups", recordOptions: [{ unit: "min", kcalPerUnit: 1.6, quantity: 10 }, { unit: "reps", kcalPerUnit: 0.32, quantity: 10 }] },
+    { category: "Gym training", name: "Crunches", recordOptions: [{ unit: "min", kcalPerUnit: 0.8, quantity: 10 }, { unit: "reps", kcalPerUnit: 0.16, quantity: 10 }] },
+    { category: "Other sports", name: "Swimming", recordOptions: [{ unit: "min", kcalPerUnit: 2.4, quantity: 10 }, { unit: "m", kcalPerUnit: 0.08, quantity: 100 }] },
+    { category: "Other sports", name: "Basketball", recordOptions: [{ unit: "min", kcalPerUnit: 2.8, quantity: 10 }] },
+    { category: "Other sports", name: "Soccer", recordOptions: [{ unit: "min", kcalPerUnit: 2.4, quantity: 10 }] },
+    { category: "Other sports", name: "Tennis", recordOptions: [{ unit: "min", kcalPerUnit: 2.4, quantity: 10 }] },
+    { category: "Other sports", name: "Volleyball", recordOptions: [{ unit: "min", kcalPerUnit: 1.5, quantity: 10 }] },
+    { category: "Table tennis", recordOptions: [{ unit: "min", kcalPerUnit: 1.5, quantity: 10 }] },
+    { category: "Badminton", recordOptions: [{ unit: "min", kcalPerUnit: 2.8, quantity: 10 }] },
+    { category: "Baseball", recordOptions: [{ unit: "min", kcalPerUnit: 1.0, quantity: 10 }] }
 ];
 
 export default function WorkoutAddingWrapper() {
@@ -37,7 +37,7 @@ export default function WorkoutAddingWrapper() {
     const [searchQuery, setSearchQuery] = useState<string>(""); // State to track search query
     const [selectedItem, setSelectedItem] = useState<any>(() => {
         const item = workoutItemOptions.find(option => option.category === "Walking");
-        return item ? { ...item, id: uuidv4(), selectedOption: { ...item.recordOptions[0], quantity: 10 } } : null;
+        return item ? { ...item, id: uuidv4(), selectedOption: item.recordOptions[0] } : null;
     });
     const [draftedItems, setDraftedItems] = useState<any[]>([]); // State to track drafted items
     const router = useRouter(); // Router for navigation
@@ -56,7 +56,7 @@ export default function WorkoutAddingWrapper() {
         if (categoryName === "Walking" || categoryName === "Running" || categoryName === "Cycling") {
             const item = workoutItemOptions.find(option => option.category === categoryName);
             if (item) {
-                setSelectedItem({ ...item, id: uuidv4(), selectedOption: { ...item.recordOptions[0], quantity: 10 } });
+                setSelectedItem({ ...item, id: uuidv4(), selectedOption: item.recordOptions[0] });
             }
         }
     };
@@ -70,21 +70,27 @@ export default function WorkoutAddingWrapper() {
     const handleItemClick = (itemName: string) => {
         const item = workoutItemOptions.find(option => option.name === itemName);
         if (item) {
-            setSelectedItem({ ...item, id: uuidv4(), selectedOption: { ...item.recordOptions[0], quantity: 10 } });
+            setSelectedItem({ ...item, id: uuidv4(), selectedOption: item.recordOptions[0] });
         }
     };
 
     // Handle option change event
     const handleOptionChange = (selectedOption: any) => {
         if (selectedItem) {
-            setSelectedItem({ ...selectedItem, selectedOption: { ...selectedOption, quantity: selectedItem.selectedOption.quantity } });
+            setSelectedItem({ ...selectedItem, selectedOption });
         }
     };
 
     // Handle quantity change event
-    const handleQuantityChange = (newQuantity: number) => {
+    const handleQuantityChange = (unit: string, newQuantity: number) => {
         if (selectedItem) {
-            setSelectedItem({ ...selectedItem, selectedOption: { ...selectedItem.selectedOption, quantity: newQuantity } });
+            const updatedRecordOptions = selectedItem.recordOptions.map((option: any) => {
+                if (option.unit === unit) {
+                    return { ...option, quantity: newQuantity };
+                }
+                return option;
+            });
+            setSelectedItem({ ...selectedItem, recordOptions: updatedRecordOptions, selectedOption: { ...selectedItem.selectedOption, quantity: newQuantity } });
         }
     };
 
@@ -161,14 +167,14 @@ export default function WorkoutAddingWrapper() {
                             <span className="mr-2">{option.unit}</span>
                             <input
                                 type="number"
-                                value={selectedItem.selectedOption.unit === option.unit ? selectedItem.selectedOption.quantity : 10}
-                                onChange={(e) => handleQuantityChange(parseInt(e.target.value))}
+                                value={option.quantity}
+                                onChange={(e) => handleQuantityChange(option.unit, parseInt(e.target.value))}
                                 className={`mr-2 p-1 border border-gray-300 rounded w-16 ${option.unit !== selectedItem.selectedOption.unit ? "text-gray-400" : ""}`}
                                 disabled={option.unit !== selectedItem.selectedOption.unit}
                             />
                             <span className={`${option.unit !== selectedItem.selectedOption.unit ? "text-gray-400" : ""}`}>{option.unit}</span>
                             <span className={`ml-auto ${option.unit !== selectedItem.selectedOption.unit ? "text-gray-400" : ""}`}>
-                                {(selectedItem.selectedOption.unit === option.unit ? selectedItem.selectedOption.quantity : 10) * option.kcalPerUnit} kcal
+                                {(option.quantity * option.kcalPerUnit).toFixed(0)} kcal
                             </span>
                         </div>
                     ))}
