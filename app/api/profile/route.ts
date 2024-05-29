@@ -1,7 +1,7 @@
+// pages/api/profile.ts
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "@/config/db";
-import User from "@/models/User";
-import Profile from "@/models/Profile"; 
+import Profile from "@/models/Profile";
 
 export async function POST(req: NextRequest) {
   await connectMongoDB();

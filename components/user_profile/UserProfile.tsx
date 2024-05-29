@@ -1,6 +1,8 @@
+// components/user_profile/UserProfile.tsx
 "use client";
 
 import Link from "next/link";
+import React from "react";
 
 export interface UserData {
   name: string;
@@ -19,14 +21,11 @@ interface UserProfileProps {
 
 const UserProfile: React.FC<UserProfileProps> = ({ userData }) => {
   if (!userData) {
-    return <h2 className="text-center font-bold">user not found</h2>;
+    return <h2 className="text-center font-bold">User not found</h2>;
   } else {
     return (
       <div className="flex flex-col items-center">
-        <div
-          id="basic-info"
-          className="bg-orange m-5 tracking-wide leading-8 font-semibold text-center w-2/3"
-        >
+        <div className="bg-orange m-5 tracking-wide leading-8 font-semibold text-center w-2/3">
           <p className="text-4xl p-2">👤</p>
           <div>
             <div>Name: {userData.name}</div>
@@ -34,38 +33,23 @@ const UserProfile: React.FC<UserProfileProps> = ({ userData }) => {
             <div>Gender: {userData.gender}</div>
             <div>Height: {userData.height} cm</div>
             <div>Weight: {userData.weight} kg</div>
-            <br />
           </div>
         </div>
-        <div
-          id="goal-info"
-          className="bg-orange m-5 tracking-wide leading-8 font-semibold text-center w-2/3"
-        >
+        <div className="bg-orange m-5 tracking-wide leading-8 font-semibold text-center w-2/3">
           <p className="text-4xl p-2">🎯</p>
           <div>
-            <div>Target Date: {userData.goalDay}</div>
+            <div>Target Date: {new Date(userData.goalDay).toLocaleDateString()}</div>
             <div>Target Weight: {userData.goalWeight} kg</div>
           </div>
-          <br />
         </div>
-        <div
-          id="calorie-info"
-          className="bg-orange m-5 tracking-wide leading-8 font-semibold text-center w-2/3"
-        >
+        <div className="bg-orange m-5 tracking-wide leading-8 font-semibold text-center w-2/3">
           <p className="text-4xl p-2">🚀</p>
           <div>
-            To reach your goal of {userData.goalWeight} kg <br />
-            until {userData.goalDay}, <br />
-            you should take: <br />
-            {userData.goalCal} Calories/day
+            To reach your goal of {userData.goalWeight} kg until {new Date(userData.goalDay).toLocaleDateString()}, you should take {userData.goalCal} Calories/day.
           </div>
-          <br />
         </div>
         <div className="flex justify-center m-10">
-          <Link
-            href={`/user/${userData.name}/edit`}
-            className="bg-dark-blue rounded-md px-3 py-2 text-beige"
-          >
+          <Link href={`/user/${userData.name}/edit`} className="bg-dark-blue rounded-md px-3 py-2 text-beige">
             Edit
           </Link>
         </div>
