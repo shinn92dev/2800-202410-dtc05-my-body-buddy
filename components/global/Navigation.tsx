@@ -101,10 +101,10 @@ export default function Navigation() {
         </button>
 
         {!isLoading ? (
-          <Link href={`/user/`} onClick={toggleHBGmenu}>
+          <Link href={`/profile/`} onClick={toggleHBGmenu}>
             <li
               className={`text-white text-center font-bold py-2 px-4 rounded-full m-2 ${
-                path === `/user/`
+                path === `/profile/`
                   ? "bg-blue-500 hover:bg-blue-700"
                   : "bg-gray-500 hover:bg-gray-700"
               }`}
