@@ -4,7 +4,6 @@ import { connectMongoDB } from "@/config/db";
 
 export async function POST(req: any) {
     const data = await req.json();
-    console.log(data);
     const { userId, date, selectedItems, newWorkout } = data.params;
     const deleteTargetWorkout = selectedItems.map((workout) => ({
         name: workout.name,
@@ -15,8 +14,6 @@ export async function POST(req: any) {
     newWorkout.forEach((workout) => {
         workout.achieved = false;
     });
-    console.log(newWorkout);
-    console.log(deleteTargetWorkout, "DELETE TARGET WORKOUT");
     if (!userId || !date || !selectedItems || !newWorkout) {
         return NextResponse.json(
             { message: "Missing required parameters" },
@@ -25,7 +22,6 @@ export async function POST(req: any) {
     }
     const [year, month, day] = date.split("-").map(Number);
     const dateObj = new Date(Date.UTC(year, month - 1, day));
-    console.log(dateObj);
 
     // Check if the user's data is found
     const targetUserWorkout = await WorkoutModel.findOne({
@@ -72,6 +68,25 @@ export async function POST(req: any) {
         const workoutIndex = targetUserWorkout.workouts.findIndex(
             (workout) => workout.date.getTime() === dateObj.getTime()
         );
+        const addedWorkout = await WorkoutModel.updateOne(
+            {
+                userId,
+            },
+            {
+                $push: {
+                    [`workouts.${workoutIndex}.workoutDetail`]: {
+                        $each: newWorkout,
+                    },
+                },
+            }
+        );
+
+        if (addedWorkout.matchedCount === 0) {
+            return NextResponse.json(
+                { message: "Failed to add new workout" },
+                { status: 500 }
+            );
+        }
         // Remove target workouts
         const deletedWorkout = await WorkoutModel.updateOne(
             {
@@ -102,23 +117,6 @@ export async function POST(req: any) {
                 ],
             }
         );
-        const addedWorkout = await WorkoutModel.updateOne(
-            {
-                userId,
-                [`workouts.${workoutIndex}._id`]: workoutsForDate._id,
-            },
-            {
-                $push: {
-                    [`workouts.${workoutIndex}.workoutDetail`]: {
-                        $each: newWorkout,
-                    },
-                },
-            }
-        );
-
-        console.log(deletedWorkout);
-        console.log(addedWorkout);
-
         return NextResponse.json(
             { message: "Workout updated successfully" },
             { status: 200 }
@@ -130,10 +128,4 @@ export async function POST(req: any) {
             { status: 500 }
         );
     }
-    return NextResponse.json(
-        {
-            messege: "YEAH",
-        },
-        { status: 200 }
-    );
 }
