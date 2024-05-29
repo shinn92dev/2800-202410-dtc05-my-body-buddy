@@ -14,17 +14,16 @@ export default function LogIn() {
           <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
             <div>
               <Image
-                src="/images/logo/my_body_buddy_logo.png"
+                src="/images/logo/my_body_buddy_logo_circle.png"
                 alt="My Body Buddy Logo"
-                width={32}
-                height={32}
-                quality={100}
+                width={50}
+                height={50}
                 className="w-32 mx-auto"
               ></Image>
             </div>
             <div className="mt-12 flex flex-col items-center">
               <h1 className="text-2xl xl:text-3xl font-extrabold">
-                Log in for My Body Buddy🏃‍♂️
+                Log in🏃‍♂️
               </h1>
               <div className="w-full flex-1 mt-8">
                 {/* Login form */}
