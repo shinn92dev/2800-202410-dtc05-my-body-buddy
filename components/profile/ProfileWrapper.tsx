@@ -1,42 +1,31 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import UserProfile from "@/components/profile/Profile";
-import { fetchUserId } from "@/app/_helper/fetchUserId"; 
-
-export interface UserData {
-  name: string;
-  age: number;
-  gender: string;
-  height: number;
-  weight: number;
-  targetWeight?: number;
-  targetDate?: Date | null;
-  targetCaloriesIntake: number;
-  targetCaloriesBurn: number;
-}
+import Profile from "@/components/profile/Profile";
 
 const ProfileWrapper: React.FC = () => {
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const [profileData, setProfileData] = useState(null);
+  const [targetData, setTargetData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/profile");
-        const data = await response.json();
-        setUserData({
-          ...data,
-          targetDate: data.targetDate ? new Date(data.targetDate) : null, // Ensure date is converted properly
-        });
+        const profileResponse = await fetch("/api/profile");
+        const profile = await profileResponse.json();
+        setProfileData(profile);
+
+        const targetResponse = await fetch(`/api/targets/${profile.userId}`);
+        const target = await targetResponse.json();
+        setTargetData(target);
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error("Error fetching profile or target data:", error);
       }
     };
 
     fetchData();
   }, []);
 
-  return <UserProfile userData={userData} />;
+  return <Profile profile={profileData} target={targetData} />;
 };
 
 export default ProfileWrapper;

@@ -1,14 +1,26 @@
 "use client";
 
-import React from "react";
-import useTargetForm from "./UseTargetForm";
-import SetTargetForm from "./SetTargetForm";
+import React, { useEffect, useState } from "react";
+import SetTargetForm from "@/components/profile_set_target/SetTargetForm";
 
 const SetTargetWrapper: React.FC = () => {
-  const userId = "someUserId"; // Replace with actual user ID logic
-  const { handleSubmit } = useTargetForm(userId);
+  const [targetData, setTargetData] = useState(null);
 
-  return <SetTargetForm onSubmit={handleSubmit} />;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/targets");
+        const data = await response.json();
+        setTargetData(data);
+      } catch (error) {
+        console.error("Error fetching target data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  return <SetTargetForm target={targetData} />;
 };
 
 export default SetTargetWrapper;

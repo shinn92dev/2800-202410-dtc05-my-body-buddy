@@ -26,6 +26,9 @@ const targetSchema = new Schema({
     type: Number,
     required: false,
   },
+  preference: { 
+    type: String, 
+    required: false },
 });
 
 targetSchema.path('targetWeight').validate(function(value) {
