@@ -1,18 +1,20 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import AiLines from '@/components/global/AiLines';
-import WorkoutAiSupportInput from '@/components/workout_ai_support/WorkoutAiSupportInput';
+import AiLines from "@/components/global/AiLines";
+import WorkoutAiSupportInput from "@/components/workout_ai_support/WorkoutAiSupportInput";
 import "@/components/global/AiLines.scss";
 import "@/components/workout_ai_support/WorkoutAiSupportInput.scss";
 import Image from "next/image";
 
 // Initial messages
 const initialMessageTitle = "Hi! I'm BODY BUDDY AI.";
-const initialMessageBody = "I'll suggest alternatives of your menu.\n\nPlease tell me which items you would like to exchange and why in the form below.";
+const initialMessageBody =
+    "I'll suggest alternatives of your menu.\n\nPlease tell me which items you would like to exchange and why in the form below.";
 
-const messageBodyWhenButtonClicked = "Generating alternative exercise menus based on your inputs...";
+const messageBodyWhenButtonClicked =
+    "Generating alternative exercise menus based on your inputs...";
 
 // AiSupportWrapper component
 export default function AiSupportWrapper() {
@@ -36,25 +38,36 @@ export default function AiSupportWrapper() {
     const handleRegenerateAlternative = async () => {
         // Regenerate the alternative using the same items and tags
         setGenerated(false);
-        const prompt = `Please consider alternative options for the workout menu below, taking into account the reasons provided.\n\nWorkout menu to replace:\n${selectedItems.map(item => `・${item.title} - ${item.quantity} ${item.unit} (${Math.round(item.kcalPerUnit * item.quantity * 10) / 10} kcal)`).join('\n')}\n\nReasons why I want to replace:\n・${selectedTags.join('\n・')}\n\nThe alternative must include the same number of items and must have the same estimated calorie consumption in total.\nEach item must be output in the following format:\n・[item_name] - [quantity] [unit] ([estimated_calorie_consume] kcal)`;
+        const prompt = `Please consider alternative options for the workout menu below, taking into account the reasons provided.\n\nWorkout menu to replace:\n${selectedItems
+            .map(
+                (item) =>
+                    `・${item.title} - ${item.quantity} ${item.unit} (${
+                        Math.round(item.kcalPerUnit * item.quantity * 10) / 10
+                    } kcal)`
+            )
+            .join(
+                "\n"
+            )}\n\nReasons why I want to replace:\n・${selectedTags.join(
+            "\n・"
+        )}\n\nThe alternative must include the same number of items and must have the same estimated calorie consumption in total.\nEach item must be output in the following format:\n・[item_name] - [quantity] [unit] ([estimated_calorie_consume] kcal)`;
 
         try {
-            const response = await fetch('/api/generate-alternative', {
-                method: 'POST',
+            const response = await fetch("/api/generate-alternative", {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ prompt }),
             });
 
             if (!response.ok) {
-                throw new Error('Failed to generate alternative');
+                throw new Error("Failed to generate alternative");
             }
 
             const data = await response.json();
             handleGenerateItems(data.result);
         } catch (error) {
-            console.error('Error generating alternative:', error);
+            console.error("Error generating alternative:", error);
         } finally {
             setGenerated(true);
         }
@@ -77,29 +90,55 @@ export default function AiSupportWrapper() {
 
     return (
         <div>
-            <AiLines messageTitle={initialMessageTitle} messageBody={initialMessageBody} />
-            <WorkoutAiSupportInput onGenerateAlternative={setGeneratedTrue} onGenerateItems={handleGenerateItems} />
-            {generated && <AiLines messageBody={messageBodyWhenButtonClicked} />}
+            <AiLines
+                messageTitle={initialMessageTitle}
+                messageBody={initialMessageBody}
+            />
+            <WorkoutAiSupportInput
+                onGenerateAlternative={setGeneratedTrue}
+                onGenerateItems={handleGenerateItems}
+            />
+            {generated && (
+                <AiLines messageBody={messageBodyWhenButtonClicked} />
+            )}
             {generatedItems.length > 0 && (
                 <div>
                     <div className="flex flex-col items-start p-2">
                         <div className="flex items-start w-full">
                             <div className="mr-2">
-                                <Image src="/my_boddy_buddy_support_ai_logo.png" alt="support AI logo" width={51} height={51} />
+                                <Image
+                                    src="/my_boddy_buddy_support_ai_logo.png"
+                                    alt="support AI logo"
+                                    width={51}
+                                    height={51}
+                                />
                             </div>
                             <div className="relative speech-bubble-ai bg-beige p-4 rounded-lg w-full">
                                 <p>Generated Items:</p>
                                 {generatedItems.map((item, index) => (
-                                    <div key={index} className="flex items-center justify-between py-1">
+                                    <div
+                                        key={index}
+                                        className="flex items-center justify-between py-1"
+                                    >
                                         <div className="flex items-center">
                                             <span className="mr-2">・</span>
                                             <div>
-                                                <h2 className="font-bold">{item.title}</h2>
-                                                <h3 className="text-sm text-gray-500">{item.quantity} {item.unit}</h3>
+                                                <h2 className="font-bold">
+                                                    {item.title}
+                                                </h2>
+                                                <h3 className="text-sm text-gray-500">
+                                                    {item.quantity} {item.unit}
+                                                </h3>
                                             </div>
                                         </div>
                                         <div>
-                                            <h2 className="font-bold">{(item.kcalPerUnit * item.quantity).toFixed(1)} kcal</h2>
+                                            <h2 className="font-bold">
+                                                {(
+                                                    item.kcalPerUnit *
+                                                    item.quantity
+                                                ).toFixed(1)}{" "}
+                                                kcal
+                                            </h2>
                                         </div>
                                     </div>
                                 ))}
