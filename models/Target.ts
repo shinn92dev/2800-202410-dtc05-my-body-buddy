@@ -22,13 +22,6 @@ const targetSchema = new Schema({
     type: Date,
     required: false,
   },
-  activityLevel: {
-    type: Number,
-    required: false,
-  },
-  preference: { 
-    type: String, 
-    required: false },
 });
 
 targetSchema.path('targetWeight').validate(function(value) {

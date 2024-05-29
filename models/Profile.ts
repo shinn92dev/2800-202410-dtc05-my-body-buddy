@@ -22,6 +22,14 @@ const profileSchema = new Schema({
         type: Number,
         required: true,
     },
+    activityLevel: {
+        type: Number,
+        required: true,
+    },
+    preference: { 
+        type: String, 
+        required: true,
+    },
 });
 
 const Profile = models.Profile || model('Profile', profileSchema);
