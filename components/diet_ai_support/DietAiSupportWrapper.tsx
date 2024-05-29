@@ -30,6 +30,7 @@ const DietAiSupportWrapper: React.FC = () => {
 
         if (response.ok) {
             const data = await response.json();
+            console.log(data.result);
             setGeneratedMenu(data.result);
         } else {
             console.error('Failed to generate diet plan');
