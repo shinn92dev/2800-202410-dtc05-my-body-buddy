@@ -72,7 +72,7 @@ export default function NavigationBeforeAuth() {
         </ul>
       </div>
 
-      <div className={`flex-grow text-center ${isOpen ? "blur-sm" : ""}`}>
+      <div className={`flex-grow text-center`}>
         <Link href="/">
           <img
             src="/my_body_buddy_logo_transparent.png"
