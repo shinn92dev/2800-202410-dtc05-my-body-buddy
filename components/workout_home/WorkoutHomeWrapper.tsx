@@ -6,204 +6,157 @@ import CircleBar from "@/components/global/CircleBar";
 import Board from "@/components/global/Board";
 import AskAiButton from "@/components/global/AskAiButton";
 import axios from "axios";
-import { useForm } from "react-hook-form";
-import { format } from "date-fns";
-import {
-    fetchWorkoutForSpecificDate,
-    calculateKcalForWorkout,
-} from "@/app/_helper/workout";
+import TopCalendar from "@/components/global/TopCalendar";
+import { fetchUserId } from "@/app/_helper/fetchUserId";
 
-const routeWorkoutHomeWrapperPost = async (
-    userId: string,
-    date: Date,
-    workoutTitle: string
-) => {
-    try {
-        const formattedDate = new Date(
-            `${date.getUTCFullYear()}-${
-                date.getUTCMonth() + 1
-            }-${date.getUTCDate()}`
-        );
-        const response = await fetch("/api/workout-wrapper", {
-            method: "POST",
-            body: JSON.stringify({
-                userId: userId,
-                date: formattedDate,
-                title: workoutTitle,
-            }),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        console.log("Response from workout home wrapper:", response);
-        if (!response.ok) {
-            throw new Error("Not OK");
-        }
-        const data = await response.json();
-        console.log("Server Response:", data);
-    } catch (error) {
-        console.log(error);
-    }
-};
+import { calculateKcalForWorkout } from "@/app/_helper/workout";
+import { handleDateSelect } from "@/app/_helper/handleDate";
 
 const WorkoutHomeWrapper: React.FC = () => {
-    const [menuForToday, setMenuForToday] = useState<any[]>([]);
-    const [achieved, setAchieved] = useState<any[]>([]);
     const [achievedWorkoutData, setAchievedWorkoutData] = useState<any[]>([]);
     const [onGoingWorkoutData, setOnGoingWorkoutData] = useState<any[]>([]);
-    const calculateTotalCalories = (
-        items: { quantity: number; kcalPerUnit: number }[]
-    ) => {
-        return items.reduce(
-            (total, item) => total + item.quantity * item.kcalPerUnit,
-            0
-        );
-    };
+    const [userId, setUserId] = useState<string>("");
 
-    const convertToItems = (
-        items: {
-            title: string;
-            count: number;
-            unit: string;
-            cals: number;
-            achieved?: boolean;
-        }[]
-    ) => {
-        return items.map((item) => {
-            return {
-                name: item.title,
-                amount: item.count + " " + item.unit,
-                calories: item.count * item.cals,
-                ...(item.achieved !== undefined && {
-                    isCompleted: item.achieved,
-                }),
-            };
-        });
-    };
-
+    useEffect(() => {
+        const getUserId = async () => {
+            try {
+                const userId = await fetchUserId();
+                setUserId(userId);
+                console.log("userId fetched successfully.");
+            } catch (error) {
+                console.error("Error fetching user ID:", error);
+            }
+        };
+        getUserId();
+    }, []);
     const fetchWorkoutData = async () => {
         try {
             const res = await axios.get("/api/get-user-id");
             const { userId } = res.data;
-            console.log(userId);
 
-            const dataRes = await axios.get(
-                `/api/get-workout?userId=${userId}`
-            );
+            const dataRes = await axios.get(`/api/get-workout`, {
+                params: {
+                    userId,
+                    date: selectedDate.toISOString().split("T")[0],
+                },
+            });
             const data = dataRes.data;
-
-            if (!data || data.workouts.length === 0) {
-                await axios.post("/api/save-new-workout", {
-                    userId: userId,
-                    workouts: [],
-                });
-            } else {
-                const workoutDataForDate = fetchWorkoutForSpecificDate(
-                    data,
-                    new Date()
-                );
-                setOnGoingWorkoutData(workoutDataForDate.onGoing);
-                setAchievedWorkoutData(workoutDataForDate.achieved);
-            }
+            setOnGoingWorkoutData(data.onGoing);
+            setAchievedWorkoutData(data.achieved);
         } catch (error) {
             console.error("Error fetching workout data:", error);
         }
     };
 
+    const [selectedDate, setSelectedDate] = useState<Date>(
+        new Date(
+            Date.UTC(
+                new Date().getFullYear(),
+                new Date().getMonth(),
+                new Date().getDate()
+            )
+        )
+    );
+
+    const onDateSelect = (date: Date) => {
+        handleDateSelect(date, (formattedDate: string) => {
+            setSelectedDate(
+                new Date(
+                    Date.UTC(
+                        date.getFullYear(),
+                        date.getMonth(),
+                        date.getDate()
+                    )
+                )
+            );
+        });
+    };
+
     useEffect(() => {
         fetchWorkoutData();
-    }, []);
-
-    const [totalCaloriesOfMenuForToday, setTotalCaloriesOfMenuForToday] =
-        useState(calculateTotalCalories(menuForToday));
-    const [totalCaloriesOfAchieved, setTotalCaloriesOfAchieved] = useState(
-        calculateTotalCalories(achieved)
-    );
-
-    const [menuForTodayItems, setMenuForTodayItems] = useState(
-        convertToItems(menuForToday)
-    );
-    const [achievedItems, setAchievedItems] = useState(
-        convertToItems(achieved)
-    );
-
-    useEffect(() => {
-        setTotalCaloriesOfAchieved(calculateTotalCalories(achieved));
-        setAchievedItems(convertToItems(achieved));
-        setMenuForTodayItems(convertToItems(menuForToday));
-    }, [menuForToday, achieved]);
+    }, [selectedDate]);
 
     const handleEditForAchieved = (index: number) => {
         // Handle edit logic here
     };
 
-    const handleDeleteForAchieved = (index: number) => {
-        setAchieved((prevAchieved: any) => {
-            const newAchieved = prevAchieved.filter(
-                (_: any, i: any) => i !== index
-            );
-            return newAchieved;
-        });
+    const handleDeleteForAchieved = async (index: number) => {
+        try {
+            const item = achievedWorkoutData[index];
+            const res = await axios.get("/api/get-user-id");
+            const { userId } = res.data;
+            console.log(item);
+            console.log("Update start:", userId);
+            // TODO: REPLACE DATE FROM CALENDAR DATE
+            const formattedDate = selectedDate.toISOString();
+            const newData = {
+                userId: userId,
+                date: formattedDate,
+                name: item.name,
+                achieved: !item.achieved,
+            };
+            const response = await fetch("/api/update-workout-achievement", {
+                method: "POST",
+                body: JSON.stringify(newData),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            console.log(response);
+            const responseData = await response.json();
+            console.log("Response data:", responseData);
+            fetchWorkoutData();
+        } catch (error) {
+            console.error("Error updating achievement status:", error);
+        }
     };
 
     const handleAddForAchieved = () => {
         window.location.href = `workout/adding`;
     };
 
+    const handleAskAI = () => {
+        const formattedDate = selectedDate.toISOString().split("T")[0];
+        window.location.href = `workout/ai-support?date=${formattedDate}`;
+    };
+
     const handleToggleComplete = async (index: number) => {
         try {
-            const item = menuForToday[index];
-            const res = await axios.put(`/api/update-workout-achievement`, {
-                userId: item.userId,
-                date: item.date,
-                title: item.name,
-                achieved: !item.isCompleted,
+            const item = onGoingWorkoutData[index];
+            const res = await axios.get("/api/get-user-id");
+            const { userId } = res.data;
+            console.log(item);
+            console.log("Update start:", userId);
+            // TODO: REPLACE DATE FROM CALENDAR DATE
+            const formattedDate = selectedDate.toISOString();
+            const newData = {
+                userId: userId,
+                date: formattedDate,
+                name: item.name,
+                achieved: !item.achieved,
+            };
+            const response = await fetch("/api/update-workout-achievement", {
+                method: "POST",
+                body: JSON.stringify(newData),
+                headers: {
+                    "Content-Type": "application/json",
+                },
             });
-
-            if (res.status === 200) {
-                setMenuForToday((prevMenu: any) => {
-                    const newMenu = [...prevMenu];
-                    newMenu[index].isCompleted = !newMenu[index].isCompleted;
-                    return newMenu;
-                });
-
-                setAchieved((prevAchieved: any) => {
-                    const newAchieved = menuForToday[index].isCompleted
-                        ? prevAchieved.filter(
-                              (achievedItem: any) =>
-                                  achievedItem.title !== item.name
-                          )
-                        : [...prevAchieved, item];
-                    return newAchieved;
-                });
-            } else {
-                throw new Error("Failed to update achievement status");
-            }
+            console.log(response);
+            const responseData = await response.json();
+            console.log("Response data:", responseData);
+            fetchWorkoutData();
         } catch (error) {
             console.error("Error updating achievement status:", error);
         }
     };
 
-    const handleAskAI = () => {
-        window.location.href = "workout/ai-support";
-    };
-
-    const { handleSubmit } = useForm();
-    const onSubmit = async () => {
-        try {
-            const res = await axios.get("/api/get-user-id");
-            const { userId } = res.data;
-
-            await routeWorkoutHomeWrapperPost(userId, new Date(), "Running");
-        } catch (error) {
-            console.log(error);
-        }
-    };
     const totalCalories =
         calculateKcalForWorkout(achievedWorkoutData) +
         calculateKcalForWorkout(onGoingWorkoutData);
     return (
         <div className="p-4 items-center bg-white">
+            <TopCalendar onDateSelect={onDateSelect} />
             <h1 className="text-center text-2xl font-bold">Your Progress</h1>
             <div className="flex justify-center mt-4">
                 <CircleBar
@@ -212,8 +165,8 @@ const WorkoutHomeWrapper: React.FC = () => {
                     }
                     subtitle={"/ " + totalCalories + " kcal"}
                     percent={
-                        (totalCaloriesOfAchieved /
-                            totalCaloriesOfMenuForToday) *
+                        (totalCalories /
+                            calculateKcalForWorkout(onGoingWorkoutData)) *
                         100
                     }
                 />
@@ -242,47 +195,48 @@ const WorkoutHomeWrapper: React.FC = () => {
                         </span>
                     </div>
                     <div>
-                        {onGoingWorkoutData.map((item, index) => (
-                            <div
-                                key={index}
-                                className={`flex justify-between items-center p-2 border-b`}
-                            >
-                                <div>
-                                    <p
-                                        className={`font-semibold ${
-                                            item.isCompleted
-                                                ? "line-through"
-                                                : ""
-                                        }`}
-                                    >
-                                        {item.name}
-                                    </p>
+                        {onGoingWorkoutData.length === 0 ? (
+                            <p className="font-semibold text-center">
+                                🎉You finished workout for today!
+                            </p>
+                        ) : (
+                            onGoingWorkoutData.map((item, index) => (
+                                <div
+                                    key={index}
+                                    className={`flex justify-between items-center p-2 border-b`}
+                                >
+                                    <div>
+                                        <p
+                                            className={`font-semibold ${
+                                                item.isCompleted
+                                                    ? "line-through"
+                                                    : ""
+                                            }`}
+                                        >
+                                            {item.name}
+                                        </p>
 
-                                    <p className="text-sm text-gray-500">
-                                        {item.quantity} {item.unit}
-                                    </p>
-                                </div>
-                                <div className="flex items-center">
-                                    <span className="text-lg font-semibold mr-4">
-                                        {item.calories} kcal
-                                    </span>
-                                    <form
-                                        method="post"
-                                        onSubmit={handleSubmit(onSubmit)}
-                                    >
+                                        <p className="text-sm text-gray-500">
+                                            {item.quantity} {item.unit}
+                                        </p>
+                                    </div>
+                                    <div className="flex items-center">
+                                        <span className="text-lg font-semibold mr-4">
+                                            {item.calories} kcal
+                                        </span>
                                         <button
-                                            type="submit"
+                                            type="button"
+                                            className="px-4 py-2 rounded-full bg-gray-500 text-white"
                                             onClick={() =>
                                                 handleToggleComplete(index)
                                             }
-                                            className="px-4 py-2 rounded-full bg-gray-500 text-white"
                                         >
                                             Done
                                         </button>
-                                    </form>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))
+                        )}
                     </div>
                     <div className="flex justify-center mt-4">
                         <AskAiButton

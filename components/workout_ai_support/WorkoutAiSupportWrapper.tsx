@@ -1,19 +1,22 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import AiLines from '@/components/global/AiLines';
 import LoadingAnimation from "@/components/global/LoadingAnimation";
 import WorkoutAiSupportInput from '@/components/workout_ai_support/WorkoutAiSupportInput';
 import "@/components/global/AiLines.scss";
 import "@/components/workout_ai_support/WorkoutAiSupportInput.scss";
+import axios from "axios";
 import Image from "next/image";
 
 // Initial messages
 const initialMessageTitle = "Hi! I'm BODY BUDDY AI.";
-const initialMessageBody = "I'll suggest alternatives of your menu.\n\nPlease tell me which items you would like to exchange and why in the form below.";
+const initialMessageBody =
+    "I'll suggest alternatives of your menu.\n\nPlease tell me which items you would like to exchange and why in the form below.";
 
-const messageBodyWhenButtonClicked = "Generating alternative exercise menus based on your inputs...";
+const messageBodyWhenButtonClicked =
+    "Generating alternative exercise menus based on your inputs...";
 
 // AiSupportWrapper component
 export default function AiSupportWrapper() {
@@ -29,11 +32,35 @@ export default function AiSupportWrapper() {
     const setGeneratedTrue = (selectedItems: any[], selectedTags: string[]) => {
         setSelectedItems(selectedItems);
         setSelectedTags(selectedTags);
+        console.log(generated);
         setGenerated(true);
         setIsLoading(true);
     };
 
-    const handleAdoptAlternative = () => {
+    const handleAdoptAlternative = async () => {
+        try {
+            const res = await axios.get("/api/get-user-id");
+            const { userId } = res.data;
+            const params = new URLSearchParams(window.location.search);
+            const date = params.get("date");
+
+            const dataRes = await axios.post(
+                "/api/update-workout-to-alternative",
+                {
+                    params: {
+                        userId,
+                        date,
+                        selectedItems,
+                        newWorkout: generatedItems,
+                    },
+                }
+            );
+            const data = dataRes.data;
+        } catch (error) {
+            console.error("Error adopting alternative: ", error);
+        }
+
+        console.log(generatedItems);
         router.push("/workout");
     };
 
@@ -42,25 +69,38 @@ export default function AiSupportWrapper() {
         setGeneratedItems([]);
         setErrorMessage(null);
 
-        const prompt = `Please consider alternative options for the workout menu below, taking into account the reasons provided.\n\nWorkout menu to replace:\n${selectedItems.map(item => `・${item.title} - ${item.quantity} ${item.unit} (${Math.round(item.kcalPerUnit * item.quantity * 10) / 10} kcal)`).join('\n')}\n\nReasons why I want to replace:\n・${selectedTags.join('\n・')}\n\nThe alternative must include the same number of items and must have the same estimated calorie consumption in total.\nEach item must be output in the following format:\n・[item_name] - [quantity] [unit] ([estimated_calorie_consume] kcal)`;
+        const prompt = `Please consider alternative options for the workout menu below, taking into account the reasons provided.\n\nWorkout menu to replace:\n${selectedItems
+            .map(
+                (item) =>
+                    `・${item.title} - ${item.quantity} ${item.unit} (${
+                        Math.round(item.kcalPerUnit * item.quantity * 10) / 10
+                    } kcal)`
+            )
+            .join(
+                "\n"
+            )}\n\nReasons why I want to replace:\n・${selectedTags.join(
+            "\n・"
+        )}\n\nThe alternative must include the same number of items and must have the same estimated calorie consumption in total.\nEach item must be output in the following format:\n・[item_name] - [quantity] [unit] ([estimated_calorie_consume] kcal)`;
 
         try {
-            const response = await fetch('/api/generate-alternative', {
-                method: 'POST',
+            const response = await fetch("/api/generate-alternative", {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ prompt }),
             });
 
             if (!response.ok) {
-                throw new Error('Failed to generate alternative');
+                throw new Error("Failed to generate alternative");
             }
 
             const data = await response.json();
             handleGenerateItems(data.result);
         } catch (error) {
-            console.error('Error generating alternative:', error);
+            console.error("Error generating alternative:", error);
+        } finally {
+            setGenerated(true);
         }
 
         setIsLoading(false);
@@ -70,24 +110,24 @@ export default function AiSupportWrapper() {
     const handleGenerateItems = (response: string) => {
         try {
             const regex = /・(.+?)\s*-\s*(\d+)\s*(\w+)\s*\((\d+)\s*kcal\)/g;
-            const items = [];
-            let match;
-            while ((match = regex.exec(response)) !== null) {
-                const title = match[1];
-                const quantity = parseInt(match[2], 10);
-                const unit = match[3];
-                const kcalPerUnit = parseFloat(match[4]) / quantity;
-                items.push({ title, quantity, unit, kcalPerUnit });
-            }
-            if (items.length > 0) {
-                setGeneratedItems(items);
-            } else {
-                setErrorMessage("Generated result could not be properly formatted. Please try again.");
-            }
+        const items = [];
+        let match;
+        while ((match = regex.exec(response)) !== null) {
+            const title = match[1];
+            const quantity = parseInt(match[2], 10);
+            const unit = match[3];
+            const kcalPerUnit = parseFloat(match[4]) / quantity;
+            items.push({ title, quantity, unit, kcalPerUnit });
+        }
+        if (items.length > 0) {
+            setGeneratedItems(items);
+        } else {
+            setErrorMessage("Generated result could not be properly formatted. Please try again.");
+        }
+        
         } catch (error) {
             setErrorMessage("An error occurred while processing the response. Please try again.");
         }
-
         setIsLoading(false);
     };
 
@@ -97,7 +137,7 @@ export default function AiSupportWrapper() {
             <WorkoutAiSupportInput onGenerateAlternative={setGeneratedTrue} onGenerateItems={handleGenerateItems} />
             {generated && <AiLines messageBody={messageBodyWhenButtonClicked} />}
             {isLoading && <LoadingAnimation />}
-            {generatedItems.length > 0 ? (
+            {generatedItems.length > 0 && (
                 <div>
                     <div className="flex flex-col items-start p-2">
                         <div className="flex items-start w-full">
@@ -107,16 +147,25 @@ export default function AiSupportWrapper() {
                             <div className="relative speech-bubble-ai bg-beige p-4 rounded-lg w-full">
                                 <p>Generated Items:</p>
                                 {generatedItems.map((item, index) => (
-                                    <div key={index} className="flex items-center justify-between py-1">
+                                    <div
+                                        key={index}
+                                        className="flex items-center justify-between py-1"
+                                    >
                                         <div className="flex items-center">
                                             <span className="mr-2">・</span>
                                             <div>
-                                                <h2 className="font-bold">{item.title}</h2>
-                                                <h3 className="text-sm text-gray-500">{item.quantity} {item.unit}</h3>
+                                                <h2 className="font-bold">
+                                                    {item.name}
+                                                </h2>
+                                                <h3 className="text-sm text-gray-500">
+                                                    {item.quantity} {item.unit}
+                                                </h3>
                                             </div>
                                         </div>
                                         <div>
-                                            <h2 className="font-bold">{(item.kcalPerUnit * item.quantity).toFixed(0)} kcal</h2>
+                                            <h2 className="font-bold">
+                                                {item.calories.toFixed(0)} kcal
+                                            </h2>
                                         </div>
                                     </div>
                                 ))}
