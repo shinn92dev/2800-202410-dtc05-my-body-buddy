@@ -49,11 +49,15 @@ const Profile: React.FC<ProfileProps> = ({ user, profile, target }) => {
     activityLevelToBeDisplayed = "High";
   }
 
-  const bmi = profile.weight / ((profile.height / 100) * (profile.height / 100));
+  const genderToBeDisplayed = profile.gender.charAt(0).toUpperCase() + profile.gender.slice(1);
 
-  const healthyWeight = 22 * (profile.height / 100) * (profile.height / 100);
+  const bmi = (profile.weight / ((profile.height / 100) * (profile.height / 100))).toFixed(1);
+
+  const healthyWeight = (22 * (profile.height / 100) * (profile.height / 100)).toFixed(1);
 
   const bmr = Math.round(calculateBmr(profile.age, profile.height, profile.weight, profile.gender));
+
+  const targetDateToBeDisplayed = target?.targetDate ? target.targetDate.split("T")[0] : "";
 
   return (
     <div className="flex flex-col items-center">
@@ -63,7 +67,7 @@ const Profile: React.FC<ProfileProps> = ({ user, profile, target }) => {
           <div><span className="font-bold">Name</span>: {user.username}</div>
           <div><span className="font-bold">Email</span>: {user.email}</div>
           <div><span className="font-bold">Age</span>: {profile.age}</div>
-          <div><span className="font-bold">Gender</span>: {profile.gender}</div>
+          <div><span className="font-bold">Gender</span>: {genderToBeDisplayed}</div>
           <div><span className="font-bold">Height</span>: {profile.height} cm</div>
           <div><span className="font-bold">Weight</span>: {profile.weight} kg</div>
           <div><span className="font-bold">Healthy Weight</span>: {healthyWeight}</div>
@@ -76,7 +80,7 @@ const Profile: React.FC<ProfileProps> = ({ user, profile, target }) => {
         <div className="bg-orange m-5 tracking-wide leading-8 font-semibold text-center w-2/3">
           <p className="text-4xl p-2">🎯</p>
           <div>
-            <div><span className="font-bold">Target Date</span>: {target.targetDate}</div>
+            <div><span className="font-bold">Target Date</span>: {targetDateToBeDisplayed}</div>
             <div><span className="font-bold">Target Weight</span>: {target.targetWeight} kg</div>
             <div><span className="font-bold">BMR</span>: {bmr} kcal/day</div>
             <div><span className="font-bold">Target Calories Intake</span>: {target.targetCaloriesIntake} kcal/day</div>

@@ -1,6 +1,9 @@
 "use client"
 
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Calendar from "react-calendar";
+import 'react-calendar/dist/Calendar.css';
 import { handleDateSelect } from "@/app/_helper/handleDate";
 import { useAuth } from "@clerk/nextjs";
 
@@ -10,16 +13,19 @@ const SetTargetForm: React.FC = () => {
     targetWeight: "",
     targetDate: "",
   });
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   useEffect(() => {
     const fetchProfileAndTarget = async () => {
       try {
-        const res = await fetch(`/api/targets`);
-        const data = await res.json();
+        const { data } = await axios.get(`/api/targets`);
         setFormData({
           targetWeight: data.target?.targetWeight || "",
           targetDate: data.target?.targetDate || "",
         });
+        if (data.target?.targetDate) {
+          setSelectedDate(new Date(data.target.targetDate));
+        }
       } catch (error) {
         console.error("Error fetching profile and target data:", error);
       }
@@ -36,9 +42,9 @@ const SetTargetForm: React.FC = () => {
     }));
   };
 
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedDate = new Date(e.target.value);
-    handleDateSelect(selectedDate, (dateString) => {
+  const handleDateChange = (date: Date) => {
+    setSelectedDate(date);
+    handleDateSelect(date, (dateString) => {
       setFormData((prevData) => ({
         ...prevData,
         targetDate: dateString,
@@ -49,18 +55,8 @@ const SetTargetForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch("/api/targets", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      if (!res.ok) {
-        throw new Error("Error updating target data");
-      }
-      const result = await res.json();
-      alert(result.message);
+      const { data } = await axios.post("/api/targets", formData);
+      alert(data.message);
       window.location.href = "/profile";
     } catch (error) {
       console.error("Error updating target data:", error);
@@ -84,13 +80,10 @@ const SetTargetForm: React.FC = () => {
         </div>
         <div className="mb-4">
           <label className="block text-gray-700">Target Date</label>
-          <input
-            type="date"
-            name="targetDate"
-            value={formData.targetDate}
+          <Calendar
             onChange={handleDateChange}
-            className="w-full px-3 py-2 border rounded-lg"
-            required
+            value={selectedDate}
+            className="w-full"
           />
         </div>
         <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">

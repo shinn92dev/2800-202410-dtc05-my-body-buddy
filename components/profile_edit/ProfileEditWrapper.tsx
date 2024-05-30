@@ -70,14 +70,17 @@ const ProfileEditWrapper: React.FC = () => {
         </div>
         <div className="mb-4">
           <label className="block text-gray-700">Gender</label>
-          <input
-            type="text"
+          <select
             name="gender"
             value={formData.gender}
             onChange={handleChange}
             className="w-full px-3 py-2 border rounded-lg"
             required
-          />
+          >
+            <option value="">Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
         </div>
         <div className="mb-4">
           <label className="block text-gray-700">Height (cm)</label>
