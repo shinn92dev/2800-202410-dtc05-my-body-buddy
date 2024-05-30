@@ -245,6 +245,10 @@ export default function WorkoutAddingWrapper() {
         });
         const params = new URLSearchParams(window.location.search);
         const date = params.get("date");
+        if (!date) {
+            console.error("Date parameter is missing");
+            return;
+        }
         const [year, month, day] = date.split("-").map(Number);
         const dateObj = new Date(Date.UTC(year, month - 1, day));
         const dataRes = await axios.post("/api/add-workout", {
