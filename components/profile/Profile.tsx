@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { calculateBmr } from "@/app/_helper/calorie";
+import { ClipLoader } from "react-spinners";
 
 interface ProfileProps {
   user: {
@@ -28,7 +29,11 @@ interface ProfileProps {
 
 const Profile: React.FC<ProfileProps> = ({ user, profile, target }) => {
   if (!profile || !user) {
-    return <div>User profile not found</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <ClipLoader size={50} color={"#123abc"} loading={true} />
+      </div>
+    )
   }
 
   let preferenceToBeDisplayed;
