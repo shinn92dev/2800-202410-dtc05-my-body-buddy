@@ -33,26 +33,14 @@ const Profile: React.FC<ProfileProps> = ({ user, profile, target }) => {
       <div className="flex justify-center items-center h-screen">
         <ClipLoader size={50} color={"#123abc"} loading={true} />
       </div>
-    )
+    );
   }
 
-  let preferenceToBeDisplayed;
+  const preferenceToBeDisplayed =
+    profile.preference === "workout" ? "Increase calories burn" : "Reduce calories intake";
 
-  if (profile.preference === "workout") {
-    preferenceToBeDisplayed = "Increase calories burn";
-  } else {
-    preferenceToBeDisplayed = "Reduce calories intake";
-  }
-
-  let activityLevelToBeDisplayed;
-
-  if (profile.activityLevel === 1) {
-    activityLevelToBeDisplayed = "Low";
-  } else if (profile.activityLevel === 2) {
-    activityLevelToBeDisplayed = "Medium";
-  } else {
-    activityLevelToBeDisplayed = "High";
-  }
+  const activityLevelToBeDisplayed =
+    profile.activityLevel === 1 ? "Low" : profile.activityLevel === 2 ? "Medium" : "High";
 
   const genderToBeDisplayed = profile.gender.charAt(0).toUpperCase() + profile.gender.slice(1);
 
@@ -62,43 +50,43 @@ const Profile: React.FC<ProfileProps> = ({ user, profile, target }) => {
 
   const bmr = Math.round(calculateBmr(profile.age, profile.height, profile.weight, profile.gender));
 
-  const targetDateToBeDisplayed = target?.targetDate ? target.targetDate.split("T")[0] : "";
+  const targetDateToBeDisplayed = target?.targetDate?.split("T")[0] ?? "";
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="bg-orange m-5 tracking-wide leading-8 font-semibold text-center w-2/3">
+    <div className="flex flex-col items-center space-y-6 min-h-screen">
+      <div className="bg-orange-500 m-5 p-4 rounded-md shadow-lg text-center w-4/5 md:w-3/5 bg-orange">
         <p className="text-4xl p-2">👤</p>
-        <div>
-          <div><span className="font-bold">Name</span>: {user.username}</div>
-          <div><span className="font-bold">Email</span>: {user.email}</div>
-          <div><span className="font-bold">Age</span>: {profile.age}</div>
-          <div><span className="font-bold">Gender</span>: {genderToBeDisplayed}</div>
-          <div><span className="font-bold">Height</span>: {profile.height} cm</div>
-          <div><span className="font-bold">Weight</span>: {profile.weight} kg</div>
-          <div><span className="font-bold">Healthy Weight</span>: {healthyWeight}</div>
-          <div><span className="font-bold">BMI</span>: {bmi}</div>
-          <div><span className="font-bold">Activity Level</span>: {activityLevelToBeDisplayed}</div>
-          <div><span className="font-bold">Preference</span>: {preferenceToBeDisplayed}</div>
+        <div className="grid grid-cols gap-4">
+          <div><span className="font-bold">Name:</span> {user.username}</div>
+          <div><span className="font-bold">Email:</span> {user.email}</div>
+          <div><span className="font-bold">Age:</span> {profile.age}</div>
+          <div><span className="font-bold">Gender:</span> {genderToBeDisplayed}</div>
+          <div><span className="font-bold">Height:</span> {profile.height} cm</div>
+          <div><span className="font-bold">Weight:</span> {profile.weight} kg</div>
+          <div><span className="font-bold">Healthy Weight:</span> {healthyWeight} kg</div>
+          <div><span className="font-bold">BMI:</span> {bmi}</div>
+          <div><span className="font-bold">Activity Level:</span> {activityLevelToBeDisplayed}</div>
+          <div><span className="font-bold">Preference:</span> {preferenceToBeDisplayed}</div>
+          <div><span className="font-bold">BMR:</span> {bmr} kcal/day</div>
         </div>
       </div>
       {target && (
-        <div className="bg-orange m-5 tracking-wide leading-8 font-semibold text-center w-2/3">
+        <div className="bg-orange-500 m-5 p-4 rounded-md shadow-lg text-center w-4/5 md:w-3/5 bg-orange">
           <p className="text-4xl p-2">🎯</p>
-          <div>
-            <div><span className="font-bold">Target Date</span>: {targetDateToBeDisplayed}</div>
-            <div><span className="font-bold">Target Weight</span>: {target.targetWeight} kg</div>
-            <div><span className="font-bold">BMR</span>: {bmr} kcal/day</div>
-            <div><span className="font-bold">Target Calories Intake</span>: {target.targetCaloriesIntake} kcal/day</div>
-            <div><span className="font-bold">Target Calories Burn</span>: {target.targetCaloriesBurn} kcal/day</div>
+          <div className="grid grid-cols gap-4">
+            <div><span className="font-bold">Target Date:</span> {targetDateToBeDisplayed}</div>
+            <div><span className="font-bold">Target Weight:</span> {target.targetWeight} kg</div>
+            <div><span className="font-bold">Target Calories Intake:</span> {target.targetCaloriesIntake} kcal/day</div>
+            <div><span className="font-bold">Target Calories Burn:</span> {target.targetCaloriesBurn} kcal/day</div>
           </div>
         </div>
       )}
       <div className="flex space-x-4">
         <Link href="/profile/edit">
-          <button className="bg-blue-500 text-white p-2 rounded">Edit Profile</button>
+          <button className="bg-dark-blue text-white p-2 rounded hover:bg-dark-blue-light">Edit Profile</button>
         </Link>
         <Link href="/profile/set-target">
-          <button className="bg-green-500 text-white p-2 rounded">Set Target</button>
+          <button className="bg-logo-pumpkin text-white p-2 rounded hover:bg-logo-pumpkin-light">Set Target</button>
         </Link>
       </div>
     </div>

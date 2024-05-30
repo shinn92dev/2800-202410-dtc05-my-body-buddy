@@ -133,9 +133,11 @@ const ProfileEditWrapper: React.FC = () => {
             <option value="diet">Decrease calories intake</option>
           </select>
         </div>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-          Save
-        </button>
+        <div className="flex justify-center">
+          <button type="submit" className="bg-dark-blue text-white px-4 py-2 rounded">
+            Save
+          </button>
+        </div>
       </form>
     </div>
   );
