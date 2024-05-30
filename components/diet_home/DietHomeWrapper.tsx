@@ -27,7 +27,7 @@ const DietHomeWrapper: React.FC = () => {
     const [dinners, setDinners] = useState<Meal[]>([]);
     const [snacks, setSnacks] = useState<Meal[]>([]);
     const [userId, setUserId] = useState<string>("");
-    const [totalTargetCalories, setTotalTargetCalories] = useState<number>(2200);
+    const [totalTargetCalories, setTotalTargetCalories] = useState<number>(0);
     const [selectedDate, setSelectedDate] = useState<Date>(new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())));
     const localDate = new Date(selectedDate.getUTCFullYear(), selectedDate.getUTCMonth(), selectedDate.getUTCDate());
 
@@ -74,6 +74,20 @@ const DietHomeWrapper: React.FC = () => {
 
         getMeals();
     }, [userId, selectedDate]);
+
+    useEffect(() => {
+        const fetchTargetCalories = async () => {
+            try {
+                const res = await axios.get("/api/targets");
+                const { targetCaloriesIntake } = res.data;
+                setTotalTargetCalories(targetCaloriesIntake);
+            } catch (error) {
+                console.error("Error fetching target calories:", error);
+            }
+        };
+
+        fetchTargetCalories();
+    }, []);
 
     const handleEdit = (mealType: MealType, index: number) => {
         // Handle edit logic here
