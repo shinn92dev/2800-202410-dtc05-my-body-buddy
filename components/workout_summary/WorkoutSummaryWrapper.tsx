@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -6,7 +7,7 @@ import BarGraph from "@/components/global/BarGraph";
 import WorkoutDietLink from "@/components/workout_diet_link/WorkoutDietLink";
 import AverageCalorieBanner from "@/components/global/AverageCalorieBanner";
 import axios from "axios";
-import { handleDateSelect } from "@/app/_helper/handleDate"; 
+import { handleDateSelect } from "@/app/_helper/handleDate";
 
 type WorkoutDetailType = {
     name: string;
@@ -14,80 +15,25 @@ type WorkoutDetailType = {
     unit: string;
     quantity: number;
     achieved: boolean;
-};
-
-type WorkoutType = {
     date: string;
-    workoutDetail: WorkoutDetailType[];
 };
 
 type WorkoutsData = {
     userId: string;
-    workouts: WorkoutType[];
+    achieved: WorkoutDetailType[];
+    onGoing: WorkoutDetailType[];
 };
 
-const mockWorkoutsData: WorkoutsData = {
-    userId: "mockUserId",
-    workouts: [
-        {
-            date: "2024-05-27",
-            workoutDetail: [
-                { name: "Running", calories: 300, unit: "km", quantity: 5, achieved: true },
-                { name: "Cycling", calories: 200, unit: "km", quantity: 10, achieved: true },
-            ],
-        },
-        {
-            date: "2024-05-28",
-            workoutDetail: [
-                { name: "Swimming", calories: 400, unit: "laps", quantity: 20, achieved: true },
-            ],
-        },
-        {
-            date: "2024-05-29",
-            workoutDetail: [
-                { name: "Running", calories: 250, unit: "km", quantity: 4, achieved: true },
-                { name: "Cycling", calories: 180, unit: "km", quantity: 8, achieved: true },
-            ],
-        },
-        {
-            date: "2024-05-30",
-            workoutDetail: [
-                { name: "Yoga", calories: 150, unit: "hour", quantity: 1, achieved: true },
-            ],
-        },
-        {
-            date: "2024-05-31",
-            workoutDetail: [
-                { name: "Running", calories: 350, unit: "km", quantity: 6, achieved: true },
-            ],
-        },
-        {
-            date: "2024-06-01",
-            workoutDetail: [
-                { name: "Cycling", calories: 220, unit: "km", quantity: 11, achieved: true },
-                { name: "Swimming", calories: 300, unit: "laps", quantity: 15, achieved: true },
-            ],
-        },
-        {
-            date: "2024-06-02",
-            workoutDetail: [
-                { name: "Running", calories: 280, unit: "km", quantity: 5, achieved: true },
-                { name: "Cycling", calories: 240, unit: "km", quantity: 12, achieved: true },
-            ],
-        },
-    ],
-};
-
-export default function WorkoutSummary() {
-    const [workouts, setWorkouts] = useState<WorkoutsData | null>(null);
+export default function WorkoutSummaryWrapper() {
+    const [workoutDetails, setWorkoutDetails] = useState<WorkoutDetailType[]>([]);
     const [userId, setUserId] = useState<string | null>(null);
     const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
-    const [errorStatus, setErrorStatus] = useState<number | null>(null); 
-    const [weeklyWorkouts, setWeeklyWorkouts] = useState<WorkoutType[]>([]);
+    const [errorStatus, setErrorStatus] = useState<number | null>(null);
+    const [weeklyWorkouts, setWeeklyWorkouts] = useState<WorkoutDetailType[]>([]);
     const [weekRange, setWeekRange] = useState<string>("");
-    const [monthlyAverageCalories, setMonthlyAverageCalories] = useState<number>(0); 
-    const [weeklyAverageCalories, setWeeklyAverageCalories] = useState<number>(0); 
-    const [dailyAverageCalories, setDailyAverageCalories] = useState<number>(0); 
+    const [monthlyAverageCalories, setMonthlyAverageCalories] = useState<number>(0);
+    const [weeklyAverageCalories, setWeeklyAverageCalories] = useState<number>(0);
+    const [dailyAverageCalories, setDailyAverageCalories] = useState<number>(0);
     const [totalCalories, setTotalCalories] = useState<number>(0);
     const maxCalories = 500;
 
@@ -105,72 +51,61 @@ export default function WorkoutSummary() {
     }, []);
 
     useEffect(() => {
-        if (userId) {
-            // const fetchWorkouts = async () => {
-            //     try {
-            //         const response = await axios.get(`/api/get-workouts`, {
-            //             params: { userId, date },
-            //         });
-            //         if (response.data) {
-            //             setWorkouts(response.data);
-            //             setErrorStatus(null);
-            //             console.log("Workouts:", response.data);
+        const fetchWorkouts = async () => {
+            if (userId) {
+                try {
+                    const response = await axios.get(`/api/get-workout`, {
+                        params: { userId, date },
+                    });
+                    if (response.data) {
+                        const { achieved, onGoing } = response.data;
+                        const combinedWorkouts = [...achieved, ...onGoing];
+                        setWorkoutDetails(combinedWorkouts);
+                        setErrorStatus(null);
+                        console.log("Workouts:", combinedWorkouts);
 
-            //             const weeklyWorkoutsData = getWeeklyWorkouts(response.data.workouts, date);
-            //             const weekDates = getWeekDates(new Date(date));
-            //             setWeekRange(`${weekDates[0]} to ${weekDates[6]}`);
+                        const weeklyWorkoutsData = getWeeklyWorkouts(combinedWorkouts, date);
+                        const weekDates = getWeekDates(new Date(date));
+                        setWeekRange(`${weekDates[0]} to ${weekDates[6]}`);
+                        console.log("Weekly workouts data:", weeklyWorkoutsData);
+                        console.log("Week range:", weekDates);
 
-            //             const weeklyCalories = calculateTotalCalories(weeklyWorkoutsData);
-            //             setWeeklyAverageCalories(Math.round(weeklyCalories / 7)); 
+                        const weeklyCalories = calculateTotalCalories(weeklyWorkoutsData);
+                        setWeeklyAverageCalories(Math.round(weeklyCalories / 7));
+                        console.log("Weekly calories:", weeklyCalories);
+                        console.log("Weekly average calories:", Math.round(weeklyCalories / 7));
 
-            //             const monthlyAverageCalories = calculateMonthlyAverageCalories(response.data.workouts, date);
-            //             setMonthlyAverageCalories(monthlyAverageCalories);
+                        const monthlyAverageCalories = calculateMonthlyAverageCalories(combinedWorkouts, date);
+                        setMonthlyAverageCalories(monthlyAverageCalories);
+                        console.log("Monthly average calories:", monthlyAverageCalories);
 
-            //             const dailyCalories = calculateDailyCalories(response.data.workouts, date);
-            //             setDailyAverageCalories(Math.round(dailyCalories / 1)); 
+                        const dailyCalories = calculateDailyCalories(combinedWorkouts, date);
+                        setDailyAverageCalories(Math.round(dailyCalories / 1));
+                        console.log("Daily calories:", dailyCalories);
+                        console.log("Daily average calories:", Math.round(dailyCalories / 1));
 
-            //             const totalCalories = calculateTotalCalories(response.data.workouts);
-            //             setTotalCalories(totalCalories);
+                        const totalCalories = calculateTotalCalories(combinedWorkouts);
+                        setTotalCalories(totalCalories);
+                        console.log("Total calories:", totalCalories);
 
-            //         } else {
-            //             setWorkouts(null);
-            //             console.log(`No workouts found for user: ${userId}`);
-            //             return null;
-            //         }
-            //     } catch (error: any) {
-            //         if (error.response && error.response.status === 404) {
-            //             setWorkouts(null);
-            //             console.log(`No workouts found for user: ${userId}`);
-            //             return null;
-            //         } else {
-            //             console.error("Error fetching workouts:", error);
-            //             setErrorStatus(error.response ? error.response.status : 500);
-            //         }
-            //     }
-            // };
-            // fetchWorkouts();
-
-            // use mock data for now
-            setWorkouts(mockWorkoutsData);
-            setErrorStatus(null);
-            console.log("Workouts:", mockWorkoutsData);
-
-            const weeklyWorkoutsData = getWeeklyWorkouts(mockWorkoutsData.workouts, date);
-            const weekDates = getWeekDates(new Date(date));
-            setWeekRange(`${weekDates[0]} to ${weekDates[6]}`);
-
-            const weeklyCalories = calculateTotalCalories(weeklyWorkoutsData);
-            setWeeklyAverageCalories(Math.round(weeklyCalories / 7)); 
-
-            const monthlyAverageCalories = calculateMonthlyAverageCalories(mockWorkoutsData.workouts, date);
-            setMonthlyAverageCalories(monthlyAverageCalories);
-
-            const dailyCalories = calculateDailyCalories(mockWorkoutsData.workouts, date);
-            setDailyAverageCalories(Math.round(dailyCalories / 1)); 
-
-            const totalCalories = calculateTotalCalories(mockWorkoutsData.workouts);
-            setTotalCalories(totalCalories);
-        }
+                    } else {
+                        setWorkoutDetails([]);
+                        console.log(`No workouts found for user: ${userId}`);
+                        return null;
+                    }
+                } catch (error: any) {
+                    if (error.response && error.response.status === 404) {
+                        setWorkoutDetails([]);
+                        console.log(`No workouts found for user: ${userId}`);
+                        return null;
+                    } else {
+                        console.error("Error fetching workouts:", error);
+                        setErrorStatus(error.response ? error.response.status : 500);
+                    }
+                }
+            }
+        };
+        fetchWorkouts();
     }, [userId, date]);
 
     const getWeekDates = (currentDate: Date) => {
@@ -183,31 +118,42 @@ export default function WorkoutSummary() {
             date.setUTCDate(monday.getUTCDate() + i);
             weekDates.push(date.toISOString().split('T')[0]);
         }
+        console.log("Week dates:", weekDates); // Add console log
         return weekDates;
     };
 
-    const getWeeklyWorkouts = (workouts: WorkoutType[], currentDate: string) => {
+    const getWeeklyWorkouts = (workouts: WorkoutDetailType[], currentDate: string) => {
         const weekDates = getWeekDates(new Date(currentDate));
-        return workouts.filter(workout => weekDates.includes(workout.date));
+        // Filter workouts based on weekDates
+        const weeklyWorkouts = workouts.filter(workout => weekDates.includes(workout.date));
+        console.log("Filtered weekly workouts:", weeklyWorkouts); // Add console log
+        return weeklyWorkouts;
     };
 
-    const calculateTotalCalories = (workouts: WorkoutType[]) => {
-        return workouts.reduce((total, day) => {
-            return total + day.workoutDetail.reduce((workoutTotal, item) => workoutTotal + item.calories, 0);
+    const calculateTotalCalories = (workouts: WorkoutDetailType[]) => {
+        const totalCalories = workouts.reduce((total, item) => {
+            return total + item.calories;
         }, 0);
+        console.log("Total calories calculation:", totalCalories); // Add console log
+        return totalCalories;
     };
 
-    const calculateMonthlyAverageCalories = (workouts: WorkoutType[], currentDate: string) => {
+    const calculateMonthlyAverageCalories = (workouts: WorkoutDetailType[], currentDate: string) => {
         const currentMonth = new Date(currentDate).getMonth();
         const monthlyWorkouts = workouts.filter(workout => new Date(workout.date).getMonth() === currentMonth);
         const totalCalories = calculateTotalCalories(monthlyWorkouts);
         const daysInMonth = new Date(new Date(currentDate).getFullYear(), currentMonth + 1, 0).getDate();
-        return Math.round(totalCalories / daysInMonth);
+        const monthlyAverageCalories = Math.round(totalCalories / daysInMonth);
+        console.log("Monthly total calories:", totalCalories); // Add console log
+        console.log("Monthly average calories calculation:", monthlyAverageCalories); // Add console log
+        return monthlyAverageCalories;
     };
 
-    const calculateDailyCalories = (workouts: WorkoutType[], currentDate: string) => {
+    const calculateDailyCalories = (workouts: WorkoutDetailType[], currentDate: string) => {
         const dailyWorkouts = workouts.filter(workout => workout.date === currentDate);
-        return calculateTotalCalories(dailyWorkouts);
+        const dailyCalories = calculateTotalCalories(dailyWorkouts);
+        console.log("Daily total calories:", dailyCalories); // Add console log
+        return dailyCalories;
     };
 
     const getMonthName = (monthIndex: number) => {
