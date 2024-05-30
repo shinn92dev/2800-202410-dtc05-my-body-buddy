@@ -240,6 +240,7 @@ export default function WorkoutAddingWrapper() {
                 calories:
                     item.selectedOption.quantity *
                     item.selectedOption.kcalPerUnit,
+                achieved: true,
             });
         });
         const params = new URLSearchParams(window.location.search);
@@ -254,8 +255,7 @@ export default function WorkoutAddingWrapper() {
         });
         const data = dataRes.data;
         console.log(data);
-
-        // router.push("/workout");
+        router.push("/workout");
     };
 
     return (
