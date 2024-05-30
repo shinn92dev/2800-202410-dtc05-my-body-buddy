@@ -38,14 +38,14 @@ const WorkoutHomeWrapper: React.FC = () => {
             const items = [];
             let match;
             while ((match = itemRegExp.exec(day)) !== null) {
-                const title = match[1];
+                const name = match[1];
                 const quantity = parseInt(match[2]);
                 const unit = match[3];
                 const calories = parseInt(match[4]);
                 const kcalPerUnit = parseFloat(
                     (calories / quantity).toFixed(1)
                 );
-                items.push({ title, quantity, unit, kcalPerUnit, calories });
+                items.push({ name, quantity, unit, kcalPerUnit, calories });
             }
             return items;
         });
@@ -81,7 +81,7 @@ const WorkoutHomeWrapper: React.FC = () => {
                 menus.every((dayMenu) =>
                     dayMenu.every(
                         (item) =>
-                            typeof item.title === "string" &&
+                            typeof item.name === "string" &&
                             typeof item.quantity === "number" &&
                             typeof item.unit === "string" &&
                             typeof item.kcalPerUnit === "number"
@@ -90,6 +90,8 @@ const WorkoutHomeWrapper: React.FC = () => {
 
             if (isValidMenu) {
                 setGeneratedWorkoutMenus(menus);
+                // TODO: ROUTE TO API
+
                 console.log(`Formatted menus:`);
                 console.log(menus);
             } else {
@@ -255,8 +257,9 @@ const WorkoutHomeWrapper: React.FC = () => {
                     }
                     subtitle={"/ " + totalCalories + " kcal"}
                     percent={
-                        (totalCalories - calculateKcalForWorkout(onGoingWorkoutData)) /
-                            totalCalories *
+                        ((totalCalories -
+                            calculateKcalForWorkout(onGoingWorkoutData)) /
+                            totalCalories) *
                         100
                     }
                 />

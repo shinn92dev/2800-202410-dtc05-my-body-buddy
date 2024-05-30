@@ -19,16 +19,16 @@ export async function POST(req: any) {
         const [year, month, day] = date.split("-").map(Number);
         const formattedDate = new Date(Date.UTC(year, month - 1, day));
         // Check if the user's data is found
-        const targetUserWorkout = await WorkoutModel.findOne({
+        let targetUserWorkout = await WorkoutModel.findOne({
             userId,
         });
 
         if (!targetUserWorkout) {
-            return NextResponse.json(
-                { message: "User's workout not found" },
-                { status: 404 }
-            );
+            // Create new user workout if not found
+            targetUserWorkout = new WorkoutModel({ userId, workouts: [] });
+            await targetUserWorkout.save();
         }
+
         const workoutsForDate = targetUserWorkout.workouts.find(
             (workout) => workout.date.getTime() === formattedDate.getTime()
         );
