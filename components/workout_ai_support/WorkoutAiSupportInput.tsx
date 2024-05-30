@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import TagsWithAddingField from "@/components/global/TagsWithAddingField";
 import axios from "axios";
@@ -8,6 +10,13 @@ type WorkoutAiSupportInputProps = {
         selectedTags: string[]
     ) => void;
     onGenerateItems: (response: string) => void;
+};
+
+type WorkoutItem = {
+    name: string;
+    quantity: number;
+    unit: string;
+    calories: number;
 };
 
 // Default tags for reasons to replace workout items
@@ -29,7 +38,7 @@ export default function WorkoutAiSupportInput({
     const [selectedItemTitles, setSelectedItemTitles] = useState<string[]>([]); // State to track selected item titles
     const [selectedTagTitles, setSelectedTagTitles] = useState<string[]>([]); // State to track selected tag titles
     const [generated, setGenerated] = useState(false); // State to track if suggestions are generated
-    const [onGoingWorkoutData, setOnGoingWorkoutData] = useState();
+    const [onGoingWorkoutData, setOnGoingWorkoutData] = useState<WorkoutItem[]>([]);
     // Handle click event for generating alternative suggestions
 
     const handleGenerateAlternative = async () => {
