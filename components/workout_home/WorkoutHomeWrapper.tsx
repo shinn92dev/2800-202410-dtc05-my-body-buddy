@@ -256,8 +256,8 @@ const WorkoutHomeWrapper: React.FC = () => {
                     }
                     subtitle={"/ " + totalCalories + " kcal"}
                     percent={
-                        (totalCalories /
-                            calculateKcalForWorkout(onGoingWorkoutData)) *
+                        (totalCalories - calculateKcalForWorkout(onGoingWorkoutData)) /
+                            totalCalories *
                         100
                     }
                 />
