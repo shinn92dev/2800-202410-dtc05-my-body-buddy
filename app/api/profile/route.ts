@@ -3,7 +3,12 @@ import { connectMongoDB } from "@/config/db";
 import Profile from "@/models/Profile";
 import Target from "@/models/Target";
 import { currentUser } from "@clerk/nextjs/server";
-import { calculateBmr, factorByActivityLevel, calculateEnergyRequirementsPerDay, calculateCaloriesPerDay } from "@/app/_helper/calorie";
+import {
+  calculateBmr,
+  factorByActivityLevel,
+  calculateEnergyRequirementsPerDay,
+  calculateCaloriesPerDay,
+} from "@/app/_helper/calorie";
 import { calculateNumberOfDaysLeft } from "@/app/_helper/handleDate";
 
 export async function GET(req: NextRequest) {
@@ -35,6 +40,21 @@ export async function POST(req: NextRequest) {
   try {
     const { age, gender, height, weight, activityLevel, preference } = await req.json();
 
+    // Validate input data
+    if (
+      !age ||
+      !gender ||
+      !height ||
+      !weight ||
+      !activityLevel ||
+      !preference ||
+      age < 0 ||
+      height < 50 ||
+      weight < 10
+    ) {
+      return NextResponse.json({ message: "Invalid input data" }, { status: 400 });
+    }
+
     const bmr = calculateBmr(age, height, weight, gender);
     const activityFactor = factorByActivityLevel(age, activityLevel);
     const energyRequirements = calculateEnergyRequirementsPerDay(bmr, activityFactor);
@@ -50,15 +70,17 @@ export async function POST(req: NextRequest) {
 
     const target = await Target.findOne({ userId: user.id });
 
-    const { targetWeight, targetDate } = target;
-    if (targetWeight && targetDate) {
-      const numberOfDaysLeft = calculateNumberOfDaysLeft(targetDate);
-      const weightGap = weight - targetWeight;
+    if (target) {
+      const { targetWeight, targetDate } = target;
+      if (targetWeight && targetDate) {
+        const numberOfDaysLeft = calculateNumberOfDaysLeft(targetDate);
+        const weightGap = weight - targetWeight;
 
-      if (numberOfDaysLeft > 0 && !isNaN(weightGap)) {
-        const result = calculateCaloriesPerDay(energyRequirements, numberOfDaysLeft, weightGap, preference);
-        targetCaloriesIntake = result.targetCaloriesIntake;
-        targetCaloriesBurn = result.targetCaloriesBurn;
+        if (numberOfDaysLeft > 0 && !isNaN(weightGap)) {
+          const result = calculateCaloriesPerDay(energyRequirements, numberOfDaysLeft, weightGap, preference);
+          targetCaloriesIntake = result.targetCaloriesIntake;
+          targetCaloriesBurn = result.targetCaloriesBurn;
+        }
       }
     }
 
