@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
 const workoutDetailSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    calories: { type: Number, required: true },
-    unit: { type: String, required: true },
-    quantity: { type: Number, required: true },
+    name: { type: String, required: false },
+    calories: { type: Number, required: false },
+    unit: { type: String, required: false },
+    quantity: { type: Number, required: false },
     achieved: { type: Boolean, default: false },
 });
 
@@ -12,7 +12,7 @@ const workoutSchema = new mongoose.Schema({
     userId: { type: String, ref: "User", required: true },
     workouts: [
         {
-            date: { type: Date, required: true },
+            date: { type: Date, required: false },
             workoutDetail: [workoutDetailSchema],
         },
     ],

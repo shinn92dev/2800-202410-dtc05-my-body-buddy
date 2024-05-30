@@ -5,6 +5,7 @@ import { connectMongoDB } from "@/config/db";
 
 export async function POST(req: any) {
     try {
+        console.log("ADD WORKOUT STARTs");
         const data = await req.json();
         const { date, workouts } = data.params;
         const { userId } = auth();

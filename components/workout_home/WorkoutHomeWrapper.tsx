@@ -84,13 +84,23 @@ const WorkoutHomeWrapper: React.FC = () => {
                             typeof item.name === "string" &&
                             typeof item.quantity === "number" &&
                             typeof item.unit === "string" &&
-                            typeof item.kcalPerUnit === "number"
+                            typeof item.calories === "number"
                     )
                 ) && menus.length === 7;
 
             if (isValidMenu) {
                 setGeneratedWorkoutMenus(menus);
-                // TODO: ROUTE TO API
+                const dataRes = await axios.post(`/api/add-workout`, {
+                    params: {
+                        date: selectedDate.toISOString().split("T")[0],
+                        workouts: menus,
+                    },
+                });
+                const data = dataRes.data;
+                if (data) {
+                    console.log(data);
+                    console.log("DATA ADDED");
+                }
 
                 console.log(`Formatted menus:`);
                 console.log(menus);
@@ -219,7 +229,6 @@ const WorkoutHomeWrapper: React.FC = () => {
             const { userId } = res.data;
             console.log(item);
             console.log("Update start:", userId);
-            // TODO: REPLACE DATE FROM CALENDAR DATE
             const formattedDate = selectedDate.toISOString();
             const newData = {
                 userId: userId,
