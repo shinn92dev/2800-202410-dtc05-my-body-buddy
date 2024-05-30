@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import SearchWindow from "@/components/global/SearchWindow";
+import axios from "axios";
 
 // Categories data
 const categories = [
@@ -228,7 +229,7 @@ export default function WorkoutAddingWrapper() {
         }
     };
 
-    const handleSaveItems = () => {
+    const handleSaveItems = async () => {
         console.log(draftedItems);
         const formattedItems: any = [];
         draftedItems.forEach((item) => {
@@ -241,7 +242,19 @@ export default function WorkoutAddingWrapper() {
                     item.selectedOption.kcalPerUnit,
             });
         });
-        console.log(formattedItems);
+        const params = new URLSearchParams(window.location.search);
+        const date = params.get("date");
+        const [year, month, day] = date.split("-").map(Number);
+        const dateObj = new Date(Date.UTC(year, month - 1, day));
+        const dataRes = await axios.post("/api/add-workout", {
+            params: {
+                date: dateObj.toISOString().split("T")[0],
+                workouts: formattedItems,
+            },
+        });
+        const data = dataRes.data;
+        console.log(data);
+
         // router.push("/workout");
     };
 
