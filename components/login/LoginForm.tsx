@@ -25,7 +25,7 @@ const routeLoginPostUser = async (userData: any) => {
       throw new Error("Not OK");
     }
     window.location.href = "/summary/diet";
-    window.location.href = "/summary/workout";
+
     return response.data;
   } catch (error) {
     console.error(error);

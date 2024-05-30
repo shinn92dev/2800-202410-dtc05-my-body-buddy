@@ -21,7 +21,7 @@ const createNewUser = async (userData: any, retries = 3): Promise<any> => {
       throw new Error("Not OK");
     }
     window.location.href = "/summary/diet";
-    window.location.href = "/summary/workout";
+
     return response.data;
   } catch (error) {
     if (
@@ -99,7 +99,7 @@ export default function SignupForm() {
         password: data.password,
       });
 
-      setSignUpErrors(String || null); // clear previous errors
+      setSignUpErrors(null); // clear previous errors
 
       if (signUpResult?.status === "complete") {
         const userId = signUpResult.createdUserId;
