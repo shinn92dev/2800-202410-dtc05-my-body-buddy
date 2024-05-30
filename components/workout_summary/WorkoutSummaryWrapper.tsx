@@ -89,7 +89,7 @@ export default function WorkoutSummary() {
     const [weeklyAverageCalories, setWeeklyAverageCalories] = useState<number>(0); 
     const [dailyAverageCalories, setDailyAverageCalories] = useState<number>(0); 
     const [totalCalories, setTotalCalories] = useState<number>(0);
-    const maxCalories = 500;
+    const maxCalories = 2000;
 
     useEffect(() => {
         const fetchUserId = async () => {
