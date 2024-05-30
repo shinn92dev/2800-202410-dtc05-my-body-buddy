@@ -125,9 +125,6 @@
 ┃ ┃ ┣ 📜 LoadingAnimation.scss
 ┃ ┃ ┣ 📜 LoadingAnimation.tsx
 ┃ ┃ ┣ 📜 Modal.tsx
-┃ ┃ ┣ 📜 Navigation.tsx
-┃ ┃ ┣ 📜 NavigationBeforeAuth.tsx
-┃ ┃ ┣ 📜 NavigationFooter.tsx
 ┃ ┃ ┣ 📜 PolicyContent.tsx
 ┃ ┃ ┣ 📜 SearchWindow.tsx
 ┃ ┃ ┣ 📜 signOutButton.tsx
