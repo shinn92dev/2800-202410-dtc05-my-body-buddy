@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "@/config/db";
 import Profile from "@/models/Profile";
+import Target from "@/models/Target";
 import { currentUser } from "@clerk/nextjs/server";
+import { calculateBmr, factorByActivityLevel, calculateEnergyRequirementsPerDay, calculateCaloriesPerDay } from "@/app/_helper/calorie";
+import { calculateNumberOfDaysLeft } from "@/app/_helper/handleDate";
 
 export async function GET(req: NextRequest) {
   await connectMongoDB();
@@ -32,9 +35,39 @@ export async function POST(req: NextRequest) {
   try {
     const { age, gender, height, weight, activityLevel, preference } = await req.json();
 
+    const bmr = calculateBmr(age, height, weight, gender);
+    const activityFactor = factorByActivityLevel(age, activityLevel);
+    const energyRequirements = calculateEnergyRequirementsPerDay(bmr, activityFactor);
+
     await Profile.updateOne(
       { userId: user.id },
       { age, gender, height, weight, activityLevel, preference },
+      { upsert: true }
+    );
+
+    let targetCaloriesIntake = energyRequirements;
+    let targetCaloriesBurn = energyRequirements;
+
+    const target = await Target.findOne({ userId: user.id });
+
+    const { targetWeight, targetDate } = target;
+    if (targetWeight && targetDate) {
+      const numberOfDaysLeft = calculateNumberOfDaysLeft(targetDate);
+      const weightGap = weight - targetWeight;
+
+      if (numberOfDaysLeft > 0 && !isNaN(weightGap)) {
+        const result = calculateCaloriesPerDay(energyRequirements, numberOfDaysLeft, weightGap, preference);
+        targetCaloriesIntake = result.targetCaloriesIntake;
+        targetCaloriesBurn = result.targetCaloriesBurn;
+      }
+    }
+
+    targetCaloriesIntake = Math.round(targetCaloriesIntake);
+    targetCaloriesBurn = Math.round(targetCaloriesBurn);
+
+    await Target.updateOne(
+      { userId: user.id },
+      { targetCaloriesIntake, targetCaloriesBurn },
       { upsert: true }
     );
 

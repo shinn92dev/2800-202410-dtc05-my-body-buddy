@@ -1,28 +1,7 @@
-// const calculateBmr = (age: number, height: number, weight: number, gender: string) => {
-//     if (gender === "male") {
-//         if (age <= 29) {
-//             const bmr = (66.4 * weight - 113.0 * height / 100 + 3000) / 4.186;
-//             return bmr; 
-//         } else if (age <= 59) {
-//             const bmr = (47.2 * weight + 66.9 * height / 100 + 3769) / 4.186;
-//             return bmr;
-//         } else {
-//             const bmr = (36.8 * weight + 4719.5 * height / 100 - 4481) / 4.186;
-//             return bmr;
-//         }
-//     } else {
-//         if (age <= 29) {
-//             const bmr = (55.6 * weight + 1397.4 * height / 100 + 148) / 4.186;
-//             return bmr;
-//         } else if (age <= 59) {
-//             const bmr = (36.4 * weight + 104.6 * height / 100 + 3619) / 4.186;
-//             return bmr;
-//         } else {
-//             const bmr = (38.5 * weight + 2665.2 * height / 100 - 1264) / 4.186;
-//             return bmr;
-//         }
-//     }
-// };
+import { connectMongoDB } from "@/config/db";
+import Target from "@/models/Target";
+import Profile from "@/models/Profile";
+import axios from "axios";
 
 const calculateBmr = (age: number, height: number, weight: number, gender: string): number => {
     if (gender === "male") {
@@ -87,13 +66,13 @@ const calculateCaloriesToLoseWeight = (energyRequirements: number, numberOfDays:
         if (caloriesBurn > energyRequirements * 1.5) {
             caloriesBurn = energyRequirements * 1.5;
         }
-        return {"targetCaloriesIntake": energyRequirements, "targetCaloriesBurn": caloriesBurn}; 
+        return {"targetCaloriesIntake": Math.round(energyRequirements), "targetCaloriesBurn": Math.round(caloriesBurn)}; 
     } else {
         let caloriesBurn: number = (energyRequirements - 200) + (7305 * weightGap / numberOfDays);
         if (caloriesBurn > (energyRequirements - 200) * 1.5) {
             caloriesBurn = (energyRequirements - 200) * 1.5;
         }
-        return {"targetCaloriesIntake": energyRequirements - 200, "targetCaloriesBurn": caloriesBurn};
+        return {"targetCaloriesIntake": Math.round(energyRequirements - 200), "targetCaloriesBurn": Math.round(caloriesBurn)};
     }
 }
 
@@ -106,4 +85,48 @@ const calculateCaloriesToGainWeight = (energyRequirements: number, numberOfDays:
         return {"targetCaloriesIntake": energyRequirements + 200, "targetCaloriesBurn": caloriesBurn};
 }
 
-export { calculateCaloriesPerDay, calculateBmr, factorByActivityLevel, calculateEnergyRequirementsPerDay}
+const fetchTargetCaloriesBurn = async (userId?: string): Promise<number> => {
+    const profileResponse = await axios.get(`/api/profile`);
+    const profileData = profileResponse.data;
+    const { age, gender, height, weight, activityLevel } = profileData;
+    const targetResponse = await axios.get(`/api/targets`);
+    const targetData = targetResponse.data;
+    const { targetCaloriesBurn } = targetData;
+    const bmr = calculateBmr(age, height, weight, gender);
+    const activityFactor = factorByActivityLevel(age, activityLevel);
+    const energyRequirements = calculateEnergyRequirementsPerDay(bmr, activityFactor);
+
+    if (targetCaloriesBurn < energyRequirements) {
+        return 0
+    } else {
+        return Math.round(targetCaloriesBurn - energyRequirements);
+    }
+}
+
+export { calculateCaloriesPerDay, calculateBmr, factorByActivityLevel, calculateEnergyRequirementsPerDay, fetchTargetCaloriesBurn };
+
+// const calculateBmr = (age: number, height: number, weight: number, gender: string) => {
+//     if (gender === "male") {
+//         if (age <= 29) {
+//             const bmr = (66.4 * weight - 113.0 * height / 100 + 3000) / 4.186;
+//             return bmr; 
+//         } else if (age <= 59) {
+//             const bmr = (47.2 * weight + 66.9 * height / 100 + 3769) / 4.186;
+//             return bmr;
+//         } else {
+//             const bmr = (36.8 * weight + 4719.5 * height / 100 - 4481) / 4.186;
+//             return bmr;
+//         }
+//     } else {
+//         if (age <= 29) {
+//             const bmr = (55.6 * weight + 1397.4 * height / 100 + 148) / 4.186;
+//             return bmr;
+//         } else if (age <= 59) {
+//             const bmr = (36.4 * weight + 104.6 * height / 100 + 3619) / 4.186;
+//             return bmr;
+//         } else {
+//             const bmr = (38.5 * weight + 2665.2 * height / 100 - 1264) / 4.186;
+//             return bmr;
+//         }
+//     }
+// };

@@ -2,11 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "@/config/db";
 import Target from "@/models/Target";
 import Profile from "@/models/Profile";
-import { currentUser } from "@clerk/nextjs/server";
+import { currentUser, auth } from "@clerk/nextjs/server";
 import { calculateCaloriesPerDay, calculateBmr, factorByActivityLevel, calculateEnergyRequirementsPerDay } from "@/app/_helper/calorie";
 import { calculateNumberOfDaysLeft } from "@/app/_helper/handleDate";
 
 export async function GET(req: NextRequest) {
+
   await connectMongoDB();
   const user = await currentUser();
   if (!user) {
@@ -62,6 +63,9 @@ export async function POST(req: NextRequest) {
     if (isNaN(targetCaloriesIntake) || isNaN(targetCaloriesBurn)) {
       throw new Error("Invalid calculation result");
     }
+
+    targetCaloriesIntake = Math.round(targetCaloriesIntake);
+    targetCaloriesBurn = Math.round(targetCaloriesBurn);
 
     await Target.updateOne(
       { userId: user.id },

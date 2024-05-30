@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { calculateBmr } from "@/app/_helper/calorie";
 
 interface ProfileProps {
   user: {
@@ -48,6 +49,12 @@ const Profile: React.FC<ProfileProps> = ({ user, profile, target }) => {
     activityLevelToBeDisplayed = "High";
   }
 
+  const bmi = profile.weight / ((profile.height / 100) * (profile.height / 100));
+
+  const healthyWeight = 22 * (profile.height / 100) * (profile.height / 100);
+
+  const bmr = Math.round(calculateBmr(profile.age, profile.height, profile.weight, profile.gender));
+
   return (
     <div className="flex flex-col items-center">
       <div className="bg-orange m-5 tracking-wide leading-8 font-semibold text-center w-2/3">
@@ -59,6 +66,8 @@ const Profile: React.FC<ProfileProps> = ({ user, profile, target }) => {
           <div><span className="font-bold">Gender</span>: {profile.gender}</div>
           <div><span className="font-bold">Height</span>: {profile.height} cm</div>
           <div><span className="font-bold">Weight</span>: {profile.weight} kg</div>
+          <div><span className="font-bold">Healthy Weight</span>: {healthyWeight}</div>
+          <div><span className="font-bold">BMI</span>: {bmi}</div>
           <div><span className="font-bold">Activity Level</span>: {activityLevelToBeDisplayed}</div>
           <div><span className="font-bold">Preference</span>: {preferenceToBeDisplayed}</div>
         </div>
@@ -69,8 +78,9 @@ const Profile: React.FC<ProfileProps> = ({ user, profile, target }) => {
           <div>
             <div><span className="font-bold">Target Date</span>: {target.targetDate}</div>
             <div><span className="font-bold">Target Weight</span>: {target.targetWeight} kg</div>
-            <div><span className="font-bold">Calories Intake</span>: {target.targetCaloriesIntake} kcal/day</div>
-            <div><span className="font-bold">Calories Burn</span>: {target.targetCaloriesBurn} kcal/day</div>
+            <div><span className="font-bold">BMR</span>: {bmr} kcal/day</div>
+            <div><span className="font-bold">Target Calories Intake</span>: {target.targetCaloriesIntake} kcal/day</div>
+            <div><span className="font-bold">Target Calories Burn</span>: {target.targetCaloriesBurn} kcal/day</div>
           </div>
         </div>
       )}
