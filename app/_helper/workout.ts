@@ -2,45 +2,20 @@ import { connectMongoDB } from "@/config/db";
 import WorkoutModel from "@/models/Workout";
 import { format } from "date-fns";
 import axios from "axios";
-import { TRACE_OUTPUT_VERSION } from "next/dist/shared/lib/constants";
-
+import { WorkoutData, WorkoutDetail } from "@/config/types";
 // Parameter: workout date from MongoDB
-const formatDateFromMongoDB = (date: Date) => {
+const formatDateFromMongoDB = (date: Date): string => {
     return new Date(date).toISOString().split("T")[0];
 };
 // Parameter: workout date from User
-export const formatDateFromInput = (date: Date) => {
+export const formatDateFromInput = (date: Date): string => {
     return format(date, "yyyy-MM-dd");
 };
 
-// export const fetchWorkoutForSpecificDate = (workoutData: any, date: Date) => {
-//     console.log(date, "FROM fetch Workout For");
-//     console.log(formatDateFromInput(date), "FROM fetch Workout For User Input");
-
-//     const workoutForToday = workoutData.workouts.filter((workout) => {
-//         const dateFromMongoDB = formatDateFromMongoDB(workout.date);
-//         console.log(formatDateFromMongoDB(workout.date), "DB");
-//         const dateFromUser = formatDateFromInput(date);
-//         return dateFromMongoDB == dateFromUser;
-//     });
-//     const achievedWorkouts = workoutForToday.flatMap((workout) =>
-//         workout.workoutDetail.filter((detail) => detail.achieved)
-//     );
-
-//     const onGoingWorkouts = workoutForToday.flatMap((workout) =>
-//         workout.workoutDetail.filter((detail) => !detail.achieved)
-//     );
-
-//     const result = {
-//         achieved: achievedWorkouts,
-//         onGoing: onGoingWorkouts,
-//     };
-
-//     console.log(result);
-//     return result;
-// };
-
-export const fetchWorkoutForSpecificDate = (workoutData: any, date: string) => {
+export const fetchWorkoutForSpecificDate = (
+    workoutData: WorkoutData,
+    date: string
+): { achieved: WorkoutDetail[]; onGoing: WorkoutDetail[] } => {
     const dailyWorkout = workoutData.workouts.find(
         (d: { date: { toISOString: () => string } }) => {
             const workoutDate = d.date.toISOString().split("T")[0];
@@ -50,12 +25,16 @@ export const fetchWorkoutForSpecificDate = (workoutData: any, date: string) => {
     if (!dailyWorkout) {
         return { achieved: [], onGoing: [] };
     }
-    const achievedWorkout = dailyWorkout.workoutDetail.filter((workout) => {
-        return workout.achieved;
-    });
-    const onGoingWorkout = dailyWorkout.workoutDetail.filter((workout) => {
-        return !workout.achieved;
-    });
+    const achievedWorkout = dailyWorkout.workoutDetail.filter(
+        (workout: WorkoutDetail) => {
+            return workout.achieved;
+        }
+    );
+    const onGoingWorkout = dailyWorkout.workoutDetail.filter(
+        (workout: WorkoutDetail) => {
+            return !workout.achieved;
+        }
+    );
     const result = {
         achieved: achievedWorkout,
         onGoing: onGoingWorkout,
@@ -63,7 +42,7 @@ export const fetchWorkoutForSpecificDate = (workoutData: any, date: string) => {
     return result;
 };
 
-export const calculateKcalForWorkout = (workouts: any) => {
+export const calculateKcalForWorkout = (workouts: WorkoutDetail[]): number => {
     let totalKcal = 0;
     workouts.forEach((workout: { calories: number }) => {
         totalKcal += workout.calories;
