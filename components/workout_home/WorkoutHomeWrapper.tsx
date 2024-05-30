@@ -94,11 +94,19 @@ const WorkoutHomeWrapper: React.FC = () => {
                     params: {
                         date: selectedDate.toISOString().split("T")[0],
                         workouts: menus,
+                        type: "seven-days-workout",
                     },
                 });
-                const data = dataRes.data.data;
-                console.log(data);
-                setOnGoingWorkoutData(data.onGoing);
+                const data = dataRes.data;
+                console.log(data, "?????????????????????");
+
+                if (data.message === "Not allowed new workout AI generation") {
+                    alert(data.data);
+                    window.location.href = "/workout";
+                    return;
+                }
+
+                setOnGoingWorkoutData(data.data.onGoing);
                 alert(
                     `Workout out for 7 days from ${selectedDate} generated and saved!`
                 );
