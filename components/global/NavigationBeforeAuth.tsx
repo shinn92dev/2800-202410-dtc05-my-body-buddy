@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 
 export default function NavigationBeforeAuth() {
   const path = usePathname();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const toggleHBGmenu = () => setIsOpen(!isOpen);
 
   return (
@@ -30,7 +30,7 @@ export default function NavigationBeforeAuth() {
       </button>
 
       <div
-        className={`fixed top-0 left-0 h-full w-2/3 bg-white border-r border-logo-pumpkin shadow-lg transform transition-transform ${
+        className={`fixed top-0 left-0 h-full w-1/3 bg-white border-r border-logo-pumpkin shadow-lg transform transition-transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -48,7 +48,7 @@ export default function NavigationBeforeAuth() {
         </button>
 
         <ul
-          className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
+          className={`text-beige font-bold text-center py-2 px-4 w-fit rounded-full m-2 ${
             path === "/login"
               ? "bg-dark-blue hover:bg-dark-blue"
               : "bg-gray-500 hover:bg-gray-700"
@@ -59,7 +59,7 @@ export default function NavigationBeforeAuth() {
           </Link>
         </ul>
         <ul
-          className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
+          className={`text-beige font-bold text-center py-2 px-4 w-fit rounded-full m-2 ${
             path === "/signup"
               ? "bg-dark-blue hover:bg-dark-blue"
               : "bg-gray-500 hover:bg-gray-700"
@@ -71,7 +71,9 @@ export default function NavigationBeforeAuth() {
         </ul>
       </div>
 
-      <div className={`flex-grow text-center`}>
+      <div className={`flex-grow text-center  ${
+          isOpen ? "blur-sm" : ""
+        } relative z-40`}>
         <Link href="/">
           <img
             src="/my_body_buddy_logo_transparent.png"
