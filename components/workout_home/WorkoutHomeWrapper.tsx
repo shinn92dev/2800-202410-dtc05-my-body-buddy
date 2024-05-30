@@ -41,9 +41,11 @@ const WorkoutHomeWrapper: React.FC = () => {
                 const title = match[1];
                 const quantity = parseInt(match[2]);
                 const unit = match[3];
-                const kcal = parseInt(match[4]);
-                const kcalPerUnit = parseFloat((kcal / quantity).toFixed(1));
-                items.push({ title, quantity, unit, kcalPerUnit });
+                const calories = parseInt(match[4]);
+                const kcalPerUnit = parseFloat(
+                    (calories / quantity).toFixed(1)
+                );
+                items.push({ title, quantity, unit, kcalPerUnit, calories });
             }
             return items;
         });

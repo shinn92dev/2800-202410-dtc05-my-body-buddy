@@ -230,7 +230,7 @@ export default function WorkoutAddingWrapper() {
 
     const handleSaveItems = () => {
         console.log(draftedItems);
-        const formattedItems = [];
+        const formattedItems: any = [];
         draftedItems.forEach((item) => {
             formattedItems.push({
                 name: item.name,
@@ -241,9 +241,6 @@ export default function WorkoutAddingWrapper() {
                     item.selectedOption.kcalPerUnit,
             });
         });
-        if (!formattedItems) {
-            return;
-        }
         console.log(formattedItems);
         // router.push("/workout");
     };
