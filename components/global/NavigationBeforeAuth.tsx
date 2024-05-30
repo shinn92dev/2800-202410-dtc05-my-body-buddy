@@ -8,7 +8,6 @@ export default function NavigationBeforeAuth() {
   const path = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const toggleHBGmenu = () => setIsOpen(!isOpen);
-  console.log(path);
 
   return (
     <nav className="flex items-center justify-between px-4">

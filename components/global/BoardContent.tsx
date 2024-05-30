@@ -33,12 +33,12 @@ const BoardContent: React.FC<BoardContentProps> = ({
                         <span className="text-lg font-semibold mr-4">
                             {item.calories} kcal
                         </span>
-                        <button
-                            onClick={() => onEdit(index)}
-                            className="text-gray-500 hover:text-gray-700 mr-2"
-                        >
-                            ✏️
-                        </button>
+                        {/*<button*/}
+                        {/*    onClick={() => onEdit(index)}*/}
+                        {/*    className="text-gray-500 hover:text-gray-700 mr-2"*/}
+                        {/*>*/}
+                        {/*    ✏️*/}
+                        {/*</button>*/}
                         <button
                             onClick={() => onDelete(index)}
                             className="text-gray-500 hover:text-gray-700"

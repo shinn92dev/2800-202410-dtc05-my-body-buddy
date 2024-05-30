@@ -32,7 +32,8 @@ const CircleBar: React.FC<CircleBarProps> = ({ title, subtitle, percent }) => {
     // Calculate stroke-dasharray for the SVG circle
     const radius = 70; // radius of the circle
     const circumference = 2 * Math.PI * radius; // circumference of the circle
-    const strokeDasharray = `${circumference * (percent / 100)} ${circumference}`;
+    const percentDecimal = percent ? percent / 100 : 0;
+    const strokeDasharray = `${circumference * percentDecimal} ${circumference}`;
 
     return (
         <div className="flex items-center justify-center relative w-40 h-40" onClick={handleClick} style={{ userSelect: 'none' }}>

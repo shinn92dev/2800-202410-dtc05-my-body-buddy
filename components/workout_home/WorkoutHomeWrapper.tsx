@@ -18,27 +18,34 @@ const WorkoutHomeWrapper: React.FC = () => {
     const [onGoingWorkoutData, setOnGoingWorkoutData] = useState<any[]>([]);
     const [userId, setUserId] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [generatingMenuFailed, setGeneratingMenuFailed] = useState<boolean>(false);
-    const [formattingMenuFailed, setFormattingMenuFailed] = useState<boolean>(false);
-    const [generatedWorkoutMenus, setGeneratedWorkoutMenus] = useState<any[][]>([]);
+    const [generatingMenuFailed, setGeneratingMenuFailed] =
+        useState<boolean>(false);
+    const [formattingMenuFailed, setFormattingMenuFailed] =
+        useState<boolean>(false);
+    const [generatedWorkoutMenus, setGeneratedWorkoutMenus] = useState<any[][]>(
+        []
+    );
 
     const parseWorkoutMenu = (data: string) => {
         const dayRegExp = /Day \d+:/g;
         const itemRegExp = /・(.+?) - (\d+) (\w+).+\((\d+) kcal\)/g;
 
         // Remove any leading text before "Day 1" to ensure the first element is correct
-        const cleanData = data.replace(/^[\s\S]*?(?=Day 1:)/, '');
+        const cleanData = data.replace(/^[\s\S]*?(?=Day 1:)/, "");
 
         const days = data.split(dayRegExp).filter(Boolean);
-        const menus = days.map(day => {
+        const menus = days.map((day) => {
             const items = [];
             let match;
             while ((match = itemRegExp.exec(day)) !== null) {
                 const title = match[1];
                 const quantity = parseInt(match[2]);
                 const unit = match[3];
-                const kcal = parseInt(match[4]);
-                items.push({ title, quantity, unit, kcalPerUnit: kcal / quantity });
+                const calories = parseInt(match[4]);
+                const kcalPerUnit = parseFloat(
+                    (calories / quantity).toFixed(1)
+                );
+                items.push({ title, quantity, unit, kcalPerUnit, calories });
             }
             return items;
         });
@@ -65,24 +72,30 @@ const WorkoutHomeWrapper: React.FC = () => {
 
         if (response.ok) {
             const data = await response.json();
-            console.log(`Original generated response from ChatGPT:\n${data.result}`);
+            console.log(
+                `Original generated response from ChatGPT:\n${data.result}`
+            );
             const menus = parseWorkoutMenu(data.result);
 
-            const isValidMenu = menus.every(dayMenu =>
-                dayMenu.every(item =>
-                    typeof item.title === "string" &&
-                    typeof item.quantity === "number" &&
-                    typeof item.unit === "string" &&
-                    typeof item.kcalPerUnit === "number"
-                )
-            ) && menus.length === 7;
+            const isValidMenu =
+                menus.every((dayMenu) =>
+                    dayMenu.every(
+                        (item) =>
+                            typeof item.title === "string" &&
+                            typeof item.quantity === "number" &&
+                            typeof item.unit === "string" &&
+                            typeof item.kcalPerUnit === "number"
+                    )
+                ) && menus.length === 7;
 
             if (isValidMenu) {
                 setGeneratedWorkoutMenus(menus);
                 console.log(`Formatted menus:`);
-                console.log(menus)
+                console.log(menus);
             } else {
-                console.error("Generated workout menus could not be formatted properly.");
+                console.error(
+                    "Generated workout menus could not be formatted properly."
+                );
                 setFormattingMenuFailed(true);
             }
         } else {
@@ -91,7 +104,7 @@ const WorkoutHomeWrapper: React.FC = () => {
         }
 
         setIsLoading(false);
-    }
+    };
 
     useEffect(() => {
         const getUserId = async () => {
@@ -164,7 +177,6 @@ const WorkoutHomeWrapper: React.FC = () => {
             const { userId } = res.data;
             console.log(item);
             console.log("Update start:", userId);
-            // TODO: REPLACE DATE FROM CALENDAR DATE
             const formattedDate = selectedDate.toISOString();
             const newData = {
                 userId: userId,
@@ -189,7 +201,8 @@ const WorkoutHomeWrapper: React.FC = () => {
     };
 
     const handleAddForAchieved = () => {
-        window.location.href = `workout/adding`;
+        const formattedDate = selectedDate.toISOString().split("T")[0];
+        window.location.href = `workout/adding?date=${formattedDate}`;
     };
 
     const handleAskAI = () => {
@@ -242,8 +255,8 @@ const WorkoutHomeWrapper: React.FC = () => {
                     }
                     subtitle={"/ " + totalCalories + " kcal"}
                     percent={
-                        (totalCalories /
-                            calculateKcalForWorkout(onGoingWorkoutData)) *
+                        (totalCalories - calculateKcalForWorkout(onGoingWorkoutData)) /
+                            totalCalories *
                         100
                     }
                 />
@@ -277,16 +290,14 @@ const WorkoutHomeWrapper: React.FC = () => {
                                 <p className="font-semibold text-center">
                                     Failed to format generated workout
                                 </p>
+                            ) : generatingMenuFailed ? (
+                                <p className="font-semibold text-center">
+                                    Failed to generate workout
+                                </p>
                             ) : (
-                                generatingMenuFailed ? (
-                                    <p className="font-semibold text-center">
-                                        Failed to generate workout
-                                    </p>
-                                ) : (
-                                    <p className="font-semibold text-center">
-                                        No workout set yet
-                                    </p>
-                                )
+                                <p className="font-semibold text-center">
+                                    No workout set yet
+                                </p>
                             )
                         ) : (
                             onGoingWorkoutData.map((item, index) => (
@@ -297,7 +308,9 @@ const WorkoutHomeWrapper: React.FC = () => {
                                     <div>
                                         <p
                                             className={`font-semibold ${
-                                                item.isCompleted ? "line-through" : ""
+                                                item.isCompleted
+                                                    ? "line-through"
+                                                    : ""
                                             }`}
                                         >
                                             {item.name}
@@ -308,13 +321,15 @@ const WorkoutHomeWrapper: React.FC = () => {
                                         </p>
                                     </div>
                                     <div className="flex items-center">
-                    <span className="text-lg font-semibold mr-4">
-                        {item.calories} kcal
-                    </span>
+                                        <span className="text-lg font-semibold mr-4">
+                                            {item.calories} kcal
+                                        </span>
                                         <button
                                             type="button"
                                             className="px-4 py-2 rounded-full bg-gray-500 text-white"
-                                            onClick={() => handleToggleComplete(index)}
+                                            onClick={() =>
+                                                handleToggleComplete(index)
+                                            }
                                         >
                                             Done
                                         </button>
@@ -325,20 +340,25 @@ const WorkoutHomeWrapper: React.FC = () => {
                     </div>
                     <div className="flex justify-center mt-4">
                         {onGoingWorkoutData.length === 0 ? (
-                                <AskAiButton
-                                    forText={`${(formattingMenuFailed || generatingMenuFailed) ? "Regenerate": "Generate Workout"}`}
-                                    icon={
-                                        <Image
-                                            src="/my_boddy_buddy_support_ai_logo_white.png"
-                                            alt="AI Logo"
-                                            className="ml-2"
-                                            width={30}
-                                            height={30}
-                                        />
-                                    }
-                                    onClick={generateWorkoutMenu}
-                                />) :
-                            (<AskAiButton
+                            <AskAiButton
+                                forText={`${
+                                    formattingMenuFailed || generatingMenuFailed
+                                        ? "Regenerate"
+                                        : "Generate Workout"
+                                }`}
+                                icon={
+                                    <Image
+                                        src="/my_boddy_buddy_support_ai_logo_white.png"
+                                        alt="AI Logo"
+                                        className="ml-2"
+                                        width={30}
+                                        height={30}
+                                    />
+                                }
+                                onClick={generateWorkoutMenu}
+                            />
+                        ) : (
+                            <AskAiButton
                                 forText={`Alternative`}
                                 icon={
                                     <Image
@@ -350,8 +370,8 @@ const WorkoutHomeWrapper: React.FC = () => {
                                     />
                                 }
                                 onClick={handleAskAI}
-                            />)
-                        }
+                            />
+                        )}
                     </div>
                     <div>
                         {isLoading && <LoadingAnimation></LoadingAnimation>}
