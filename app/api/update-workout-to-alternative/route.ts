@@ -1,9 +1,18 @@
 import { NextResponse } from "next/server";
+import { Workout, WorkoutData, WorkoutDetail } from "@/config/types";
 import WorkoutModel from "@/models/Workout";
 import { connectMongoDB } from "@/config/db";
 
-export async function POST(req: any) {
-    const data = await req.json();
+interface RequestBody {
+    userId: string;
+    date: string;
+    selectedItems: WorkoutDetail[];
+    newWorkout: WorkoutDetail[];
+}
+
+export async function POST(req: Request): Promise<Response> {
+    await connectMongoDB();
+    const data: { params: RequestBody } = await req.json();
     const { userId, date, selectedItems, newWorkout } = data.params;
     const deleteTargetWorkout = selectedItems.map((workout) => ({
         name: workout.name,
@@ -37,7 +46,7 @@ export async function POST(req: any) {
 
     // Check if workout for selected date exists
     const workoutsForDate = targetUserWorkout.workouts.find(
-        (workout) => workout.date.getTime() === dateObj.getTime()
+        (workout: Workout) => workout.date.getTime() === dateObj.getTime()
     );
 
     if (!workoutsForDate) {
@@ -50,7 +59,7 @@ export async function POST(req: any) {
     // Check if all target to delete workout exists
     const allItemsExist = deleteTargetWorkout.every((targetItem) =>
         workoutsForDate.workoutDetail.some(
-            (detail) =>
+            (detail: WorkoutDetail) =>
                 detail.name === targetItem.name &&
                 detail.calories === targetItem.calories &&
                 detail.unit === targetItem.unit &&
@@ -66,7 +75,7 @@ export async function POST(req: any) {
     }
     try {
         const workoutIndex = targetUserWorkout.workouts.findIndex(
-            (workout) => workout.date.getTime() === dateObj.getTime()
+            (workout: Workout) => workout.date.getTime() === dateObj.getTime()
         );
         const addedWorkout = await WorkoutModel.updateOne(
             {

@@ -3,6 +3,7 @@ import WorkoutModel from "@/models/Workout";
 import { format } from "date-fns";
 import axios from "axios";
 import { WorkoutData, WorkoutDetail } from "@/config/types";
+
 // Parameter: workout date from MongoDB
 const formatDateFromMongoDB = (date: Date): string => {
     return new Date(date).toISOString().split("T")[0];

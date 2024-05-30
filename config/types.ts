@@ -1,3 +1,4 @@
+// Workout Related Types
 export interface WorkoutDetail {
     name: string;
     calories: number;
