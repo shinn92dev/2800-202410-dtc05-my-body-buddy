@@ -25,7 +25,6 @@ const ProfileEditWrapper: React.FC = () => {
         const data = res.data;
         setFormData(data);
       } catch (error) {
-        toast.error("Error fetching profile data");
         console.error("Error fetching profile data:", error);
       } finally {
         setLoading(false);
