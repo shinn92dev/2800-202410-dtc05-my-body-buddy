@@ -234,7 +234,7 @@ const WorkoutHomeWrapper: React.FC = () => {
         calculateKcalForWorkout(onGoingWorkoutData);
     return (
         <div className="p-4 items-center bg-white">
-            <TopCalendar onDateSelect={onDateSelect} />
+            <TopCalendar onDateSelect={onDateSelect}/>
             <h1 className="text-center text-2xl font-bold">Your Progress</h1>
             <div className="flex justify-center mt-4">
                 <CircleBar
@@ -243,8 +243,8 @@ const WorkoutHomeWrapper: React.FC = () => {
                     }
                     subtitle={"/ " + totalCalories + " kcal"}
                     percent={
-                        (totalCalories /
-                            calculateKcalForWorkout(onGoingWorkoutData)) *
+                        (totalCalories - calculateKcalForWorkout(onGoingWorkoutData))/
+                            totalCalories *
                         100
                     }
                 />
@@ -327,7 +327,7 @@ const WorkoutHomeWrapper: React.FC = () => {
                     <div className="flex justify-center mt-4">
                         {onGoingWorkoutData.length === 0 ? (
                                 <AskAiButton
-                                    forText={`${(formattingMenuFailed || generatingMenuFailed) ? "Regenerate": "Generate Workout"}`}
+                                    forText={`${(formattingMenuFailed || generatingMenuFailed) ? "Regenerate" : "Generate Workout"}`}
                                     icon={
                                         <Image
                                             src="/my_boddy_buddy_support_ai_logo_white.png"
