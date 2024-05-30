@@ -205,6 +205,16 @@ export default function SignupForm() {
           id="password"
           {...register("password", { required: true })}
         />
+
+        <div className="text-dark-blue pt-2 pb-2 text-sm">
+          Password should be:
+          <br />
+          <li>at least 8 characters</li>
+          <li>not contain same characters in a row (aaa) </li>
+          <li>not consecutive characters (abcde) </li>
+          <li>not contain same characters with email or username </li>
+        </div>
+
         {errors.password && (
           <span className="text-red-500 text-sm">
             {errors.password.message}
