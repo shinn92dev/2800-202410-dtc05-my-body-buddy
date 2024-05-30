@@ -87,9 +87,9 @@ How did you use AI? Tell us exactly what AI services and products you used and h
 </td>
     </tr>
     <tr>
-      <td align="center" width="150px"><a href=""><img src="/public/images/our_team/saeyoung.jpg" width="100px;" alt="Saeyoung photo"/><br /><sub><b>Developer: 
+      <td align="center" width="150px"><a href="https://github.com/eesope"><img src="/public/images/our_team/saeyoung.jpg" width="100px;" alt="Saeyoung photo"/><br /><sub><b>Developer: 
       <br />Saeyoung Park</b></sub></a><br /></td>
-      <td>Add your introduction here!</td>
+      <td>Hi👋 I am CST student at BCIT🧑🏻‍💻 To have energy to make fun toy projects, I'm swimming and weight training these days 🏊🏻 Let's get some advice from My Body Buddy and get healthy living tips! 🍱</td>
     </tr>
     <tr>
       <td align="center" width="150px"><a href=""><img src="/public/images/our_team/momo.jpeg" width="100px" alt=""/><br /><sub><b>Developer: <br />Momona Wada</b></sub></a><br /></td>
