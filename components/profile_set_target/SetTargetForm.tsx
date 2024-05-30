@@ -36,7 +36,6 @@ const SetTargetForm: React.FC = () => {
           setSelectedDate(new Date(data.target.targetDate));
         }
       } catch (error) {
-        toast.error("Error fetching profile and target data");
         console.error("Error fetching profile and target data:", error);
       } finally {
         setLoading(false);
