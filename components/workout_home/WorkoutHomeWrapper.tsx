@@ -96,14 +96,12 @@ const WorkoutHomeWrapper: React.FC = () => {
                         workouts: menus,
                     },
                 });
-                const data = dataRes.data;
-                if (data) {
-                    console.log(data);
-                    console.log("DATA ADDED");
-                }
-
-                console.log(`Formatted menus:`);
-                console.log(menus);
+                const data = dataRes.data.data;
+                console.log(data);
+                setOnGoingWorkoutData(data.onGoing);
+                alert(
+                    `Workout out for 7 days from ${selectedDate} generated and saved!`
+                );
             } else {
                 console.error(
                     "Generated workout menus could not be formatted properly."
