@@ -94,6 +94,7 @@ const WorkoutHomeWrapper: React.FC = () => {
                     params: {
                         date: selectedDate.toISOString().split("T")[0],
                         workouts: menus,
+                        type: "seven-days-workout",
                     },
                 });
                 const data = dataRes.data.data;

@@ -251,6 +251,7 @@ export default function WorkoutAddingWrapper() {
             params: {
                 date: dateObj.toISOString().split("T")[0],
                 workouts: formattedItems,
+                type: "add-achieved-workout",
             },
         });
         const data = dataRes.data;
