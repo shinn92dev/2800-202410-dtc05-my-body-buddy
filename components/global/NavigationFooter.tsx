@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 export default function NavigationFooter() {
   const path = usePathname();
 
-  const getButtonClasses = (buttonPath: string) => {
+  const getButtonClasses = (buttonPath: string): string => {
     return path?.startsWith(buttonPath)
       ? "text-logo-pumpkin font-bold"
       : "text-gray-600 font-bold";

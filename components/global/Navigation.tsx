@@ -25,7 +25,7 @@ export default function Navigation() {
   const { isLoaded, isSignedIn, user } = useUser();
 
   const clickCountRef = useRef(0);
-  const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const clickTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (isLoaded && isSignedIn && user) {
@@ -84,7 +84,7 @@ export default function Navigation() {
       </button>
 
       <div
-        className={`fixed top-0 left-0 h-full w-2/3 bg-white border-r border-logo-pumpkin shadow-lg transform transition-transform ${
+        className={`fixed top-0 left-0 h-full w-1/3 bg-white border-r border-logo-pumpkin shadow-lg transform transition-transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } z-50 slide-out-menu`}
       >
