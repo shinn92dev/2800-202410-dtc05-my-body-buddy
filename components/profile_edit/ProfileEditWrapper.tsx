@@ -3,9 +3,12 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
+import { ClipLoader } from "react-spinners";
+import toast, { Toaster } from "react-hot-toast";
 
 const ProfileEditWrapper: React.FC = () => {
   const { userId } = useAuth();
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     age: "",
     gender: "",
@@ -22,7 +25,10 @@ const ProfileEditWrapper: React.FC = () => {
         const data = res.data;
         setFormData(data);
       } catch (error) {
+        toast.error("Error fetching profile data");
         console.error("Error fetching profile data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -44,19 +50,29 @@ const ProfileEditWrapper: React.FC = () => {
       if (res.status !== 200) {
         throw new Error("Error updating profile data");
       }
-      alert(res.data.message);
-      window.location.href = "/profile";
+      toast.success("Profile updated successfully");
+      setTimeout(() => {
+        window.location.href = "/profile";
+      }, 2000);
     } catch (error) {
+      toast.error("Error updating profile data");
       console.error("Error updating profile data:", error);
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <ClipLoader size={50} color={"#123abc"} loading={true} />
+      </div>
+    );
+  }
+
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <form className="bg-white p-6 rounded-lg shadow-md" onSubmit={handleSubmit}>
-        <h2 className="text-2xl font-bold mb-4">Edit Profile</h2>
-        <div className="mb-4">
-        </div>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <Toaster position="top-center" reverseOrder={false} />
+      <form className="bg-white p-6 rounded-lg shadow-md w-full max-w-md" onSubmit={handleSubmit}>
+        <h2 className="text-2xl font-bold mb-4 text-center">Edit Profile</h2>
         <div className="mb-4">
           <label className="block text-gray-700">Age</label>
           <input
@@ -134,7 +150,10 @@ const ProfileEditWrapper: React.FC = () => {
           </select>
         </div>
         <div className="flex justify-center">
-          <button type="submit" className="bg-dark-blue text-white px-4 py-2 rounded">
+          <button
+            type="submit"
+            className="bg-dark-blue text-white px-4 py-2 rounded hover:bg-dark-blue-light"
+          >
             Save
           </button>
         </div>
