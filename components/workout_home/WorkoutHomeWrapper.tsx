@@ -38,14 +38,14 @@ const WorkoutHomeWrapper: React.FC = () => {
             const items = [];
             let match;
             while ((match = itemRegExp.exec(day)) !== null) {
-                const title = match[1];
+                const name = match[1];
                 const quantity = parseInt(match[2]);
                 const unit = match[3];
                 const calories = parseInt(match[4]);
                 const kcalPerUnit = parseFloat(
                     (calories / quantity).toFixed(1)
                 );
-                items.push({ title, quantity, unit, kcalPerUnit, calories });
+                items.push({ name, quantity, unit, kcalPerUnit, calories });
             }
             return items;
         });
@@ -81,17 +81,27 @@ const WorkoutHomeWrapper: React.FC = () => {
                 menus.every((dayMenu) =>
                     dayMenu.every(
                         (item) =>
-                            typeof item.title === "string" &&
+                            typeof item.name === "string" &&
                             typeof item.quantity === "number" &&
                             typeof item.unit === "string" &&
-                            typeof item.kcalPerUnit === "number"
+                            typeof item.calories === "number"
                     )
                 ) && menus.length === 7;
-
+            console.log(menus, "PARSED WORKOUT FROM CLIENT");
             if (isValidMenu) {
                 setGeneratedWorkoutMenus(menus);
-                console.log(`Formatted menus:`);
-                console.log(menus);
+                const dataRes = await axios.post(`/api/add-workout`, {
+                    params: {
+                        date: selectedDate.toISOString().split("T")[0],
+                        workouts: menus,
+                    },
+                });
+                const data = dataRes.data.data;
+                console.log(data);
+                setOnGoingWorkoutData(data.onGoing);
+                alert(
+                    `Workout out for 7 days from ${selectedDate} generated and saved!`
+                );
             } else {
                 console.error(
                     "Generated workout menus could not be formatted properly."
@@ -217,7 +227,6 @@ const WorkoutHomeWrapper: React.FC = () => {
             const { userId } = res.data;
             console.log(item);
             console.log("Update start:", userId);
-            // TODO: REPLACE DATE FROM CALENDAR DATE
             const formattedDate = selectedDate.toISOString();
             const newData = {
                 userId: userId,
@@ -255,8 +264,9 @@ const WorkoutHomeWrapper: React.FC = () => {
                     }
                     subtitle={"/ " + totalCalories + " kcal"}
                     percent={
-                        (totalCalories - calculateKcalForWorkout(onGoingWorkoutData)) /
-                            totalCalories *
+                        ((totalCalories -
+                            calculateKcalForWorkout(onGoingWorkoutData)) /
+                            totalCalories) *
                         100
                     }
                 />
