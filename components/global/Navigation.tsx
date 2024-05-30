@@ -107,7 +107,7 @@ export default function Navigation() {
               <Link
                 href={`/profile`}
                 onClick={toggleHBGmenu}
-                className={`text-beige block text-center font-bold py-2 px-4 rounded-full m-2 ${
+                className={`text-beige text-center font-bold py-2 px-4 rounded-full m-2 ${
                   path === `/profile`
                     ? "bg-dark-blue hover:bg-dark-blue"
                     : "bg-gray-500 hover:bg-gray-700"
