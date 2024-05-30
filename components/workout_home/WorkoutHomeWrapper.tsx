@@ -7,7 +7,10 @@ import Board from "@/components/global/Board";
 import AskAiButton from "@/components/global/AskAiButton";
 import axios from "axios";
 import TopCalendar from "@/components/global/TopCalendar";
-import { fetchUserId } from "@/app/_helper/fetchUserId";
+import {
+    fetchUserId,
+    useCurrentUserInformation,
+} from "@/app/_helper/fetchUserId";
 
 import { calculateKcalForWorkout } from "@/app/_helper/workout";
 import { handleDateSelect } from "@/app/_helper/handleDate";

@@ -7,14 +7,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const { method } = req;
 
     switch (method) {
-        case 'GET':
+        case "GET":
             return await getWorkout(req, res);
-        case 'POST':
+        case "POST":
             return await updateWorkout(req, res);
-        case 'PUT':
+        case "PUT":
             return await createWorkout(req, res);
         default:
-            res.setHeader('Allow', ['GET', 'POST', 'PUT']);
+            res.setHeader("Allow", ["GET", "POST", "PUT"]);
             return res.status(405).end(`Method ${method} Not Allowed`);
     }
 };
@@ -23,7 +23,7 @@ const getWorkout = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         const { userId } = getAuth(req);
         if (!userId) {
-            return res.status(401).json({ message: 'User not authenticated' });
+            return res.status(401).json({ message: "User not authenticated" });
         }
 
         await connectMongoDB();
@@ -35,8 +35,13 @@ const getWorkout = async (req: NextApiRequest, res: NextApiResponse) => {
 
         return res.status(200).json(workoutData);
     } catch (error) {
-        console.error('Error fetching workout data:', error);
-        return res.status(500).json({ message: 'Internal Server Error', error: (error as Error).message });
+        console.error("Error fetching workout data:", error);
+        return res
+            .status(500)
+            .json({
+                message: "Internal Server Error",
+                error: (error as Error).message,
+            });
     }
 };
 
@@ -44,7 +49,7 @@ const updateWorkout = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         const { userId } = getAuth(req);
         if (!userId) {
-            return res.status(401).json({ message: 'User not authenticated' });
+            return res.status(401).json({ message: "User not authenticated" });
         }
 
         const { date, title, status } = req.body;
@@ -52,19 +57,30 @@ const updateWorkout = async (req: NextApiRequest, res: NextApiResponse) => {
 
         await connectMongoDB();
         const updated = await WorkoutModel.findOneAndUpdate(
-            { userId, "workouts.date": formattedDate, "workouts.workoutDetail.title": title },
+            {
+                userId,
+                "workouts.date": formattedDate,
+                "workouts.workoutDetail.title": title,
+            },
             { $set: { "workouts.$.workoutDetail.$[inner].achieved": status } },
             { arrayFilters: [{ "inner.title": title }], new: true }
         );
 
         if (!updated) {
-            return res.status(404).json({ message: 'Workout not found' });
+            return res.status(404).json({ message: "Workout not found" });
         }
 
-        return res.status(200).json({ message: "Workout updated successfully", updated });
+        return res
+            .status(200)
+            .json({ message: "Workout updated successfully", updated });
     } catch (error) {
-        console.error('Error updating workout data:', error);
-        return res.status(500).json({ message: 'Internal Server Error', error: (error as Error).message });
+        console.error("Error updating workout data:", error);
+        return res
+            .status(500)
+            .json({
+                message: "Internal Server Error",
+                error: (error as Error).message,
+            });
     }
 };
 
@@ -72,7 +88,7 @@ const createWorkout = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         const { userId } = getAuth(req);
         if (!userId) {
-            return res.status(401).json({ message: 'User not authenticated' });
+            return res.status(401).json({ message: "User not authenticated" });
         }
 
         const { workouts } = req.body;
@@ -82,8 +98,13 @@ const createWorkout = async (req: NextApiRequest, res: NextApiResponse) => {
 
         return res.status(201).json(newWorkout);
     } catch (error) {
-        console.error('Error creating new workout data:', error);
-        return res.status(500).json({ message: 'Internal Server Error', error: (error as Error).message });
+        console.error("Error creating new workout data:", error);
+        return res
+            .status(500)
+            .json({
+                message: "Internal Server Error",
+                error: (error as Error).message,
+            });
     }
 };
 
