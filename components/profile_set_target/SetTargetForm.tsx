@@ -72,6 +72,10 @@ const SetTargetForm: React.FC = () => {
     }
   };
 
+  // Get today's date
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
   return (
     <div className="flex justify-center items-center min-h-screen">
       <form className="bg-white p-6 rounded-lg shadow-md" onSubmit={handleSubmit}>
@@ -92,6 +96,7 @@ const SetTargetForm: React.FC = () => {
           <Calendar
             onChange={handleDateChange}
             value={selectedDate}
+            minDate={today} // Restrict to today and future dates
             className="w-full"
           />
         </div>
