@@ -16,7 +16,8 @@ export async function POST(req: any) {
                 { status: 400 }
             );
         }
-        console.log(date, workouts, userId);
+        // console.log(date, workouts, userId);
+        console.log(workouts, "FROM SERVER");
         const [year, month, day] = date.split("-").map(Number);
         const formattedDate = new Date(Date.UTC(year, month - 1, day));
         // Check if the user's data is found
@@ -43,8 +44,16 @@ export async function POST(req: any) {
                     date: newDate,
                     workoutDetail: [],
                 });
+                for (const workout of workouts[i]) {
+                    console.log(workout);
+                    newWorkouts[i].workoutDetail.push(workout);
+                }
             }
             targetUserWorkout.workouts.push(...newWorkouts);
+            console.log(
+                targetUserWorkout.workouts[0].workoutDetail,
+                "!!!!!!!!!!!!!!!!!!!!!!"
+            );
             await targetUserWorkout.save();
             workoutsForDate = newWorkouts[0];
             return NextResponse.json(

@@ -87,7 +87,7 @@ const WorkoutHomeWrapper: React.FC = () => {
                             typeof item.calories === "number"
                     )
                 ) && menus.length === 7;
-
+            console.log(menus, "PARSED WORKOUT FROM CLIENT");
             if (isValidMenu) {
                 setGeneratedWorkoutMenus(menus);
                 const dataRes = await axios.post(`/api/add-workout`, {
