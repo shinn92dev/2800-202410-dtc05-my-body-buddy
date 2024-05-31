@@ -36,6 +36,7 @@ export default function WorkoutSummaryWrapper() {
     const [dailyAverageCalories, setDailyAverageCalories] = useState<number>(0);
     const [targetCalories, setTargetCalories] = useState<number>(0);
     const [totalCalories, setTotalCalories] = useState<number>(0);
+    const [achievedAverageCalories, setAchievedAverageCalories] = useState<number>(0);
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -88,6 +89,12 @@ export default function WorkoutSummaryWrapper() {
                         setTotalCalories(totalCalories);
                         console.log("Total calories:", totalCalories);
 
+                        // Calculate achieved average calories
+                        const achievedWorkouts = combinedWorkouts.filter(workout => workout.achieved);
+                        const achievedCalories = calculateTotalCalories(achievedWorkouts);
+                        const achievedAverageCalories = achievedWorkouts.length ? Math.round(achievedCalories / achievedWorkouts.length) : 0;
+                        setAchievedAverageCalories(achievedAverageCalories);
+                        console.log("Achieved average calories:", achievedAverageCalories);
                     } else {
                         setWorkoutDetails([]);
                         console.log(`No workouts found for user: ${userId}`);
@@ -108,7 +115,7 @@ export default function WorkoutSummaryWrapper() {
         fetchWorkouts();
     }, [userId, date]);
 
-        useEffect(() => {
+    useEffect(() => {
         const fetchTargetCalories = async () => {
             try {
                 const [profileResponse, targetResponse] = await Promise.all([
@@ -141,7 +148,7 @@ export default function WorkoutSummaryWrapper() {
                 console.error("Error calculating total calories:", error);
                 throw error;
             }
-            };
+        };
         fetchTargetCalories();
     }, []);
 
@@ -232,6 +239,12 @@ export default function WorkoutSummaryWrapper() {
                 <BarGraph
                     label="Daily Average"
                     value={dailyAverageCalories}
+                    maxValue={maxCalories}
+                    targetValue={targetCalories}
+                />
+                <BarGraph
+                    label="Achieved Average"
+                    value={achievedAverageCalories}
                     maxValue={maxCalories}
                     targetValue={targetCalories}
                 />
