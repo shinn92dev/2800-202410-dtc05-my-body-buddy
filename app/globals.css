@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-    --navbar-height: 64px;
-    --footer-height: 80px;
+  --navbar-height: 16rem;
+  --footer-height: 20rem;
 }
 
 .slide-out-menu {
@@ -14,7 +14,4 @@
 .main-content {
     z-index: 1;
     min-height: calc(100vh - var(--navbar-height) - var(--footer-height));
-}
-
-.main {
 }

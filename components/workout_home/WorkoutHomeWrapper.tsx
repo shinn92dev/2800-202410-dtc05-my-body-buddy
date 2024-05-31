@@ -30,7 +30,7 @@ const WorkoutHomeWrapper: React.FC = () => {
     const [generatedWorkoutMenus, setGeneratedWorkoutMenus] = useState<any[][]>(
         []
     );
-    const [totalCalories, setTotalCalories] = useState<number>(0);
+    const [targetCalories, setTargetCalories] = useState<number>(0);
 
     const parseWorkoutMenu = (data: string) => {
         const dayRegExp = /Day \d+:/g;
@@ -191,7 +191,7 @@ const WorkoutHomeWrapper: React.FC = () => {
     }, [selectedDate]);
 
     useEffect(() => {
-        const fetchTotalCalories = async () => {
+        const fetchTargetCalories = async () => {
             try {
                 const [profileResponse, targetResponse] = await Promise.all([
                     axios.get("/api/profile"),
@@ -215,16 +215,16 @@ const WorkoutHomeWrapper: React.FC = () => {
                 const energyRequirements = calculateEnergyRequirementsPerDay(bmr, activityFactor);
 
                 if (targetCaloriesBurn < energyRequirements) {
-                    setTotalCalories(0);
+                    setTargetCalories(0);
                 } else {
-                    setTotalCalories(Math.round(targetCaloriesBurn - energyRequirements));
+                    setTargetCalories(Math.round(targetCaloriesBurn - energyRequirements));
                 }
             } catch (error) {
                 console.error("Error calculating total calories:", error);
                 throw error;
             }
             };
-        fetchTotalCalories();
+        fetchTargetCalories();
     }, []);
 
     const handleEditForAchieved = (index: number) => {
@@ -312,9 +312,9 @@ const WorkoutHomeWrapper: React.FC = () => {
                     title={
                         calculateKcalForWorkout(achievedWorkoutData) + " kcal"
                     }
-                    subtitle={"/ " + totalCalories + " kcal"}
+                    subtitle={"/ " + targetCalories + " kcal"}
                     percent={
-                        calculateKcalForWorkout(achievedWorkoutData) / totalCalories * 100
+                        calculateKcalForWorkout(achievedWorkoutData) / targetCalories * 100
                     }
                 />
             </div>

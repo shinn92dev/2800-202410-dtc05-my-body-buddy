@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -8,6 +7,7 @@ import WorkoutDietLink from "@/components/workout_diet_link/WorkoutDietLink";
 import AverageCalorieBanner from "@/components/global/AverageCalorieBanner";
 import axios from "axios";
 import { handleDateSelect } from "@/app/_helper/handleDate";
+import { calculateBmr, factorByActivityLevel, calculateEnergyRequirementsPerDay } from "@/app/_helper/calorie";
 
 type WorkoutDetailType = {
     name: string;
@@ -34,8 +34,8 @@ export default function WorkoutSummaryWrapper() {
     const [monthlyAverageCalories, setMonthlyAverageCalories] = useState<number>(0);
     const [weeklyAverageCalories, setWeeklyAverageCalories] = useState<number>(0);
     const [dailyAverageCalories, setDailyAverageCalories] = useState<number>(0);
+    const [targetCalories, setTargetCalories] = useState<number>(0);
     const [totalCalories, setTotalCalories] = useState<number>(0);
-    const maxCalories = 500;
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -108,6 +108,43 @@ export default function WorkoutSummaryWrapper() {
         fetchWorkouts();
     }, [userId, date]);
 
+        useEffect(() => {
+        const fetchTargetCalories = async () => {
+            try {
+                const [profileResponse, targetResponse] = await Promise.all([
+                    axios.get("/api/profile"),
+                    axios.get("/api/targets")
+                ]);
+
+                const profile = profileResponse.data;
+                if (!profile) {
+                    throw new Error("Profile not found");
+                }
+                const { age, gender, height, weight, activityLevel } = profile;
+
+                const target = targetResponse.data;
+                if (!target) {
+                    throw new Error("Target not found");
+                }
+                const { targetCaloriesBurn } = target;
+
+                const bmr = calculateBmr(age, height, weight, gender);
+                const activityFactor = factorByActivityLevel(age, activityLevel);
+                const energyRequirements = calculateEnergyRequirementsPerDay(bmr, activityFactor);
+
+                if (targetCaloriesBurn < energyRequirements) {
+                    setTargetCalories(0);
+                } else {
+                    setTargetCalories(Math.round(targetCaloriesBurn - energyRequirements));
+                }
+            } catch (error) {
+                console.error("Error calculating total calories:", error);
+                throw error;
+            }
+            };
+        fetchTargetCalories();
+    }, []);
+
     const getWeekDates = (currentDate: Date) => {
         const weekDates = [];
         const dayOfWeek = (currentDate.getUTCDay() + 6) % 7;
@@ -163,6 +200,7 @@ export default function WorkoutSummaryWrapper() {
 
     const selectedMonth = new Date(date).getMonth();
     const selectedMonthName = getMonthName(selectedMonth);
+    const maxCalories = targetCalories * 1.2;
 
     return (
         <div>
@@ -183,16 +221,19 @@ export default function WorkoutSummaryWrapper() {
                     label={`Monthly Average (${selectedMonthName})`}
                     value={monthlyAverageCalories}
                     maxValue={maxCalories}
+                    targetValue={targetCalories}
                 />
                 <BarGraph
                     label="Weekly Average"
                     value={weeklyAverageCalories}
                     maxValue={maxCalories}
+                    targetValue={targetCalories}
                 />
                 <BarGraph
                     label="Daily Average"
                     value={dailyAverageCalories}
                     maxValue={maxCalories}
+                    targetValue={targetCalories}
                 />
             </div>
             {errorStatus && <div className="text-red-500 text-center">Error fetching data: {errorStatus}</div>}
