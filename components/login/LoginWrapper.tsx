@@ -16,17 +16,28 @@ export default function LoginWrapper() {
                             <Image
                                 src="/images/logo/my_body_buddy_logo.png"
                                 alt="My Body Buddy Logo"
-                                width={32}
-                                height={32}
+                                width={100}
+                                height={100}
                                 quality={100}
-                                className="w-32 mx-auto"
+                                className="mx-auto"
                             />
                         </div>
                         <div className="mt-12 flex flex-col items-center">
                             <h1 className="text-2xl xl:text-3xl font-extrabold">
                                 Log in for My Body Buddy🏃‍♂️
                             </h1>
-                            <div className="w-full flex-1 mt-8">
+                            <div className="mt-2">
+                                <p>
+                                    Don&apos;t have an account?&nbsp;
+                                    <Link
+                                        href="/signup"
+                                        className="hover:underline text-red-300"
+                                    >
+                                        Sign up here
+                                    </Link>
+                                </p>
+                            </div>
+                            <div className="w-full flex-1">
                                 <LoginForm />
                                 <Link
                                     href="/forgot-password"
