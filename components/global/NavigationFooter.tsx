@@ -33,7 +33,7 @@ export default function NavigationFooter() {
   }, []);
 
   return (
-    <div
+    <footer
       className={`grid grid-flow-col justify-around fixed inset-x-0 bottom-0 h-20 bg-beige text-center transition-transform duration-300 border-t ${
         isVisible ? "translate-y-0" : "translate-y-full"
       }`}
@@ -92,6 +92,6 @@ export default function NavigationFooter() {
         </svg>
         <p>Work Out</p>
       </Link>
-    </div>
+    </footer>
   );
 }

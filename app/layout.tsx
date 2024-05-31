@@ -32,7 +32,7 @@ export default function RootLayout({
             </SignedIn>
           </header>
 
-          <main className="pt-16 pb-20">{children}</main>
+          <main className="pt-16 pb-20 main-content">{children}</main>
 
           <SignedIn>
             <NavigationFooter />
