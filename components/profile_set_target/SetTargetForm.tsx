@@ -5,7 +5,7 @@ import axios from "axios";
 import Calendar, { CalendarProps } from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { useAuth } from "@clerk/nextjs";
-import { ClipLoader } from "react-spinners";
+import LoadingAnimation from "../global/LoadingAnimation";
 import toast, { Toaster } from "react-hot-toast";
 
 export const handleDateSelect = (selectedDate: Date, setDate: (date: string) => void) => {
@@ -89,18 +89,18 @@ const SetTargetForm: React.FC = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gray-100">
-        <ClipLoader size={50} color={"#123abc"} loading={true} />
+        <LoadingAnimation />
       </div>
     );
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center min-h-screen bg-white mx-4">
       <Toaster position="top-center" reverseOrder={false} />
-      <form className="bg-white p-6 rounded-lg shadow-md w-full max-w-md" onSubmit={handleSubmit}>
+      <form className="bg-orange p-6 rounded-lg shadow-md w-full max-w-md" onSubmit={handleSubmit}>
         <h2 className="text-2xl font-bold mb-4 text-center">Set Target</h2>
         <div className="mb-4 text-center">
-          <label className="block text-gray-700">Target Weight (kg)</label>
+          <label className="block">Target Weight (kg)</label>
           <input
             type="number"
             name="targetWeight"
@@ -111,7 +111,7 @@ const SetTargetForm: React.FC = () => {
           />
         </div>
         <div className="mb-4 text-center">
-          <label className="block text-gray-700">Target Date</label>
+          <label className="block">Target Date</label>
           <div className="flex justify-center">
             <Calendar
               onChange={handleDateChange}

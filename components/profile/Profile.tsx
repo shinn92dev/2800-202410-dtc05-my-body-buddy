@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { calculateBmr } from "@/app/_helper/calorie";
-import { ClipLoader } from "react-spinners";
+import LoadingAnimation from "../global/LoadingAnimation";
 
 interface ProfileProps {
   user: {
@@ -31,7 +31,7 @@ const Profile: React.FC<ProfileProps> = ({ user, profile, target }) => {
   if (!profile || !user) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <ClipLoader size={50} color={"#123abc"} loading={true} />
+        <LoadingAnimation />
       </div>
     );
   }
@@ -57,27 +57,27 @@ const Profile: React.FC<ProfileProps> = ({ user, profile, target }) => {
       <div className="bg-orange-500 m-5 p-4 rounded-md shadow-lg text-center w-4/5 md:w-3/5 bg-orange">
         <p className="text-4xl p-2">👤</p>
         <div className="grid grid-cols gap-4">
-          <div><span className="font-bold">Name:</span> {user.username}</div>
-          <div><span className="font-bold">Email:</span> {user.email}</div>
-          <div><span className="font-bold">Age:</span> {profile.age}</div>
-          <div><span className="font-bold">Gender:</span> {genderToBeDisplayed}</div>
-          <div><span className="font-bold">Height:</span> {profile.height} cm</div>
-          <div><span className="font-bold">Weight:</span> {profile.weight} kg</div>
-          <div><span className="font-bold">Healthy Weight:</span> {healthyWeight} kg</div>
-          <div><span className="font-bold">BMI:</span> {bmi}</div>
-          <div><span className="font-bold">Daily Activity Level:</span> {activityLevelToBeDisplayed}</div>
-          <div><span className="font-bold">Preference:</span> {preferenceToBeDisplayed}</div>
-          <div><span className="font-bold">BMR:</span> {bmr} kcal/day</div>
+          <div><span className="font-bold">Name:</span> <span className="font-semibold text">{user.username}</span></div>
+          <div><span className="font-bold">Email:</span> <span className="font-semibold">{user.email}</span></div>
+          <div><span className="font-bold">Age:</span> <span className="font-semibold">{profile.age}</span></div>
+          <div><span className="font-bold">Gender:</span> <span className="font-semibold">{genderToBeDisplayed}</span></div>
+          <div><span className="font-bold">Height:</span> <span className="font-semibold">{profile.height} cm</span></div>
+          <div><span className="font-bold">Weight:</span> <span className="font-semibold">{profile.weight} kg</span></div>
+          <div><span className="font-bold">Healthy Weight:</span> <span className="font-semibold">{healthyWeight} kg</span></div>
+          <div><span className="font-bold">BMI:</span> <span className="font-semibold">{bmi}</span></div>
+          <div><span className="font-bold">Daily Activity Level:</span> <span className="font-semibold">{activityLevelToBeDisplayed}</span></div>
+          <div><span className="font-bold">Preference:</span> <span className="font-semibold">{preferenceToBeDisplayed}</span></div>
+          <div><span className="font-bold">BMR:</span> <span className="font-semibold">{bmr} kcal/day</span></div>
         </div>
       </div>
       {target && (
         <div className="bg-orange-500 m-5 p-4 rounded-md shadow-lg text-center w-4/5 md:w-3/5 bg-orange">
           <p className="text-4xl p-2">🎯</p>
           <div className="grid grid-cols gap-4">
-            <div><span className="font-bold">Target Date:</span> {targetDateToBeDisplayed}</div>
-            <div><span className="font-bold">Target Weight:</span> {target.targetWeight} kg</div>
-            <div><span className="font-bold">Target Calories Intake:</span> {target.targetCaloriesIntake} kcal/day</div>
-            <div><span className="font-bold">Target Calories Burn:</span> {target.targetCaloriesBurn} kcal/day</div>
+            <div><span className="font-bold">Target Date:</span> <span className="font-semibold">{targetDateToBeDisplayed}</span></div>
+            <div><span className="font-bold">Target Weight:</span> <span className="font-semibold">{target.targetWeight} kg</span></div>
+            <div><span className="font-bold">Target Calories Intake:</span> <span className="font-semibold">{target.targetCaloriesIntake} kcal/day</span></div>
+            <div><span className="font-bold">Target Calories Burn:</span> <span className="font-semibold">{target.targetCaloriesBurn} kcal/day</span></div>
           </div>
         </div>
       )}
