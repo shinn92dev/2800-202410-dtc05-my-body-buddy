@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import SearchWindow from "@/components/global/SearchWindow";
 import axios from "axios";
+import { toast, Toaster } from "react-hot-toast";
 
 // Categories data
 const categories = [
@@ -266,19 +267,36 @@ export default function WorkoutAddingWrapper() {
     const handleRemoveDraftedItem = (index: number) => {
         const updatedItems = draftedItems.filter((_, i) => i !== index);
         setDraftedItems(updatedItems);
-        console.log(selectedItem);
     };
 
     // Handle add selected item to draft event
     const handleSaveDraftedItems = () => {
         if (selectedItem) {
+            const kcalValue =
+                selectedItem.selectedOption.quantity *
+                selectedItem.selectedOption.kcalPerUnit;
+            if (kcalValue > 10000) {
+                toast.error("Kcal value cannot exceed 10,000");
+                return;
+            }
             setDraftedItems([...draftedItems, selectedItem]);
             setSelectedItem(null); // Clear the selected item after adding to drafts
         }
     };
 
     const handleSaveItems = async () => {
-        console.log(draftedItems);
+        const totalKcal = draftedItems.reduce(
+            (acc, item) =>
+                acc +
+                item.selectedOption.quantity * item.selectedOption.kcalPerUnit,
+            0
+        );
+
+        if (totalKcal > 10000) {
+            toast.error("Total Kcal value of drafted workouts cannot exceed 10,000");
+            return;
+        }
+
         const formattedItems: any = [];
         draftedItems.forEach((item) => {
             formattedItems.push({
@@ -294,25 +312,31 @@ export default function WorkoutAddingWrapper() {
         const params = new URLSearchParams(window.location.search);
         const date = params.get("date");
         if (!date) {
-            console.error("Date parameter is missing");
+            toast.error("Date parameter is missing");
             return;
         }
         const [year, month, day] = date.split("-").map(Number);
         const dateObj = new Date(Date.UTC(year, month - 1, day));
-        const dataRes = await axios.post("/api/add-workout", {
-            params: {
-                date: dateObj.toISOString().split("T")[0],
-                workouts: formattedItems,
-                type: "add-achieved-workout",
-            },
-        });
-        const data = dataRes.data;
-        console.log(data);
-        router.push("/workout");
+        try {
+            const dataRes = await axios.post("/api/add-workout", {
+                params: {
+                    date: dateObj.toISOString().split("T")[0],
+                    workouts: formattedItems,
+                    type: "add-achieved-workout",
+                },
+            });
+            const data = dataRes.data;
+            console.log(data);
+            toast.success("Workouts saved successfully");
+            router.push("/workout");
+        } catch (error) {
+            toast.error("Failed to save workouts");
+        }
     };
 
     return (
         <div className="p-4">
+            <Toaster />
             <h1 className="text-lg font-bold mb-1">Category</h1>
             <div className="flex justify-center mt-4">
                 <div className="grid grid-cols-5 gap-0">
