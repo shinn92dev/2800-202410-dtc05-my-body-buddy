@@ -46,7 +46,7 @@ export default function SignOutButton() {
             className="text-beige font-bold text-center py-1 px-3 rounded-full 
         m-2 bg-gray-500 hover:bg-gray-700"
         >
-            <button onClick={() => signOut()} className={``}>
+            <button onClick={() => signOut()} className="w-100">
                 Sign out
             </button>
         </form>
