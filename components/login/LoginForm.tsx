@@ -22,7 +22,7 @@ const routeLoginPostUser = async (userData: any) => {
             },
         });
         if (response.status !== 200) {
-            throw new Error("Not OK");
+            throw new Error("Login fail");
         }
         window.location.href = "/summary/diet";
 
