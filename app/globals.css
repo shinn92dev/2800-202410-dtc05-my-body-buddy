@@ -15,6 +15,3 @@
     z-index: 1;
     min-height: calc(100vh - var(--navbar-height) - var(--footer-height));
 }
-
-.main {
-}

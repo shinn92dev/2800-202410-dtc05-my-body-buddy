@@ -73,7 +73,7 @@ const ProfileEditWrapper: React.FC = () => {
       <form className="bg-orange p-6 rounded-lg shadow-md w-full max-w-md" onSubmit={handleSubmit}>
         <h2 className="text-2xl font-bold mb-4 text-center">Edit Profile</h2>
         <div className="mb-4">
-          <label className="block">Age</label>
+          <label className="block font-semibold pl-1 pb-1">Age</label>
           <input
             type="number"
             name="age"
@@ -84,7 +84,7 @@ const ProfileEditWrapper: React.FC = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block">Gender</label>
+          <label className="block font-semibold pl-1 pb-1">Gender</label>
           <select
             name="gender"
             value={formData.gender}
@@ -99,7 +99,7 @@ const ProfileEditWrapper: React.FC = () => {
           </select>
         </div>
         <div className="mb-4">
-          <label className="block">Height (cm)</label>
+          <label className="block font-semibold pl-1 pb-1">Height (cm)</label>
           <input
             type="number"
             name="height"
@@ -110,7 +110,7 @@ const ProfileEditWrapper: React.FC = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block">Weight (kg)</label>
+          <label className="block font-semibold pl-1 pb-1">Weight (kg)</label>
           <input
             type="number"
             name="weight"
@@ -121,7 +121,7 @@ const ProfileEditWrapper: React.FC = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block">Daily Activity Level</label>
+          <label className="block font-semibold pl-1 pb-1">Daily Activity Level</label>
           <select
             name="activityLevel"
             value={formData.activityLevel}
@@ -136,7 +136,7 @@ const ProfileEditWrapper: React.FC = () => {
           </select>
         </div>
         <div className="mb-4">
-          <label className="block">Preference</label>
+          <label className="block font-semibold pl-1 pb-1">Preference</label>
           <select
             name="preference"
             value={formData.preference}

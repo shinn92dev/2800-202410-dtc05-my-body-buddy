@@ -100,7 +100,7 @@ const SetTargetForm: React.FC = () => {
       <form className="bg-orange p-6 rounded-lg shadow-md w-full max-w-md" onSubmit={handleSubmit}>
         <h2 className="text-2xl font-bold mb-4 text-center">Set Target</h2>
         <div className="mb-4 text-center">
-          <label className="block">Target Weight (kg)</label>
+          <label className="block font-semibold pb-1">Target Weight (kg)</label>
           <input
             type="number"
             name="targetWeight"
@@ -111,7 +111,7 @@ const SetTargetForm: React.FC = () => {
           />
         </div>
         <div className="mb-4 text-center">
-          <label className="block">Target Date</label>
+          <label className="block font-semibold pb-1">Target Date</label>
           <div className="flex justify-center">
             <Calendar
               onChange={handleDateChange}
