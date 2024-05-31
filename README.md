@@ -60,9 +60,9 @@ Our project, DTC-5, is developing an innovative personal health and fitness appl
 -   **sass**: For styling.
 -   **OpenAI API**: For AI support in generating diet plans and workout menus.
 -   For more APIs and Frameworks, check [package.json](./package.json) or execute the command below
-    ````sh
-    npm install```
-    ````
+    ```sh
+    npm install
+    ```
 
 ### Do They Need Any API Keys?
 
@@ -281,9 +281,9 @@ we used AI to create data sets, especially for testing the logic before connecti
 
 ## 📦File Contents of folder
 
-```json
+```
 📦 2800-202410-DTC05-MY-BODY-BUDDY
- ┣ 📂app // main directory
+ ┣ 📂app // Main directory
  ┃ ┣ 📂(authentication)
  ┃ ┃ ┣ 📂forgot-password
  ┃ ┃ ┃ ┣ 📜ForgotPasswordWrapper.tsx
