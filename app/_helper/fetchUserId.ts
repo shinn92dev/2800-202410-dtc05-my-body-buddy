@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
-import { auth } from "@clerk/nextjs/server";
 export const fetchUserId = async (): Promise<string> => {
     try {
         const response = await axios.get("/api/get-user-id");

@@ -1,5 +1,3 @@
-// app/_helper/fetchMeals.ts
-
 import axios from "axios";
 
 interface Meal {
@@ -16,7 +14,10 @@ interface Meals {
     snacks: Meal[];
 }
 
-export const fetchMeals = async (userId: string, date: Date): Promise<Meals> => {
+export const fetchMeals = async (
+    userId: string,
+    date: Date
+): Promise<Meals> => {
     try {
         const response = await axios.get("/api/get-meals", {
             params: {

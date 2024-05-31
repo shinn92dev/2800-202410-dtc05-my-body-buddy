@@ -1,16 +1,21 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 import { OpenAI } from "openai";
 import { getAuth } from "@clerk/nextjs/server";
 import { connectMongoDB } from "@/config/db";
 import Target from "@/models/Target";
 import Profile from "@/models/Profile";
-import { calculateBmr, calculateCaloriesPerDay, calculateEnergyRequirementsPerDay, factorByActivityLevel } from "@/app/_helper/calorie";
+import {
+    calculateBmr,
+    calculateCaloriesPerDay,
+    calculateEnergyRequirementsPerDay,
+    factorByActivityLevel,
+} from "@/app/_helper/calorie";
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
-const fetchTargetCaloriesBurn = async (req: NextApiRequest): Promise<number> => {
+const fetchTargetCaloriesBurn = async (req: NextRequest): Promise<number> => {
     const { userId } = getAuth(req);
     await connectMongoDB();
     const profile = await Profile.findOne({ userId });
@@ -25,7 +30,10 @@ const fetchTargetCaloriesBurn = async (req: NextApiRequest): Promise<number> => 
     const { targetCaloriesBurn } = target;
     const bmr = calculateBmr(age, height, weight, gender);
     const activityFactor = factorByActivityLevel(age, activityLevel);
-    const energyRequirements = calculateEnergyRequirementsPerDay(bmr, activityFactor);
+    const energyRequirements = calculateEnergyRequirementsPerDay(
+        bmr,
+        activityFactor
+    );
 
     if (targetCaloriesBurn < energyRequirements) {
         return 0;
@@ -34,13 +42,10 @@ const fetchTargetCaloriesBurn = async (req: NextApiRequest): Promise<number> => 
     }
 };
 
-// data to fetch from db
-// const targetCaloriesForWorkoutPerDay = await fetchTargetCaloriesBurn();
-
 const generateWorkoutPlan = async (prompt: string) => {
     try {
         const response = await openai.chat.completions.create({
-            model: "gpt-4o",
+            model: "gpt-4",
             messages: [{ role: "user", content: prompt }],
         });
         return (
@@ -53,12 +58,11 @@ const generateWorkoutPlan = async (prompt: string) => {
     }
 };
 
-export default async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse
-) {
-    if (req.method === "POST") {
-        const targetCaloriesForWorkoutPerDay = await fetchTargetCaloriesBurn(req);
+export async function POST(req: NextRequest) {
+    try {
+        const targetCaloriesForWorkoutPerDay = await fetchTargetCaloriesBurn(
+            req
+        );
         const prompt = `
         Please consider workout menus for seven days. Each menu should include at least one (commonly two or more) workout item(s), and the total estimated calorie consumption of these items must be ${targetCaloriesForWorkoutPerDay} kcal.\n\n
         
@@ -72,13 +76,17 @@ export default async function handler(
         ・[item_name] - [quantity] [unit(min, reps, etc.)] ([estimated_calorie_consume] kcal)\n
         (repeat for subsequent days)`;
 
-        try {
-            const result = await generateWorkoutPlan(prompt);
-            res.status(200).json({ result });
-        } catch (error) {
-            res.status(500).json({ error: "Failed to generate workout plan" });
-        }
-    } else {
-        res.status(405).json({ error: "Method not allowed" });
+        const result = await generateWorkoutPlan(prompt);
+        return NextResponse.json({ result }, { status: 200 });
+    } catch (error) {
+        console.error("Error generating workout plan:", error);
+        return NextResponse.json(
+            { error: "Failed to generate workout plan" },
+            { status: 500 }
+        );
     }
+}
+
+export async function OPTIONS() {
+    return NextResponse.json({}, { status: 204 });
 }

@@ -15,8 +15,12 @@ import {
 import { calculateKcalForWorkout } from "@/app/_helper/workout";
 import { handleDateSelect } from "@/app/_helper/handleDate";
 import LoadingAnimation from "@/components/global/LoadingAnimation";
-import { Toaster, toast } from "react-hot-toast"; 
-import { calculateBmr, factorByActivityLevel, calculateEnergyRequirementsPerDay } from "@/app/_helper/calorie";
+import { Toaster, toast } from "react-hot-toast";
+import {
+    calculateBmr,
+    factorByActivityLevel,
+    calculateEnergyRequirementsPerDay,
+} from "@/app/_helper/calorie";
 
 const WorkoutHomeWrapper: React.FC = () => {
     const [achievedWorkoutData, setAchievedWorkoutData] = useState<any[]>([]);
@@ -30,7 +34,7 @@ const WorkoutHomeWrapper: React.FC = () => {
     const [generatedWorkoutMenus, setGeneratedWorkoutMenus] = useState<any[][]>(
         []
     );
-    const [totalCalories, setTotalCalories] = useState<number>(0);
+    const [targetCalories, setTargetCalories] = useState<number>(0);
 
     const parseWorkoutMenu = (data: string) => {
         const dayRegExp = /Day \d+:/g;
@@ -191,11 +195,11 @@ const WorkoutHomeWrapper: React.FC = () => {
     }, [selectedDate]);
 
     useEffect(() => {
-        const fetchTotalCalories = async () => {
+        const fetchTargetCalories = async () => {
             try {
                 const [profileResponse, targetResponse] = await Promise.all([
                     axios.get("/api/profile"),
-                    axios.get("/api/targets")
+                    axios.get("/api/targets"),
                 ]);
 
                 const profile = profileResponse.data;
@@ -211,20 +215,28 @@ const WorkoutHomeWrapper: React.FC = () => {
                 const { targetCaloriesBurn } = target;
 
                 const bmr = calculateBmr(age, height, weight, gender);
-                const activityFactor = factorByActivityLevel(age, activityLevel);
-                const energyRequirements = calculateEnergyRequirementsPerDay(bmr, activityFactor);
+                const activityFactor = factorByActivityLevel(
+                    age,
+                    activityLevel
+                );
+                const energyRequirements = calculateEnergyRequirementsPerDay(
+                    bmr,
+                    activityFactor
+                );
 
                 if (targetCaloriesBurn < energyRequirements) {
-                    setTotalCalories(0);
+                    setTargetCalories(0);
                 } else {
-                    setTotalCalories(Math.round(targetCaloriesBurn - energyRequirements));
+                    setTargetCalories(
+                        Math.round(targetCaloriesBurn - energyRequirements)
+                    );
                 }
             } catch (error) {
                 console.error("Error calculating total calories:", error);
                 throw error;
             }
-            };
-        fetchTotalCalories();
+        };
+        fetchTargetCalories();
     }, []);
 
     const handleEditForAchieved = (index: number) => {
@@ -300,142 +312,155 @@ const WorkoutHomeWrapper: React.FC = () => {
             console.error("Error updating achievement status:", error);
         }
     };
-    
+
     return (
         <>
-        <Toaster />
-        <TopCalendar onDateSelect={onDateSelect} />
-        <div className="p-4 items-center bg-white">
-            <h1 className="text-center text-2xl font-bold">Your Progress</h1>
-            <div className="flex justify-center mt-4">
-                <CircleBar
+            <Toaster />
+            <TopCalendar onDateSelect={onDateSelect} />
+            <div className="p-4 items-center bg-white">
+                <h1 className="text-center text-2xl font-bold">
+                    Your Progress
+                </h1>
+                <div className="flex justify-center mt-4">
+                    {/* <CircleBar
                     title={
                         calculateKcalForWorkout(achievedWorkoutData) + " kcal"
                     }
-                    subtitle={"/ " + totalCalories + " kcal"}
+                    subtitle={"/ " + targetCalories + " kcal"}
                     percent={
-                        calculateKcalForWorkout(achievedWorkoutData) / totalCalories * 100
+                        calculateKcalForWorkout(achievedWorkoutData) / targetCalories * 100
                     }
-                />
-            </div>
-            <div className={"p-2"}>
-                <Board
-                    icon={<span>🕺</span>}
-                    title={"Achieved"}
-                    items={achievedWorkoutData}
-                    onEdit={(index) => handleEditForAchieved(index)}
-                    onDelete={(index) => handleDeleteForAchieved(index)}
-                    onAdd={handleAddForAchieved}
-                />
-            </div>
-            <div className="p-2">
-                <div className="p-4 bg-beige rounded-lg shadow-md">
-                    <div className="flex justify-between items-center mb-4">
-                        <div className="flex items-center">
-                            <span>🏋️</span>
-                            <h2 className="text-xl font-bold ml-2">
-                                Workout for Today
-                            </h2>
+                /> */}
+                    <CircleBar
+                        achievedCalories={calculateKcalForWorkout(
+                            achievedWorkoutData
+                        )}
+                        onGoingCalories={calculateKcalForWorkout(
+                            onGoingWorkoutData
+                        )}
+                        totalTargetCalories={targetCalories}
+                    />
+                </div>
+                <div className={"p-2"}>
+                    <Board
+                        icon={<span>🕺</span>}
+                        title={"Achieved"}
+                        items={achievedWorkoutData}
+                        onEdit={(index) => handleEditForAchieved(index)}
+                        onDelete={(index) => handleDeleteForAchieved(index)}
+                        onAdd={handleAddForAchieved}
+                    />
+                </div>
+                <div className="p-2">
+                    <div className="p-4 bg-beige rounded-lg shadow-md">
+                        <div className="flex justify-between items-center mb-4">
+                            <div className="flex items-center">
+                                <span>🏋️</span>
+                                <h2 className="text-xl font-bold ml-2">
+                                    Workout for Today
+                                </h2>
+                            </div>
+                            <span className="text-lg font-semibold">
+                                {calculateKcalForWorkout(onGoingWorkoutData)}
+                                kcal
+                            </span>
                         </div>
-                        <span className="text-lg font-semibold">
-                            {calculateKcalForWorkout(onGoingWorkoutData)}kcal
-                        </span>
-                    </div>
-                    <div>
-                        {onGoingWorkoutData.length === 0 ? (
-                            formattingMenuFailed ? (
-                                <p className="font-semibold text-center">
-                                    Failed to format generated workout
-                                </p>
-                            ) : generatingMenuFailed ? (
-                                <p className="font-semibold text-center">
-                                    Failed to generate workout
-                                </p>
+                        <div>
+                            {onGoingWorkoutData.length === 0 ? (
+                                formattingMenuFailed ? (
+                                    <p className="font-semibold text-center">
+                                        Failed to format generated workout
+                                    </p>
+                                ) : generatingMenuFailed ? (
+                                    <p className="font-semibold text-center">
+                                        Failed to generate workout
+                                    </p>
+                                ) : (
+                                    <p className="font-semibold text-center">
+                                        No workout set yet
+                                    </p>
+                                )
                             ) : (
-                                <p className="font-semibold text-center">
-                                    No workout set yet
-                                </p>
-                            )
-                        ) : (
-                            onGoingWorkoutData.map((item, index) => (
-                                <div
-                                    key={index}
-                                    className={`flex justify-between items-center p-2 border-b`}
-                                >
-                                    <div>
-                                        <p
-                                            className={`font-semibold ${
-                                                item.isCompleted
-                                                    ? "line-through"
-                                                    : ""
-                                            }`}
-                                        >
-                                            {item.name}
-                                        </p>
+                                onGoingWorkoutData.map((item, index) => (
+                                    <div
+                                        key={index}
+                                        className={`flex justify-between items-center p-2 border-b`}
+                                    >
+                                        <div>
+                                            <p
+                                                className={`font-semibold ${
+                                                    item.isCompleted
+                                                        ? "line-through"
+                                                        : ""
+                                                }`}
+                                            >
+                                                {item.name}
+                                            </p>
 
-                                        <p className="text-sm text-gray-500">
-                                            {item.quantity} {item.unit}
-                                        </p>
+                                            <p className="text-sm text-gray-500">
+                                                {item.quantity} {item.unit}
+                                            </p>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <span className="text-lg font-semibold mr-4">
+                                                {item.calories} kcal
+                                            </span>
+                                            <button
+                                                type="button"
+                                                className="px-4 py-2 rounded-full bg-gray-500 text-white"
+                                                onClick={() =>
+                                                    handleToggleComplete(index)
+                                                }
+                                            >
+                                                Done
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div className="flex items-center">
-                                        <span className="text-lg font-semibold mr-4">
-                                            {item.calories} kcal
-                                        </span>
-                                        <button
-                                            type="button"
-                                            className="px-4 py-2 rounded-full bg-gray-500 text-white"
-                                            onClick={() =>
-                                                handleToggleComplete(index)
-                                            }
-                                        >
-                                            Done
-                                        </button>
-                                    </div>
-                                </div>
-                            ))
-                        )}
-                    </div>
-                    <div className="flex justify-center mt-4">
-                        {onGoingWorkoutData.length === 0 ? (
-                            <AskAiButton
-                                forText={`${
-                                    formattingMenuFailed || generatingMenuFailed
-                                        ? "Regenerate"
-                                        : "Generate Workout"
-                                }`}
-                                icon={
-                                    <Image
-                                        src="/my_boddy_buddy_support_ai_logo_white.png"
-                                        alt="AI Logo"
-                                        className="ml-2"
-                                        width={30}
-                                        height={30}
-                                    />
-                                }
-                                onClick={generateWorkoutMenu}
-                            />
-                        ) : (
-                            <AskAiButton
-                                forText={`Alternative`}
-                                icon={
-                                    <Image
-                                        src="/my_boddy_buddy_support_ai_logo_white.png"
-                                        alt="AI Logo"
-                                        className="ml-2"
-                                        width={30}
-                                        height={30}
-                                    />
-                                }
-                                onClick={handleAskAI}
-                            />
-                        )}
-                    </div>
-                    <div>
-                        {isLoading && <LoadingAnimation></LoadingAnimation>}
+                                ))
+                            )}
+                        </div>
+                        <div className="flex justify-center mt-4">
+                            {onGoingWorkoutData.length === 0 ? (
+                                <AskAiButton
+                                    forText={`${
+                                        formattingMenuFailed ||
+                                        generatingMenuFailed
+                                            ? "Regenerate"
+                                            : "Generate Workout"
+                                    }`}
+                                    icon={
+                                        <Image
+                                            src="/my_boddy_buddy_support_ai_logo_white.png"
+                                            alt="AI Logo"
+                                            className="ml-2"
+                                            width={30}
+                                            height={30}
+                                        />
+                                    }
+                                    onClick={generateWorkoutMenu}
+                                />
+                            ) : (
+                                <AskAiButton
+                                    forText={`Alternative`}
+                                    icon={
+                                        <Image
+                                            src="/my_boddy_buddy_support_ai_logo_white.png"
+                                            alt="AI Logo"
+                                            className="ml-2"
+                                            width={30}
+                                            height={30}
+                                        />
+                                    }
+                                    onClick={handleAskAI}
+                                />
+                            )}
+                        </div>
+                        <div>
+                            {isLoading && <LoadingAnimation></LoadingAnimation>}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         </>
     );
 };

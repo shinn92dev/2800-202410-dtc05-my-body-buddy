@@ -13,7 +13,7 @@ export default function Navigation() {
     // for hamburger menu
     const [isOpen, setIsOpen] = useState(false);
     const toggleHBGmenu = () => setIsOpen(!isOpen);
-
+    const handleLinkClick = () => setIsOpen(false);
     // for logo animation
     const [isHide, setIsHide] = useState(false);
     const [isDance, setIsDance] = useState(false);
@@ -35,7 +35,9 @@ export default function Navigation() {
             setIsLoading(false);
         }
     }, [isLoaded, isSignedIn, user]);
-
+    useEffect(() => {
+        setIsOpen(false);
+    }, [path]);
     const handleLogoClick = () => {
         clickCountRef.current += 1;
 
@@ -64,44 +66,14 @@ export default function Navigation() {
     };
 
     return (
-        <nav className="fixed top-0 w-full h-16 flex items-center justify-between px-4 z-50 bg-white shadow-sm">
-            {/* <div
-                className={`fixed top-0 left-0 h-full w-1/3 bg-white border-r border-logo-pumpkin shadow-lg transform transition-transform ${
-                    isOpen ? "translate-x-0" : "-translate-x-full"
-                } z-50 slide-out-menu`}
-            >
-                
-
-                <ul className="mt-16">
-                    {!isLoading && loggedUsername ? (
-                        <li>
-                            <Link
-                                href={`/profile`}
-                                onClick={toggleHBGmenu}
-                                className={`text-beige text-center font-bold py-2 px-4 rounded-full m-2 ${
-                                    path === `/profile`
-                                        ? "bg-dark-blue hover:bg-dark-blue"
-                                        : "bg-gray-500 hover:bg-gray-700"
-                                }`}
-                            >
-                                Profile
-                            </Link>
-                        </li>
-                    ) : (
-                        <li className="text-center py-2 px-4">Loading...</li>
-                    )}
-                    <li>
-                        <SignOutButton />
-                    </li>
-                </ul>
-            </div> */}
+        <nav className="fixed top-0 w-full h-16 flex items-center justify-between px-4 z-50 bg-white shadow-sm py-2">
             <div className="w-1/3"></div>
             <div
-                className={`text-center w-1/3${
+                className={`text-center w-1/3 ${
                     isOpen ? "blur-sm" : ""
                 } relative z-40`}
             >
-                <Link href="/summary/diet">
+                <Link href="/summary/diet" onClick={handleLinkClick}>
                     <Image
                         src="/my_body_buddy_logo_transparent.png"
                         alt="logo"
@@ -110,7 +82,7 @@ export default function Navigation() {
                         height="80"
                         className={`mx-auto ${isHide ? "hidden" : ""}`}
                     />
-                    <Image
+                    {/* <Image
                         src="/spin_person_only_transparent.png"
                         alt="person only logo"
                         onClick={handleLogoClick}
@@ -119,13 +91,12 @@ export default function Navigation() {
                         className={`mx-auto ${isHide ? "block" : "hidden"} ${
                             isDance ? "animate-spin" : ""
                         } ${isBounce ? "animate-bounce" : ""}`}
-                    />
+                    /> */}
                 </Link>
             </div>
             <div className="w-1/3 flex justify-end">
                 <button
                     className="block ml-4 pr-2"
-                    // onClick={toggleHBGmenu}
                     aria-label="Toggle menu"
                     onClick={toggleHBGmenu}
                 >
@@ -140,7 +111,7 @@ export default function Navigation() {
                             cy="512"
                             r="472"
                             stroke="#FF6C1A"
-                            stroke-width="80"
+                            strokeWidth="80"
                             fill="none"
                         />
                         <circle cx="512" cy="384" r="128" fill="#FF6C1A" />
@@ -157,20 +128,31 @@ export default function Navigation() {
                 } z-50 slide-out-menu`}
             >
                 <ul className="flex justify-center px-4 h-16">
-                    <Link href="/profile" className="w-1/3">
-                        <li className="flex justify-center px-4 mt-1.5">
+                    <li className="w-1/10 flex justify-start items-center pl-2">
+                        <Image
+                            src="/my_body_buddy_logo_transparent.png"
+                            alt="logo"
+                            onClick={handleLogoClick}
+                            width="35"
+                            height="35"
+                            className={`mx-auto ${isHide ? "hidden" : ""}`}
+                        />
+                    </li>
+                    <li className="flex justify-center items-center w-2/5">
+                        <Link href="/profile" onClick={handleLinkClick}>
                             <button
-                                className="text-beige font-bold text-center py-1 px-3 rounded-full 
+                                className="w-100 text-beige font-bold text-center py-1 px-3 rounded-full 
         m-2 bg-gray-500 hover:bg-gray-700 flex justify-center items-center"
                             >
                                 Profile
                             </button>
-                        </li>
-                    </Link>
-                    <li className="w-1/3 h-16 flex items-center">
+                        </Link>
+                    </li>
+
+                    <li className="w-2/5 h-16 flex items-center">
                         <SignOutButton />
                     </li>
-                    <li className="w-1/3 flex justify-end items-center pr-2 h-16">
+                    <li className="w-1/10 flex justify-end items-center pr-2 h-16">
                         <button onClick={toggleHBGmenu}>
                             <svg
                                 className="mt-3 h-10 w-10 fill-current text-logo-pumpkin"

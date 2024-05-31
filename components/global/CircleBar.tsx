@@ -1,26 +1,110 @@
-"use client";
+import React, { useState } from "react";
+import { Doughnut } from "react-chartjs-2";
+import {
+    Chart as ChartJS,
+    ArcElement,
+    Tooltip,
+    Legend,
+    Title,
+    ChartOptions,
+    ChartData,
+} from "chart.js";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 
-import React, { useState, useEffect } from "react";
+ChartJS.register(ArcElement, Tooltip, Legend, Title, ChartDataLabels);
 
-type CircleBarProps = {
-    title: string;
-    subtitle?: string;
-    percent: number;
-};
+interface CalorieDistributionChartProps {
+    achievedCalories: number;
+    onGoingCalories: number;
+    totalTargetCalories: number;
+}
 
-const CircleBar: React.FC<CircleBarProps> = ({ title, subtitle, percent }) => {
+const CircleBar: React.FC<CalorieDistributionChartProps> = ({
+    achievedCalories,
+    onGoingCalories,
+    totalTargetCalories,
+}) => {
+    const [isSpinning, setIsSpinning] = useState(false);
     const [clickCount, setClickCount] = useState(0);
-    const [isFlashing, setIsFlashing] = useState(false);
 
-    useEffect(() => {
-        if (clickCount === 3 && percent >= 100) {
-            setIsFlashing(true);
-            setTimeout(() => {
-                setIsFlashing(false);
-            }, 1500);
-            setClickCount(0);
-        }
-    }, [clickCount, percent]);
+    const totalCalories = achievedCalories + onGoingCalories;
+    const remainingCalories = totalTargetCalories - totalCalories;
+
+    const data: ChartData<"doughnut"> = {
+        labels: ["Achieved", "Ongoing", "Remaining"],
+        datasets: [
+            {
+                data: [
+                    achievedCalories,
+                    onGoingCalories,
+                    remainingCalories > 0 ? remainingCalories : 0,
+                ],
+                backgroundColor: [
+                    "#525FE1",
+                    "#FFA41B",
+                    "#EE752F",
+                    "#F86F03",
+                    "lightgray",
+                ],
+                hoverBackgroundColor: [
+                    "#3B4CC0",
+                    "#FF8C00",
+                    "#CC5F23",
+                    "#D85D00",
+                    "#FFF6F4",
+                ],
+                borderColor: "#FFF6F4",
+            },
+        ],
+    };
+
+    const options: ChartOptions<"doughnut"> = {
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+            padding: {
+                left: 80,
+                right: 80,
+                top: 20,
+                bottom: 20,
+            },
+        },
+        plugins: {
+            legend: {
+                display: false,
+            },
+            tooltip: {
+                callbacks: {
+                    label: (tooltipItem) => {
+                        return `${tooltipItem.label}: ${tooltipItem.raw} kcal`;
+                    },
+                },
+            },
+            datalabels: {
+                color: (context) => {
+                    const dataset = context.dataset;
+                    const backgroundColor = dataset.backgroundColor;
+                    return Array.isArray(backgroundColor)
+                        ? backgroundColor[context.dataIndex]
+                        : backgroundColor;
+                },
+                font: {
+                    weight: "bold",
+                    size: 12,
+                },
+                formatter: (value, context) => {
+                    const label =
+                        context.chart.data.labels?.[context.dataIndex] || "";
+                    return value > 0 ? label : "";
+                },
+                anchor: "end",
+                align: "end",
+                offset: 2,
+                clip: false,
+            },
+        },
+        cutout: "70%",
+    };
 
     const handleClick = () => {
         setClickCount((prevCount) => prevCount + 1);
@@ -29,39 +113,27 @@ const CircleBar: React.FC<CircleBarProps> = ({ title, subtitle, percent }) => {
         }, 500);
     };
 
-    // Calculate stroke-dasharray for the SVG circle
-    const radius = 70; // radius of the circle
-    const circumference = 2 * Math.PI * radius; // circumference of the circle
-    const percentDecimal = percent ? percent / 100 : 0;
-    const strokeDasharray = `${circumference * percentDecimal} ${circumference}`;
+    if (clickCount === 3) {
+        setClickCount(0);
+        if (!isSpinning) {
+            setIsSpinning(true);
+            setTimeout(() => {
+                setIsSpinning(false);
+            }, 1000);
+        }
+    }
 
     return (
-        <div className="flex items-center justify-center relative w-40 h-40" onClick={handleClick} style={{ userSelect: 'none' }}>
-            <svg className="absolute top-0 left-0 w-full h-full transform -rotate-90">
-                <circle
-                    className="text-gray-300"
-                    strokeWidth="10"
-                    stroke="currentColor"
-                    fill="transparent"
-                    r={radius}
-                    cx="50%"
-                    cy="50%"
-                />
-                <circle
-                    className="text-dark-blue"
-                    strokeWidth="10"
-                    strokeLinecap="round"
-                    stroke="currentColor"
-                    fill="transparent"
-                    r={radius}
-                    cx="50%"
-                    cy="50%"
-                    strokeDasharray={strokeDasharray}
-                />
-            </svg>
-            <div className="flex flex-col items-center">
-                <span className={`text-2xl font-bold ${isFlashing ? 'animate-flash' : ''}`}>{title}</span>
-                {subtitle && <span className="text-sm">{subtitle}</span>}
+        <div
+            className={`relative w-full h-64 ${
+                isSpinning ? "animate-spin-fast" : ""
+            }`}
+            onClick={handleClick}
+        >
+            <Doughnut data={data} options={options} />
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-2xl font-bold">{totalCalories}kcal</span>
+                <span className="text-lg">/ {totalTargetCalories}kcal</span>
             </div>
         </div>
     );

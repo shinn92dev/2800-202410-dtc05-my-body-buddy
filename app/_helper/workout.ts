@@ -1,19 +1,24 @@
-import { connectMongoDB } from "@/config/db";
-import WorkoutModel from "@/models/Workout";
 import { format } from "date-fns";
 import axios from "axios";
 import { WorkoutData, WorkoutDetail } from "@/config/types";
 
+// Convert a date from MongoDB to a string in yyyy-MM-dd format
 // Parameter: workout date from MongoDB
 const formatDateFromMongoDB = (date: Date): string => {
     return new Date(date).toISOString().split("T")[0];
 };
-// Parameter: workout date from User
+
+// Convert a date from user input to a string in yyyy-MM-dd format
+// Params: workout date from User
 export const formatDateFromInput = (date: Date): string => {
     return format(date, "yyyy-MM-dd");
 };
 
-export const fetchWorkoutForSpecificDate = (
+// Filter workouts for a specific date, returning achieved and ongoing workouts
+// params:
+// - workoutdata: workout data object
+// - date: string date
+export const filterWorkoutForSpecificDate = (
     workoutData: WorkoutData,
     date: string
 ): { achieved: WorkoutDetail[]; onGoing: WorkoutDetail[] } => {
@@ -43,6 +48,8 @@ export const fetchWorkoutForSpecificDate = (
     return result;
 };
 
+// Calculate the total calories burned from a list of workouts
+// Params: workouts workout Detail array
 export const calculateKcalForWorkout = (workouts: WorkoutDetail[]): number => {
     let totalKcal = 0;
     workouts.forEach((workout: { calories: number }) => {
@@ -51,6 +58,12 @@ export const calculateKcalForWorkout = (workouts: WorkoutDetail[]): number => {
     return totalKcal;
 };
 
+// Update the achievement status of a specific workout for a user on a given date
+// Params:
+// - userId: user session id
+// - date: Date object
+// - name: workout name
+// - achieved: achieved status
 export const updateWorkoutStatus = async (
     userId: string,
     date: Date,
