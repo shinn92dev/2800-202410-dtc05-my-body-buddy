@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import WorkoutModel from "@/models/Workout";
 import { connectMongoDB } from "@/config/db";
+import { Workout } from "@/config/types";
 const stripTimeFromDate = (date: Date) => {
     const d = new Date(date);
     d.setUTCHours(0, 0, 0, 0);
@@ -28,7 +29,7 @@ export async function POST(req: any) {
                 );
             }
 
-            const workoutForDate = fetched.workouts.find((workout) => {
+            const workoutForDate = fetched.workouts.find((workout: Workout) => {
                 const workoutDate = stripTimeFromDate(new Date(workout.date));
                 return workoutDate.getTime() === formattedDate.getTime();
             });
@@ -40,10 +41,14 @@ export async function POST(req: any) {
                 );
             }
 
-            const workoutIndex = fetched.workouts.findIndex((workout) => {
-                const workoutDate = stripTimeFromDate(new Date(workout.date));
-                return workoutDate.getTime() === formattedDate.getTime();
-            });
+            const workoutIndex = fetched.workouts.findIndex(
+                (workout: Workout) => {
+                    const workoutDate = stripTimeFromDate(
+                        new Date(workout.date)
+                    );
+                    return workoutDate.getTime() === formattedDate.getTime();
+                }
+            );
 
             const result = await WorkoutModel.updateOne(
                 {
