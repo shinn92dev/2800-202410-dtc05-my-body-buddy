@@ -79,6 +79,51 @@ const workoutItemOptions = [
         ],
     },
     {
+        category: "Gym training",
+        name: "Pull-ups",
+        recordOptions: [
+            { unit: "min", kcalPerUnit: 2.0, quantity: 10 },
+            { unit: "reps", kcalPerUnit: 0.4, quantity: 10 },
+        ],
+    },
+    {
+        category: "Gym training",
+        name: "Squats",
+        recordOptions: [
+            { unit: "min", kcalPerUnit: 1.2, quantity: 10 },
+            { unit: "reps", kcalPerUnit: 0.24, quantity: 10 },
+        ],
+    },
+    {
+        category: "Gym training",
+        name: "Lunges",
+        recordOptions: [
+            { unit: "min", kcalPerUnit: 1.3, quantity: 10 },
+            { unit: "reps", kcalPerUnit: 0.26, quantity: 10 },
+        ],
+    },
+    {
+        category: "Gym training",
+        name: "Deadlifts",
+        recordOptions: [
+            { unit: "min", kcalPerUnit: 2.5, quantity: 10 },
+            { unit: "reps", kcalPerUnit: 0.5, quantity: 10 },
+        ],
+    },
+    {
+        category: "Gym training",
+        name: "Bench Press",
+        recordOptions: [
+            { unit: "min", kcalPerUnit: 2.3, quantity: 10 },
+            { unit: "reps", kcalPerUnit: 0.46, quantity: 10 },
+        ],
+    },
+    {
+        category: "Gym training",
+        name: "Plank",
+        recordOptions: [{ unit: "min", kcalPerUnit: 1.5, quantity: 10 }],
+    },
+    {
         category: "Other sports",
         name: "Swimming",
         recordOptions: [
@@ -107,15 +152,18 @@ const workoutItemOptions = [
         recordOptions: [{ unit: "min", kcalPerUnit: 1.5, quantity: 10 }],
     },
     {
-        category: "Table tennis",
+        category: "Other sports",
+        name: "Table tennis",
         recordOptions: [{ unit: "min", kcalPerUnit: 1.5, quantity: 10 }],
     },
     {
-        category: "Badminton",
+        category: "Other sports",
+        name: "Badminton",
         recordOptions: [{ unit: "min", kcalPerUnit: 2.8, quantity: 10 }],
     },
     {
-        category: "Baseball",
+        category: "Other sports",
+        name: "Baseball",
         recordOptions: [{ unit: "min", kcalPerUnit: 1.0, quantity: 10 }],
     },
 ];
