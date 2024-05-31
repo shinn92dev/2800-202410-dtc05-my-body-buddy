@@ -26,7 +26,18 @@ export default function LoginWrapper() {
                             <h1 className="text-2xl xl:text-3xl font-extrabold">
                                 Log in for My Body Buddy🏃‍♂️
                             </h1>
-                            <div className="w-full flex-1 mt-8">
+                            <div className="mt-2">
+                                <p>
+                                    Don&apos;t have an account?&nbsp;
+                                    <Link
+                                        href="/signup"
+                                        className="hover:underline text-red-300"
+                                    >
+                                        Sign up here
+                                    </Link>
+                                </p>
+                            </div>
+                            <div className="w-full flex-1 mt-3">
                                 <LoginForm />
                                 <Link
                                     href="/forgot-password"
