@@ -398,8 +398,6 @@ How did you use AI? Tell us exactly what AI services and products you used and h
  ┃ ┣ 📂signup
  ┃ ┃ ┣ 📜SignupForm.tsx
  ┃ ┃ ┗ 📜SignupWrapper.tsx
- ┃ ┣ 📂summary_score_circle_bar
- ┃ ┃ ┗ 📜ScoreCircleBarWrapper.tsx
  ┃ ┣ 📂workout_adding
  ┃ ┃ ┗ 📜WorkoutAddingWrapper.tsx
  ┃ ┣ 📂workout_ai_support
