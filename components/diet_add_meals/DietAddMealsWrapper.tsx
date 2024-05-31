@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
 import MealForm from './MealForm';
 import MealList from './MealList';
 import { fetchUserId } from '@/app/_helper/fetchUserId';
@@ -31,6 +32,7 @@ const DietAddMealsWrapper: React.FC = () => {
         setUserId(userId);
       } catch (error) {
         console.error("Error fetching user ID:", error);
+        toast.error("Failed to fetch user ID");
       }
     };
 
@@ -62,7 +64,7 @@ const DietAddMealsWrapper: React.FC = () => {
 
   const saveMeals = async () => {
     if (!userId) {
-      alert('User ID is not set');
+      toast.error('User ID is not set');
       return;
     }
 
@@ -73,25 +75,30 @@ const DietAddMealsWrapper: React.FC = () => {
         meals,
         mealType,
       });
-      alert('Meals saved successfully');
+      toast.success('Meals saved successfully');
       router.push('/diet'); // Redirect to diet home page
     } catch (error) {
       console.error('Error saving meals:', error);
-      alert('Failed to save meals');
+      toast.error('Failed to save meals');
     }
   };
 
   return (
-    <div className="p-4 min-h-screen">
+    <div className="p-4 min-h-screen bg-gray-50">
+      <Toaster />
       <MealForm addMeal={addMeal} />
       <MealList meals={meals} deleteMeal={deleteMeal} />
-      <button
-        onClick={saveMeals}
-        disabled={isSaveDisabled}
-        className={`p-2 rounded w-full mt-4 ${isSaveDisabled ? 'bg-gray-300' : 'bg-logo-pumpkin text-white'}`}
-      >
-        Save Meals
-      </button>
+      <div className='flex justify-center'>
+        <button
+          onClick={saveMeals}
+          disabled={isSaveDisabled}
+          className={`p-2 rounded w-1/2 mt-4 transition-colors duration-200 ${
+            isSaveDisabled ? 'bg-gray-300 cursor-not-allowed' : 'bg-logo-pumpkin text-white hover:bg-logo-pumpkin-dark'
+          }`}
+        >
+          Save Meals
+        </button>
+      </div>
     </div>
   );
 };

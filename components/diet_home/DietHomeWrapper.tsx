@@ -11,6 +11,7 @@ import { fetchMeals } from "@/app/_helper/fetchMeals";
 import { handleDateSelect } from "@/app/_helper/handleDate";
 import { format } from "date-fns";
 import axios from "axios";
+import toast, { Toaster } from 'react-hot-toast';
 
 interface Meal {
     name: string;
@@ -114,6 +115,7 @@ const DietHomeWrapper: React.FC = () => {
             } else if (mealType === "snacks") {
                 setSnacks(snacks.filter((_, i) => i !== index));
             }
+            toast.success("Meal item deleted successfully");
         } catch (error) {
             console.error("Error deleting meal item:", (error as Error).message);
         }
@@ -138,6 +140,7 @@ const DietHomeWrapper: React.FC = () => {
 
     return (
         <div className="bg-white min-h-screen p-4">
+            <Toaster />
             <TopCalendar onDateSelect={onDateSelect} />
             <h1 className="text-3xl font-bold flex flex-col items-center p-2 m-2">
                 Diet Log for {format(localDate, "MMMM d, yyyy")}

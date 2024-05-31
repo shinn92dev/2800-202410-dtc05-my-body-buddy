@@ -16,7 +16,7 @@ const MealList: React.FC<MealListProps> = ({ meals, deleteMeal }) => {
   const bgColor = meals.length > 0 ? 'bg-beige' : 'bg-white';
 
   return (
-    <div className={`${bgColor} p-4`}>
+    <div className={`${bgColor} p-4 rounded shadow-md`}>
       {meals.length > 0 ? (
         meals.map((meal, index) => (
           <div key={index} className="flex justify-between items-center mb-2 border-b pb-2">
@@ -29,7 +29,7 @@ const MealList: React.FC<MealListProps> = ({ meals, deleteMeal }) => {
             </div>
             <button
               onClick={() => deleteMeal(index)}
-              className="bg-orange text-white p-1 rounded"
+              className="bg-orange text-white p-1 rounded transition-colors duration-200 hover:bg-orange-hover"
             >
               Delete
             </button>
