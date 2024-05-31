@@ -20,13 +20,10 @@ const ForgotPasswordPage: NextPage = () => {
         return null;
     }
 
-    // If the user is already signed in,
-    // redirect them to the home page
     if (isSignedIn) {
         router.push("/");
     }
 
-    // Send the password reset code to the user's email
     async function create(e: React.FormEvent) {
         e.preventDefault();
         await signIn
@@ -44,9 +41,6 @@ const ForgotPasswordPage: NextPage = () => {
             });
     }
 
-    // Reset the user's password.
-    // Upon successful reset, the user will be
-    // signed in and redirected to the home page
     async function reset(e: React.FormEvent) {
         e.preventDefault();
         await signIn
@@ -56,15 +50,13 @@ const ForgotPasswordPage: NextPage = () => {
                 password,
             })
             .then((result) => {
-                // Check if 2FA is required
                 if (result.status === "needs_second_factor") {
                     setSecondFactor(true);
                     setError("");
                 } else if (result.status === "complete") {
-                    // Set the active session to
-                    // the newly created session (user is now signed in)
                     setActive({ session: result.createdSessionId });
                     setError("");
+                    window.location.href = "/";
                 } else {
                     console.log(result);
                 }
@@ -81,8 +73,9 @@ const ForgotPasswordPage: NextPage = () => {
                 margin: "auto",
                 maxWidth: "500px",
             }}
+            className="p-5"
         >
-            <h1>Forgot Password?</h1>
+            <h1 className="font-extrabold text-3xl p-2">Forgot Password?</h1>
             <form
                 style={{
                     display: "flex",
@@ -90,6 +83,7 @@ const ForgotPasswordPage: NextPage = () => {
                     gap: "1em",
                 }}
                 onSubmit={!successfulCreation ? create : reset}
+                className="p-2"
             >
                 {!successfulCreation && (
                     <>
@@ -101,9 +95,12 @@ const ForgotPasswordPage: NextPage = () => {
                             placeholder="e.g john@doe.com"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            className="w-full p-2 pl-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                         />
 
-                        <button>Send password reset code</button>
+                        <button className="text-beige font-bold text-center py-1 px-3 rounded-full m-2 bg-gray-500 hover:bg-gray-700">
+                            Send password reset code
+                        </button>
                         {error && <p>{error}</p>}
                     </>
                 )}
