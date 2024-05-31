@@ -8,6 +8,11 @@ import { useAuth } from "@clerk/nextjs";
 import LoadingAnimation from "../global/LoadingAnimation";
 import toast, { Toaster } from "react-hot-toast";
 
+const maxTargetWeight = 200;
+const minTargetWeight = 10;
+const maxTargetDate = new Date();
+maxTargetDate.setFullYear(maxTargetDate.getFullYear() + 3);
+
 export const handleDateSelect = (selectedDate: Date, setDate: (date: string) => void) => {
   const utcDate = new Date(Date.UTC(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate()));
   setDate(utcDate.toISOString().split("T")[0]);
@@ -23,6 +28,7 @@ const SetTargetForm: React.FC = () => {
   });
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [isSaved, setIsSaved] = useState(false);
+  const [errors, setErrors] = useState<{ targetWeight?: string; targetDate?: string }>({});
 
   useEffect(() => {
     const fetchProfileAndTarget = async () => {
@@ -65,8 +71,37 @@ const SetTargetForm: React.FC = () => {
     }
   };
 
+  const validateForm = () => {
+    const newErrors: { targetWeight?: string; targetDate?: string } = {};
+
+    if (!formData.targetWeight) {
+      newErrors.targetWeight = "Target weight is required.";
+      toast.error(newErrors.targetWeight);
+    } else if (Number(formData.targetWeight) < minTargetWeight || Number(formData.targetWeight) > maxTargetWeight) {
+      newErrors.targetWeight = `Target weight must be between ${minTargetWeight}kg and ${maxTargetWeight}kg.`;
+      toast.error(newErrors.targetWeight);
+    }
+
+    if (!formData.targetDate) {
+      newErrors.targetDate = "Target date is required.";
+      toast.error(newErrors.targetDate);
+    } else {
+      const selectedDate = new Date(formData.targetDate);
+      if (selectedDate > maxTargetDate) {
+        newErrors.targetDate = `Target date must be within three years from today.`;
+        toast.error(newErrors.targetDate);
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
     setSubmitting(true);
     try {
       const { data } = await axios.post("/api/targets", formData);
@@ -117,6 +152,7 @@ const SetTargetForm: React.FC = () => {
               onChange={handleDateChange}
               value={selectedDate}
               minDate={today}
+              maxDate={maxTargetDate}
               className="inline-block"
             />
           </div>
