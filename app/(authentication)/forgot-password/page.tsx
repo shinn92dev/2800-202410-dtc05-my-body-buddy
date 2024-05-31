@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useAuth, useSignIn } from "@clerk/nextjs";
 import type { NextPage } from "next";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const ForgotPasswordPage: NextPage = () => {
     const [email, setEmail] = useState("");
@@ -101,7 +102,29 @@ const ForgotPasswordPage: NextPage = () => {
                         <button className="text-beige font-bold text-center py-1 px-3 rounded-full m-2 bg-gray-500 hover:bg-gray-700">
                             Send password reset code
                         </button>
-                        {error && <p>{error}</p>}
+                        {error && (
+                            <div className="flex flex-col items-center">
+                                <p className="text-center text-red-500">
+                                    {error}
+                                </p>
+                                {error === "Couldn't find your account." ? (
+                                    <div className="flex flex-col items-center">
+                                        <p>
+                                            Join us by clicking the button
+                                            below✨
+                                        </p>
+                                        <Link
+                                            href="/signup"
+                                            className="text-beige font-bold text-center py-1 px-3 rounded-full m-2 bg-gray-500 hover:bg-gray-700"
+                                        >
+                                            Sign Up
+                                        </Link>
+                                    </div>
+                                ) : (
+                                    ""
+                                )}
+                            </div>
+                        )}
                     </>
                 )}
 
