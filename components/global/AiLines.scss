@@ -1,6 +1,6 @@
 .speech-bubble-ai {
   position: relative;
-  background: #f5f5dc; /* ベージュ色 */
+  background: #f5f5dc; /* beige colour */
   border-radius: .4em;
   padding: 10px;
   max-width: 300px;
@@ -15,4 +15,15 @@
   width: 0;
   height: 0;
   margin-top: -5px;
+}
+
+@media (max-width: 768px) {
+  .speech-bubble-ai img {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  .support-ai-logo {
+    max-width: none !important;
+  }
 }

@@ -1,14 +1,16 @@
+// pages/api/delete-meal.ts
+
 import { NextRequest, NextResponse } from 'next/server';
 import { connectMongoDB } from '@/config/db';
 import Meal from '@/models/Meal';
+import { getAuth } from '@clerk/nextjs/server';
 
 type MealType = 'breakfast' | 'lunch' | 'dinner' | 'snacks';
 
 export async function DELETE(req: NextRequest) {
-  await connectMongoDB();
-
   try {
-    const { userId, date, mealType, mealIndex } = await req.json();
+    const { userId } = getAuth(req);
+    const { date, mealType, mealIndex } = await req.json();
 
     if (!userId || !date || !mealType || mealIndex === undefined) {
       console.error('Missing required parameters');
@@ -20,7 +22,7 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ message: 'Invalid mealType' }, { status: 400 });
     }
 
-    const dateObj = new Date(date).toISOString().split('T')[0];
+    await connectMongoDB();
 
     const mealDocument = await Meal.findOne({ userId });
 
@@ -29,6 +31,7 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ message: 'Meal document not found' }, { status: 404 });
     }
 
+    const dateObj = new Date(date).toISOString().split('T')[0];
     const dailyMeal = mealDocument.dailyMeals.find((d: { date: { toISOString: () => string; }; }) => {
       const mealDate = d.date.toISOString().split('T')[0];
       return mealDate === dateObj;

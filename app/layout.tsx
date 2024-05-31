@@ -2,12 +2,7 @@ import type { Metadata } from "next";
 import Navigation from "@/components/global/Navigation";
 import NavigationFooter from "@/components/global/NavigationFooter";
 import "./globals.css";
-import {
-  ClerkProvider,
-  SignedIn,
-  SignedOut,
-} from "@clerk/nextjs";
-import Head from "next/head";
+import { ClerkProvider, SignedIn, SignedOut } from "@clerk/nextjs";
 import NavigationBeforeAuth from "@/components/global/NavigationBeforeAuth";
 
 export const metadata: Metadata = {
@@ -37,7 +32,7 @@ export default function RootLayout({
             </SignedIn>
           </header>
 
-          <main className="pb-20">{children}</main>
+          <main className="pt-16 pb-20 main-content">{children}</main>
 
           <SignedIn>
             <NavigationFooter />

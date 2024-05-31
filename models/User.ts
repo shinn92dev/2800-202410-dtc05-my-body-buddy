@@ -1,6 +1,12 @@
 import mongoose from "mongoose";
+import { date } from "yup";
 
 const userSchema = new mongoose.Schema({
+  userId: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   username: {
     type: String,
     required: true,
@@ -10,40 +16,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-  },
-  isLoggedIn: {
-    type: Boolean,
-    required: true,
-  },
-  age: {
-    type: Number,
-    required: false,
-    unique: false,
-  },
-  gender: {
-    type: String,
-    required: false,
-    unique: false,
-  },
-  height: {
-    type: Number,
-    required: false,
-    unique: false,
-  },
-  weight: {
-    type: Number,
-    required: false,
-    unique: false,
-  },
-  goalWeight: {
-    type: Number,
-    required: false,
-    unique: false,
-  },
-  goalDay: {
-    type: String,
-    required: false,
-    unique: false,
   },
 });
 

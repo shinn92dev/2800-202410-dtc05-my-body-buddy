@@ -1,0 +1,46 @@
+.speech-bubble-ai {
+  p {
+    //margin-bottom: 1em;
+    //font-weight: lighter;
+  }
+
+  ul, ol {
+    margin-left: 0.5em;
+    margin-bottom: 1em;
+
+    li {
+      margin-bottom: 0.5em;
+    }
+  }
+
+  ul li::before {
+    content: "・";
+    font-weight: bolder;
+    //margin-right: 0.5em;
+  }
+
+  ol {
+    counter-reset: list-counter;
+  }
+
+  ol li {
+    counter-increment: list-counter;
+  }
+
+  ol li::before {
+    content: counter(list-counter) ". ";
+    font-weight: bolder;
+    //margin-right: 0.5em;
+  }
+
+  h3::before {
+    content: "▶︎";
+    margin-right: 0.5em;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    //margin-top: 1em;
+    margin-bottom: 0.5em;
+    font-weight: 900;
+  }
+}

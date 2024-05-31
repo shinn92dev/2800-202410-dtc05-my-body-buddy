@@ -1,4 +1,4 @@
-import AiSupportWrapper from "@/components/workout_ai_support/AiSupportWrapper";
+import WorkoutAiSupportWrapper from "@/components/workout_ai_support/WorkoutAiSupportWrapper";
 
 export const metadata = {
     title: "Workout AI Support",
@@ -6,5 +6,5 @@ export const metadata = {
 
 // Rendering client components with server components
 export default function WorkoutAiSupportPage() {
-    return <AiSupportWrapper />;
+    return <WorkoutAiSupportWrapper />;
 }
