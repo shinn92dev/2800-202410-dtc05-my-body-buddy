@@ -151,24 +151,29 @@ Our project, DTC-5, is developing an innovative personal health and fitness appl
 ## 💡Product usage and features
 
 Follow the steps to enjoy our app:
-**_!! NOT DONE YET !! DON"T FORGET TO UPDATE !!_**
 
 1. Sign up or log in.
-2. After logged in, click the hamburger menu on the left top.
-3. Click **Profile**
-4. Click **Edit** and fill out all fields
-5. Click **Save** and make sure it is saved
-6. Click **Done** to close
-7. (Add more if necessary)
-8. Diet page steps
-    - Add meals
-    - AI support
-9. Workout page steps
-    - Add workouts
-    - AI support
-10. Check home page after adding workout/diet
-11.
-12. .....
+2. After logged in, the profile edit page will automatically pop up.
+3. Fill out all fields and click **Save**.
+4. Click **Set Target** button to enter your goal weight and date.
+5. Click **Submit** to save your profile information.
+6. Click **Home** button on the footer navigation bar to look around summary of your diet page and work out page.
+7. Click **Workout** button below the calendar to see summary of your work out page.
+8. Click a specific **date** on the top calendar to see the summary of that date.
+9. Click **Profile** on the right top to edit your profile info.
+10. Click **Diet** button on the footer navigation bar to see your diet plan.
+11. Click **Ask AI for Menu** to get a suggestion upon your preferences.
+12. After click the Ask AI button, select your preference of serving numbers, ingredients to include, and other preferences.
+13. Click **Generate menu** to get a suggestion.
+14. Click **+** button at each Breakfast, Lunch, Dinner, Snacks part to add your own meal menu manually.
+15. Fill out your own meal information.
+16. Click **Add Selected Meals** and if adding meals is completed, click **Save Meals**.
+17. Click **Work out** button on the footer navigation bar to see your work out plan.
+18. Click **Ask AI for Generate Workout** to get a suggestion upon your personal goal.
+19. Click **+** button at the Achieved part to add your own work out plan manually.
+20. Select work out category and enter the information of the work out you have done.
+21. Click **Add to Draft** and if adding work out is completed, click **Save Workout**.
+22. Click **Sign out** button to sign out from your current account at the **Profile** menu on the right top.
 
 ## 🔎Credits, References, and Licenses
 
