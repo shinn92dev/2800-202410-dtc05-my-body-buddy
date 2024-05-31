@@ -7,7 +7,6 @@ import { calculateCaloriesPerDay, calculateBmr, factorByActivityLevel, calculate
 import { calculateNumberOfDaysLeft } from "@/app/_helper/handleDate";
 
 export async function GET(req: NextRequest) {
-
   await connectMongoDB();
   const user = await currentUser();
   if (!user) {

@@ -21,4 +21,3 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ message: "Error fetching profile data" }, { status: 500 });
   }
 }
-

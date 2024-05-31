@@ -12,17 +12,22 @@ const ProfileWrapper: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userResponse = await axios.get("/api/user");
+        const [userResponse, profileResponse] = await Promise.all([
+          axios.get("/api/user"),
+          axios.get("/api/profile"),
+        ]);
+
         const user = userResponse.data;
         setUserData(user);
 
-        const profileResponse = await axios.get("/api/profile");
         const profile = profileResponse.data;
         setProfileData(profile);
 
-        const targetResponse = await axios.get(`/api/targets`);
-        const target = targetResponse.data;
-        setTargetData(target);
+        if (profile) {
+          const targetResponse = await axios.get(`/api/targets`);
+          const target = targetResponse.data;
+          setTargetData(target);
+        }
       } catch (error) {
         console.error("Error fetching profile or target data:", error);
       }
