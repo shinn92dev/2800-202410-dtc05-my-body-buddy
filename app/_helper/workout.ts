@@ -9,12 +9,15 @@ const formatDateFromMongoDB = (date: Date): string => {
 };
 
 // Convert a date from user input to a string in yyyy-MM-dd format
-// Parameter: workout date from User
+// Params: workout date from User
 export const formatDateFromInput = (date: Date): string => {
     return format(date, "yyyy-MM-dd");
 };
 
 // Filter workouts for a specific date, returning achieved and ongoing workouts
+// params:
+// - workoutdata: workout data object
+// - date: string date
 export const filterWorkoutForSpecificDate = (
     workoutData: WorkoutData,
     date: string
@@ -46,6 +49,7 @@ export const filterWorkoutForSpecificDate = (
 };
 
 // Calculate the total calories burned from a list of workouts
+// Params: workouts workout Detail array
 export const calculateKcalForWorkout = (workouts: WorkoutDetail[]): number => {
     let totalKcal = 0;
     workouts.forEach((workout: { calories: number }) => {
@@ -55,6 +59,11 @@ export const calculateKcalForWorkout = (workouts: WorkoutDetail[]): number => {
 };
 
 // Update the achievement status of a specific workout for a user on a given date
+// Params:
+// - userId: user session id
+// - date: Date object
+// - name: workout name
+// - achieved: achieved status
 export const updateWorkoutStatus = async (
     userId: string,
     date: Date,
