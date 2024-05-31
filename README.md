@@ -296,9 +296,8 @@ we used AI to create data sets, especially for testing the logic before connecti
       <td>Hi👋 I'm Tatsunori from Japan, currently living in Vancouver. I'm a CST student at BCIT 🧑🏻‍💻. When I'm not coding, I enjoy exploring Vancouver's natural beauty. I'm excited to be a part of the My Body Buddy project and look forward to creating impactful health and fitness solutions with my team! Feel free to reach out if you'd like to connect or collaborate 🚀</td>
     </tr>
     <tr>
-      <td align="center" width="150px"><a href="https://github.com/yoshidont-mind"><img src="/public/images/our_team/tatsuya.png" width="100px" alt=""/><br /><sub><b>Developer: <br />Tatsuya Yoshida</b></sub></a><br /></td>
-      <td>Hi, I'm Tatsuya Yoshida from Nara, Japan🍣. I am very interested in incorporating generative AI🧠 into applications, such as using OpenAI's API. I'm eager to create software that can help people. Stay tuned to see what we can achieve with this project!🥳
-</td>
+      <td align="center" width="150px"><a href=""><img src="/public/images/our_team/tatsuya.png" width="100px" alt=""/><br /><sub><b>Developer: <br />Tatsuya Yoshida</b></sub></a><br /></td>
+      <td>Add your introduction here!</td>
     </tr>
   </tbody>
 </table>
