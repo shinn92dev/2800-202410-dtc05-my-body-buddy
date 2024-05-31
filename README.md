@@ -1,5 +1,5 @@
 <div align="center">
-<img src="/public/images/logo/my_body_buddy_logo.png" width="200px" />
+<a href="https://two800-202410-dtc05-my-body-buddy.onrender.com/", target="_blank"><img src="/public/images/logo/my_body_buddy_logo.png" width="200px" /></a>
 </div>
 
 # My Body Buddy
