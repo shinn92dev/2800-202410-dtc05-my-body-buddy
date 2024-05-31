@@ -9,6 +9,7 @@ import { handleDateSelect } from "@/app/_helper/handleDate";
 import { format } from "date-fns";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import Modal from "react-modal";
 
 const Board = dynamic(() => import("@/components/global/Board"));
 const AskAiButton = dynamic(() => import("@/components/global/AskAiButton"));
@@ -107,27 +108,39 @@ const DietHomeWrapper: React.FC = () => {
         getData();
     }, [userId, selectedDate]);
 
-    const handleEdit = useCallback((mealType: MealType, index: number) => {
-        // Handle edit logic here
-    }, []);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalMealType, setModalMealType] = useState<MealType | null>(null);
+    const [modalMealIndex, setModalMealIndex] = useState<number | null>(null);
 
-    const handleDelete = useCallback(
-        async (mealType: MealType, index: number) => {
+    const openModal = (mealType: MealType, index: number) => {
+        setModalMealType(mealType);
+        setModalMealIndex(index);
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setModalMealType(null);
+        setModalMealIndex(null);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (modalMealType !== null && modalMealIndex !== null) {
             try {
                 const date = format(localDate, "yyyy-MM-dd");
                 await axios.delete("/api/delete-meal", {
                     data: {
                         userId,
                         date,
-                        mealType,
-                        mealIndex: index,
+                        mealType: modalMealType,
+                        mealIndex: modalMealIndex,
                     },
                 });
 
                 setMeals((prevMeals) => ({
                     ...prevMeals,
-                    [mealType]: prevMeals[mealType].filter(
-                        (_, i) => i !== index
+                    [modalMealType]: prevMeals[modalMealType].filter(
+                        (_, i) => i !== modalMealIndex
                     ),
                 }));
 
@@ -137,7 +150,19 @@ const DietHomeWrapper: React.FC = () => {
                     "Error deleting meal item:",
                     (error as Error).message
                 );
+            } finally {
+                closeModal();
             }
+        }
+    };
+
+    const handleEdit = useCallback((mealType: MealType, index: number) => {
+        // Handle edit logic here
+    }, []);
+
+    const handleDelete = useCallback(
+        (mealType: MealType, index: number) => {
+            openModal(mealType, index);
         },
         [localDate, userId]
     );
@@ -238,6 +263,31 @@ const DietHomeWrapper: React.FC = () => {
                     />
                 </div>
             </div>
+            <Modal
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                contentLabel="Delete Confirmation"
+                className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+            >
+                <div className="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 className="text-2xl font-bold mb-4 text-center">Delete Confirmation</h2>
+                    <p className="mb-4">Are you sure you want to delete this meal?</p>
+                    <div className="flex justify-center space-x-6">
+                        <button
+                            onClick={closeModal}
+                            className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            onClick={handleConfirmDelete}
+                            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
+                        >
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </Modal>
         </>
     );
 };
