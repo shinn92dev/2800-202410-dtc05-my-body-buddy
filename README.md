@@ -24,7 +24,7 @@ Our project, DTC-5, is developing an innovative personal health and fitness appl
 
 ## 🔧Project installation and execution requirements
 
-**_NOT DONE YET!!_**
+**_ TEST PART NOT DONE YET!!_**
 
 ### What Does the Developer Need to Install?
 
@@ -143,6 +143,8 @@ Our project, DTC-5, is developing an innovative personal health and fitness appl
 4. **Access the Application**
 
     - Open your browser and go to `http://localhost:3000` to see the application in action.9. Include a link to the testing plan you have completed so the new developer can see your testing history and maybe contribute to a minor bugfix!
+
+**Include a link to the testing plan you have completed so the new developer can see your testing history and maybe contribute to a minor bugfix!**
 
 **_In a separate plaintext file called passwords.txt that has NOT been added to your repo, provide us with any admin/user/server login IDs and passwords. Don’t add this to your repo, especially if your repo is public! Upload this plaintext file to the 05d Dropbox in D2L._**
 
