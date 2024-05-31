@@ -65,36 +65,6 @@ export default function Navigation() {
 
     return (
         <nav className="fixed top-0 w-full h-16 flex items-center justify-between px-4 z-50 bg-white shadow-sm">
-            {/* <div
-                className={`fixed top-0 left-0 h-full w-1/3 bg-white border-r border-logo-pumpkin shadow-lg transform transition-transform ${
-                    isOpen ? "translate-x-0" : "-translate-x-full"
-                } z-50 slide-out-menu`}
-            >
-                
-
-                <ul className="mt-16">
-                    {!isLoading && loggedUsername ? (
-                        <li>
-                            <Link
-                                href={`/profile`}
-                                onClick={toggleHBGmenu}
-                                className={`text-beige text-center font-bold py-2 px-4 rounded-full m-2 ${
-                                    path === `/profile`
-                                        ? "bg-dark-blue hover:bg-dark-blue"
-                                        : "bg-gray-500 hover:bg-gray-700"
-                                }`}
-                            >
-                                Profile
-                            </Link>
-                        </li>
-                    ) : (
-                        <li className="text-center py-2 px-4">Loading...</li>
-                    )}
-                    <li>
-                        <SignOutButton />
-                    </li>
-                </ul>
-            </div> */}
             <div className="w-1/3"></div>
             <div
                 className={`text-center w-1/3${
@@ -125,7 +95,6 @@ export default function Navigation() {
             <div className="w-1/3 flex justify-end">
                 <button
                     className="block ml-4 pr-2"
-                    // onClick={toggleHBGmenu}
                     aria-label="Toggle menu"
                     onClick={toggleHBGmenu}
                 >
