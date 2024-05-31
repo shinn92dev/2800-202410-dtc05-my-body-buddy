@@ -4,6 +4,30 @@
 
 # My Body Buddy
 
+## Table of Contents
+
+1. [Project Description](#project-description)
+2. [Tech Stack](#🛠️tech-stack)
+3. [Project Installation and Execution Requirements](#project-installation-and-execution-requirements)
+    - [What Does the Developer Need to Install?](#what-does-the-developer-need-to-install)
+    - [Which 3rd Party APIs and Frameworks Does the Developer Need to Download?](#which-3rd-party-apis-and-frameworks-does-the-developer-need-to-download)
+    - [Do They Need Any API Keys?](#do-they-need-any-api-keys)
+    - [In Which Order Should They Install Things? Does Installation Location Matter?](#in-which-order-should-they-install-things-does-installation-location-matter)
+    - [Detailed Configuration Instructions](#detailed-configuration-instructions)
+4. [Product Usage and Features](#product-usage-and-features)
+5. [Credits, References, and Licenses](#credits-references-and-licenses)
+    - [Credits](#credits)
+    - [References](#references)
+    - [Licenses](#licenses)
+6. [Usage of AI](#usage-of-ai)
+    - [AI Utilization in App Development](#ai-utilization-in-app-development)
+    - [AI for Data Set Creation and Cleaning](#ai-for-data-set-creation-and-cleaning)
+    - [Usage AI in My Body Buddy](#usage-ai-in-my-body-buddy)
+    - [AI Limitations we encountered](#ai-limitations-we-encountered)
+7. [Our Team (Contact Information)](#our-team-contact-information)
+    - [Team Members](#team-members)
+8. [File Contents of folder](#file-contents-of-folder)
+
 ## 📖Project Description
 
 Our project, DTC-5, is developing an innovative personal health and fitness application designed to help individuals who don’t know where to start to get in shape for their healthier life with personalized workout and diet plans suggested by AI.
