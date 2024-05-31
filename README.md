@@ -212,10 +212,34 @@ Follow the steps to enjoy our app:
 
 How did you use AI? Tell us exactly what AI services and products you used and how you used them. Be very specific:
 
-1. Did you use AI to help create your app? If so, how? Be specific.
-2. DId you use AI to create data sets or clean data sets? If so, how? Be specific.
-3. Does your app use AI? If so, how? Be specific.
-4. Did you encounter any limitations? What were they, and how did you overcome them? Be specific.
+### AI Utilization in App Development
+
+-   **AI Used**
+    `Chat GPT`, `OpenAI's GPT API`
+-   **Sample Data Creation**: We used AI to generate sample data sets for testing and development purposes, which helped simulate real user inputs and scenarios.
+-   **Getting Hints for Errors**: When encountering coding errors or issues, we used AI to get hints and suggestions for debugging and resolving the problems more efficiently.
+-   **Summarize Official Documentation**: We leveraged AI to summarize lengthy official documentation, making it easier to quickly grasp key points and integrate necessary features.
+
+### AI for Data Set Creation and Cleaning
+
+we used AI to create data sets, especially for testing the logic before connecting to the actual database. The AI generated sample data that closely mimicked real user data, allowing us to:
+
+-   Validate our application's functionality.
+-   Ensure it behaved as expected under various scenarios.
+-   Identify and fix issues early in the development process.
+-   Improve the overall quality of the app.
+
+### Usage AI in MY Body Buddy
+
+-   **Workout Creation**: The AI suggests workout routines based on user fitness goals and current fitness levels.
+-   **Workout Alternative Suggestion**: The AI suggests alternative workouts if a user wants to change their current workout routine. This ensures users have variety and can avoid monotony in their fitness regimen.
+-   **Diet Plan Advice**: The AI provides users with nutritional advice and tips based on their dietary habits, goals, and dietary preferences.
+
+### AI Limitations we encountered
+
+-   **Information Availability**: For certain APIs or libraries, there was a lack of comprehensive information, and even when information was available, it was sometimes outdated. To overcome this, we relied on community support, online forums, and continuous testing to ensure we were implementing the most effective solutions.
+-   **Response Time**: The response time from the AI API was sometimes slower than expected, which affected the user experience. We addressed this by optimizing our request handling and providing users with loading indicators to improve perceived performance.
+-   **Contextual Accuracy**: The AI occasionally produced results that were not entirely accurate or contextually relevant. To mitigate this, we fine-tuned our prompts and provided additional context to improve the quality of the AI responses. We also incorporated a feedback mechanism for users to report unsatisfactory results, which helped us refine our approach over time.
 
 ## 👨‍👩‍👦‍👦Our Team (Contact information)
 
