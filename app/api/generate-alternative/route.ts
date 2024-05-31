@@ -13,8 +13,6 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        console.log("IN SIDE OF API TO GENERATE AI ANSWER FOR WORKOUT");
-
         const result = await generateAlternativeWorkout(prompt);
         return NextResponse.json({ result }, { status: 200 });
     } catch (error) {
