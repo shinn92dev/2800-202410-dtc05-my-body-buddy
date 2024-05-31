@@ -16,3 +16,23 @@ export interface WorkoutData {
     userId: string;
     workouts: Workout[];
 }
+
+export interface MealItem {
+  name: string;
+  quantity?: number;
+  unit?: string;
+  calories: number;
+}
+
+export interface DailyMeal {
+  date: Date;
+  breakfast: MealItem[];
+  lunch: MealItem[];
+  dinner: MealItem[];
+  snacks: MealItem[];
+}
+
+export interface Meal {
+  userId: string;
+  dailyMeals: DailyMeal[];
+}
