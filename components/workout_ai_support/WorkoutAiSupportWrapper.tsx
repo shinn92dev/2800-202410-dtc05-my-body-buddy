@@ -9,6 +9,7 @@ import "@/components/global/AiLines.scss";
 import "@/components/workout_ai_support/WorkoutAiSupportInput.scss";
 import axios from "axios";
 import Image from "next/image";
+import { toast, Toaster } from "react-hot-toast";
 
 // Initial messages
 const initialMessageTitle = "Hi! I'm BODY BUDDY AI.";
@@ -57,10 +58,12 @@ export default function AiSupportWrapper() {
             );
             const data = dataRes.data;
         } catch (error) {
+            toast.error("Failed to adopt alternative workout menu");
             console.error("Error adopting alternative: ", error);
         }
 
         console.log(generatedItems);
+        toast.success("Successfully adopted alternative workout menu!");
         router.push("/workout");
     };
 
@@ -98,6 +101,7 @@ export default function AiSupportWrapper() {
             const data = await response.json();
             handleGenerateItems(data.result);
         } catch (error) {
+            toast.error("Failed to generate alternative");
             console.error("Error generating alternative:", error);
         } finally {
             setGenerated(true);
@@ -128,6 +132,7 @@ export default function AiSupportWrapper() {
                 );
             }
         } catch (error) {
+            toast.error("An error occurred while processing the response. Please try again.");
             setErrorMessage(
                 "An error occurred while processing the response. Please try again."
             );
@@ -137,6 +142,7 @@ export default function AiSupportWrapper() {
     console.log(generatedItems);
     return (
         <div>
+            <Toaster />
             <AiLines
                 messageTitle={initialMessageTitle}
                 messageBody={initialMessageBody}

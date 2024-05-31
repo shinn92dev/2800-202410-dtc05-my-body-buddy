@@ -15,6 +15,7 @@ import {
 import { calculateKcalForWorkout } from "@/app/_helper/workout";
 import { handleDateSelect } from "@/app/_helper/handleDate";
 import LoadingAnimation from "@/components/global/LoadingAnimation";
+import { Toaster, toast } from "react-hot-toast"; 
 
 const WorkoutHomeWrapper: React.FC = () => {
     const [achievedWorkoutData, setAchievedWorkoutData] = useState<any[]>([]);
@@ -104,13 +105,13 @@ const WorkoutHomeWrapper: React.FC = () => {
                 console.log(data, "?????????????????????");
 
                 if (data.message === "Not allowed new workout AI generation") {
-                    alert(data.data);
+                    toast.error(data.data);
                     window.location.href = "/workout";
                     return;
                 }
 
                 setOnGoingWorkoutData(data.data.onGoing);
-                alert(
+                toast.success(
                     `Workout out for 7 days from ${selectedDate} generated and saved!`
                 );
             } else {
@@ -266,6 +267,7 @@ const WorkoutHomeWrapper: React.FC = () => {
         calculateKcalForWorkout(onGoingWorkoutData);
     return (
         <>
+        <Toaster />
         <TopCalendar onDateSelect={onDateSelect} />
         <div className="p-4 items-center bg-white">
             <h1 className="text-center text-2xl font-bold">Your Progress</h1>
