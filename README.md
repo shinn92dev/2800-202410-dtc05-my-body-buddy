@@ -208,14 +208,9 @@ Follow the steps to enjoy our app:
 
 ## 🤖Usage of AI
 
-**_!! This list is copied and pasted from the instruction. Don't forget to update !!_**
-
-How did you use AI? Tell us exactly what AI services and products you used and how you used them. Be very specific:
-
 ### AI Utilization in App Development
 
--   **AI Used**
-    `Chat GPT`, `OpenAI's GPT API`
+-   **AI Used**: `Chat GPT`, `OpenAI's GPT API`
 -   **Sample Data Creation**: We used AI to generate sample data sets for testing and development purposes, which helped simulate real user inputs and scenarios.
 -   **Getting Hints for Errors**: When encountering coding errors or issues, we used AI to get hints and suggestions for debugging and resolving the problems more efficiently.
 -   **Summarize Official Documentation**: We leveraged AI to summarize lengthy official documentation, making it easier to quickly grasp key points and integrate necessary features.
