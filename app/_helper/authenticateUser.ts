@@ -1,13 +1,13 @@
-import { redirect } from 'next/navigation';
-import { auth } from '@clerk/nextjs/server';
-import { connectMongoDB } from '@/config/db';
-import Profile from '@/models/Profile';
-import Target from '@/models/Target';
+import { redirect } from "next/navigation";
+import { auth } from "@clerk/nextjs/server";
+import { connectMongoDB } from "@/config/db";
+import Profile from "@/models/Profile";
+import Target from "@/models/Target";
 
 const authenticateUser = async () => {
     const { userId } = auth();
     if (!userId) {
-        redirect('/');
+        redirect("/login");
     }
 
     await connectMongoDB();
@@ -15,14 +15,14 @@ const authenticateUser = async () => {
     const user = await Profile.findOne({ userId });
 
     if (!user) {
-        redirect('/profile/edit');
+        redirect("/profile/edit");
     }
 
     const target = await Target.findOne({ userId });
 
     if (!target) {
-        redirect('/profile/set-target');
+        redirect("/profile/set-target");
     }
-}
+};
 
 export default authenticateUser;
