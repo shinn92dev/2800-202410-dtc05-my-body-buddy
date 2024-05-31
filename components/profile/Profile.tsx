@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { calculateBmr } from "@/app/_helper/calorie";
+import { calculateBmr, factorByActivityLevel, calculateEnergyRequirementsPerDay } from "@/app/_helper/calorie";
 import LoadingAnimation from "../global/LoadingAnimation";
 
 interface ProfileProps {
@@ -50,6 +50,20 @@ const Profile: React.FC<ProfileProps> = ({ user, profile, target }) => {
 
   const bmr = Math.round(calculateBmr(profile.age, profile.height, profile.weight, profile.gender));
 
+  const activityFactor = factorByActivityLevel(profile.age, profile.activityLevel);
+
+  const energyRequirements = calculateEnergyRequirementsPerDay(bmr, activityFactor);
+
+  let targetDailyWorkOutCalories;
+
+  if (target) {
+    if (target.targetCaloriesBurn < energyRequirements) {
+      targetDailyWorkOutCalories = 0;
+    } else {
+      targetDailyWorkOutCalories = Math.round(target.targetCaloriesBurn - energyRequirements);
+        }
+  }
+
   const targetDateToBeDisplayed = target?.targetDate?.split("T")[0] ?? "";
 
   return (
@@ -78,6 +92,7 @@ const Profile: React.FC<ProfileProps> = ({ user, profile, target }) => {
             <div><span className="font-bold">Target Weight:</span> <span className="font-semibold">{target.targetWeight} kg</span></div>
             <div><span className="font-bold">Target Calories Intake:</span> <span className="font-semibold">{target.targetCaloriesIntake} kcal/day</span></div>
             <div><span className="font-bold">Target Calories Burn:</span> <span className="font-semibold">{target.targetCaloriesBurn} kcal/day</span></div>
+             <div><span className="font-bold">Target Daily WorkOut Calories Burn:</span> <span className="font-semibold">{targetDailyWorkOutCalories} kcal/day</span></div>
           </div>
         </div>
       )}
