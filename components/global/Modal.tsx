@@ -9,10 +9,6 @@ export default function Modal({
     modalContent: ReactElement;
     showModal: boolean;
 }) {
-    // const [newShowModal, setNewShowModal] = useState(showModal);
-    // const closeModal = () => {
-    //     setNewShowModal(false);
-    // };
     return (
         <div
             id="default-modal"

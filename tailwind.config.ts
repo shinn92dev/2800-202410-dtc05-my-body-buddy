@@ -28,7 +28,21 @@ const config: Config = {
       animation: {
         flash: 'flash 0.5s ease-in-out 3',
         'spin-fast': 'spin 0.1s linear 10',
-        
+      },
+      fontSize: {
+        'xs': ['0.75rem', '1rem'], // 12px, line-height 16px
+        'sm': ['0.875rem', '1.25rem'], // 14px, line-height 20px
+        'md': ['1rem', '1.5rem'], // 16px, line-height 24px
+        'lg': ['1.125rem', '1.75rem'], // 18px, line-height 28px
+        'xl': ['1.25rem', '1.75rem'], // 20px, line-height 28px
+        '2xl': ['1.5rem', '2rem'], // 24px, line-height 32px
+        '3xl': ['1.875rem', '2.25rem'], // 30px, line-height 36px
+        '4xl': ['2.25rem', '2.5rem'], // 36px, line-height 40px
+        '5xl': ['3rem', '1'], // 48px, line-height 1
+        '6xl': ['3.75rem', '1'], // 60px, line-height 1
+        '7xl': ['4.5rem', '1'], // 72px, line-height 1
+        '8xl': ['6rem', '1'], // 96px, line-height 1
+        '9xl': ['8rem', '1'], // 128px, line-height 1
       },
     },
   },

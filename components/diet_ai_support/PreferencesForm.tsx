@@ -12,7 +12,7 @@ type Ingredient = {
 
 const defaultPreferences = [
     'Halal', 'Vegetarian', 'No cooking required',
-    'Something I haven’t eaten recently', 'Easy to prepare', 'Minimal washing up'
+    'Easy to prepare', 'Minimal washing up', 'Low-carb', 'Tasty', 'Low sodium', 'Healthy'
 ];
 
 const PreferencesForm: React.FC<PreferencesFormProps> = ({ onSubmit }) => {

@@ -43,7 +43,7 @@ const MealForm: React.FC<MealFormProps> = ({ addMeal }) => {
   };
 
   return (
-    <div className="mb-4 p-2 bg-beige rounded">
+    <div className="mb-4 p-4 bg-beige rounded shadow-md">
       <input
         type="text"
         placeholder="Enter meal name"
@@ -74,12 +74,14 @@ const MealForm: React.FC<MealFormProps> = ({ addMeal }) => {
         onChange={(e) => setCalories(e.target.value === '' ? '' : Number(e.target.value))}
         className="border p-2 rounded w-full mb-2"
       />
-      <button
-        onClick={handleAddMeal}
-        className="bg-dark-blue text-white p-2 rounded w-full"
-      >
-        Add Selected Meals
-      </button>
+      <div className='flex justify-center'>
+        <button
+          onClick={handleAddMeal}
+          className="bg-dark-blue text-white p-2 rounded w-1/2 transition-colors duration-200 hover:bg-dark-blue-hover"
+        >
+          Add Selected Meals
+        </button>
+      </div>
     </div>
   );
 };

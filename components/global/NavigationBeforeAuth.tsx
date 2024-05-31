@@ -6,9 +6,8 @@ import { usePathname } from "next/navigation";
 
 export default function NavigationBeforeAuth() {
   const path = usePathname();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const toggleHBGmenu = () => setIsOpen(!isOpen);
-  console.log(path);
 
   return (
     <nav className="flex items-center justify-between px-4">
@@ -30,9 +29,9 @@ export default function NavigationBeforeAuth() {
         </svg>
       </button>
 
-      <ul
-        className={`absolute left-1 top-1 w-1/3 bg-white border border-logo-pumpkin shadow-lg rounded-md ${
-          isOpen ? "block" : "hidden"
+      <div
+        className={`fixed top-0 left-0 h-full w-1/3 bg-white border-r border-logo-pumpkin shadow-lg transform transition-transform ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <button onClick={toggleHBGmenu}>
@@ -48,8 +47,8 @@ export default function NavigationBeforeAuth() {
           </svg>
         </button>
 
-        <li
-          className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
+        <ul
+          className={`text-beige font-bold text-center py-2 px-4 w-fit rounded-full m-2 ${
             path === "/login"
               ? "bg-dark-blue hover:bg-dark-blue"
               : "bg-gray-500 hover:bg-gray-700"
@@ -58,9 +57,9 @@ export default function NavigationBeforeAuth() {
           <Link href="/login" onClick={toggleHBGmenu}>
             Log In
           </Link>
-        </li>
-        <li
-          className={`text-beige font-bold text-center py-2 px-4 rounded-full m-2 ${
+        </ul>
+        <ul
+          className={`text-beige font-bold text-center py-2 px-4 w-fit rounded-full m-2 ${
             path === "/signup"
               ? "bg-dark-blue hover:bg-dark-blue"
               : "bg-gray-500 hover:bg-gray-700"
@@ -69,10 +68,12 @@ export default function NavigationBeforeAuth() {
           <Link href="/signup" onClick={toggleHBGmenu}>
             Sign Up
           </Link>
-        </li>
-      </ul>
+        </ul>
+      </div>
 
-      <div className="flex-grow text-center">
+      <div className={`flex-grow text-center  ${
+          isOpen ? "blur-sm" : ""
+        } relative z-40`}>
         <Link href="/">
           <img
             src="/my_body_buddy_logo_transparent.png"

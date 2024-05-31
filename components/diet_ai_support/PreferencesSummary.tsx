@@ -23,11 +23,13 @@ const PreferencesSummary: React.FC<PreferencesSummaryProps> = ({ preferences }) 
             </ul>
             <h2 className="text-lg font-bold border-t py-1 mt-1">Other Preferences:</h2>
             <div className="flex flex-wrap gap-2 mb-2">
-                {preferences.preferences.map((preference, index) => (
-                    <span key={index} className="px-2 py-1 rounded border bg-dark-blue text-white">
-                                {preference}
-                            </span>
-                ))}
+                <div>
+                    {preferences.preferences.map((preference, index) => (
+                        <p key={index}>
+                            ・{preference}
+                        </p>
+                    ))}
+                </div>
             </div>
         </div>
     );

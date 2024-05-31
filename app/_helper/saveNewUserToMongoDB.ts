@@ -1,25 +1,21 @@
+// _helper/saveNewUserToMongoDB.ts
+
 import UserModel from "@/models/User";
 
 type newUserDataType = {
     email: string;
     username: string;
-    isLoggedIn: boolean;
+    userId: string;
 };
 
 const saveNewUserToMongoDB = async (newUserData: newUserDataType) => {
     if (newUserData) {
         try {
-            console.log("UserModel:", UserModel);
             const newUser = new UserModel(newUserData);
-            console.log(newUser);
-            console.log(newUser instanceof UserModel);
             await newUser.save();
-            console.log("success");
+            console.log("User data saved successfully");
         } catch (error) {
-            console.log(
-                "Error while storing new user data from MongoDB",
-                error
-            );
+            console.error("Error while storing new user data in MongoDB", error);
         }
     }
 };

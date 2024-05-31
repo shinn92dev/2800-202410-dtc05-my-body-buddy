@@ -1,134 +1,69 @@
 import { connectMongoDB } from "@/config/db";
 import WorkoutModel from "@/models/Workout";
+import { format } from "date-fns";
+import axios from "axios";
+import { WorkoutData, WorkoutDetail } from "@/config/types";
 
-type DetailedWorkoutDataType = {
-    date: Date;
-    workoutDetail: [
-        {
-            title: string;
-            cals: number;
-            unit: string;
-            count: number;
-            achieved: boolean;
-        }
-    ];
+// Parameter: workout date from MongoDB
+const formatDateFromMongoDB = (date: Date): string => {
+    return new Date(date).toISOString().split("T")[0];
 };
-type OneDayWorkoutType = {};
-type WorkoutDataType = {
-    username: string;
-    workouts: DetailedWorkoutDataType[];
+// Parameter: workout date from User
+export const formatDateFromInput = (date: Date): string => {
+    return format(date, "yyyy-MM-dd");
 };
 
-export const saveNewUserWorkoutMongoDB = async (
-    workoutData: WorkoutDataType
-) => {
-    try {
-        await connectMongoDB();
-        const newUserWorkout = new WorkoutModel(workoutData);
-        await newUserWorkout.save();
-        console.log("WOrkout for new user saved successfully");
-    } catch (error) {
-        console.log("Error while saving new user workout data: ", error);
-    }
-};
-
-// newWorkoutData must be type of DetailedWorkoutDataType
-export const updateWorkoutMongoDB = async (
-    username: string,
-    newWorkoutData: DetailedWorkoutDataType
-) => {
-    if (newWorkoutData) {
-        try {
-            await connectMongoDB();
-            console.log("WorkoutData: ", newWorkoutData);
-            const currentUser = await WorkoutModel.findOneAndUpdate(
-                {
-                    username: username,
-                },
-                { $push: { workouts: newWorkoutData } }
-            );
-            console.log(
-                "New workout updated successfully for ",
-                username,
-                ": "
-            );
-            console.log(currentUser);
-        } catch (error) {
-            console.log("Error while saving workout data");
-        }
-    }
-};
-
-export const retrieveWorkout = async (username: string) => {
-    try {
-        await connectMongoDB();
-        const workoutForCurrentUser = await WorkoutModel.findOne(
-            {
-                username: username,
-            },
-            { _id: 0 }
-        );
-        console.log(
-            "Workout for current user retrieved successfully for ",
-            username,
-            ": "
-        );
-        console.log(workoutForCurrentUser);
-        return workoutForCurrentUser;
-    } catch (error) {
-        console.log("Error while retrieving workout");
-        return null;
-    }
-};
-
-export const filterSpecificDayWorkout = (date: Date, workouts: any) => {
-    console.log("CHECK THIS OUTPUT:", workouts);
-    if (!Array.isArray(workouts)) {
-        return null;
-    }
-    const specificDayWorkout = workouts.filter(
-        (workout: DetailedWorkoutDataType) => {
-            return (
-                workout.date.getFullYear() === date.getFullYear() &&
-                workout.date.getMonth() === date.getMonth() &&
-                workout.date.getDate() === date.getDate()
-            );
+export const fetchWorkoutForSpecificDate = (
+    workoutData: WorkoutData,
+    date: string
+): { achieved: WorkoutDetail[]; onGoing: WorkoutDetail[] } => {
+    const dailyWorkout = workoutData.workouts.find(
+        (d: { date: { toISOString: () => string } }) => {
+            const workoutDate = d.date.toISOString().split("T")[0];
+            return workoutDate === date;
         }
     );
-    return specificDayWorkout[0];
+    if (!dailyWorkout) {
+        return { achieved: [], onGoing: [] };
+    }
+    const achievedWorkout = dailyWorkout.workoutDetail.filter(
+        (workout: WorkoutDetail) => {
+            return workout.achieved;
+        }
+    );
+    const onGoingWorkout = dailyWorkout.workoutDetail.filter(
+        (workout: WorkoutDetail) => {
+            return !workout.achieved;
+        }
+    );
+    const result = {
+        achieved: achievedWorkout,
+        onGoing: onGoingWorkout,
+    };
+    return result;
 };
 
-export const filterWorkoutsByAchievement = (date: Date, workoutDetail: any) => {
-    const specificDayWorkout = filterSpecificDayWorkout(date, workoutDetail);
-    const filterYear = date.getFullYear();
-    const filterMonth = date.getMonth();
-    const filterDay = date.getDate();
-    console.log("OUTPUT FROM FILTER:", specificDayWorkout);
-    const workoutYear = specificDayWorkout?.date.getFullYear();
-    const workoutMonth = specificDayWorkout?.date.getMonth();
-    const workoutDay = specificDayWorkout?.date.getDate();
-    // Compare year, month, and day for equality
-    if (
-        filterYear !== workoutYear ||
-        filterMonth !== workoutMonth ||
-        filterDay !== workoutDay
-    ) {
-        console.log(
-            "You gave this function wrong date of workout (considering only year, month, and day)"
-        );
-        return null;
-    }
-    if (specificDayWorkout) {
-        const achievedWorkouts = specificDayWorkout.workoutDetail.filter(
-            (workout: any) => workout.achieved
-        );
-        const onGoingWorkouts = specificDayWorkout.workoutDetail.filter(
-            (workout: any) => !workout.achieved
-        );
-        console.log("FILTER FUNCTION DONE!");
-        return { achieved: achievedWorkouts, onGoing: onGoingWorkouts };
-    } else {
-        console.log(`Cannot find workout for ${date}`);
-        return null;
-    }
+export const calculateKcalForWorkout = (workouts: WorkoutDetail[]): number => {
+    let totalKcal = 0;
+    workouts.forEach((workout: { calories: number }) => {
+        totalKcal += workout.calories;
+    });
+    return totalKcal;
+};
+
+export const updateWorkoutStatus = async (
+    userId: string,
+    date: Date,
+    name: string,
+    achieved: boolean
+) => {
+    console.log("Update Workout Status Function");
+    const formattedDate = formatDateFromInput(date);
+    const response = await axios.put("/api/update-workout-achievement", {
+        userId,
+        date: formattedDate,
+        name,
+        achieved,
+    });
+    return response.data;
 };

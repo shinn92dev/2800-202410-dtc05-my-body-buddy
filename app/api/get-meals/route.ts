@@ -1,25 +1,33 @@
+// pages/api/get-meals.ts
+
 import { NextRequest, NextResponse } from 'next/server';
 import { connectMongoDB } from '@/config/db';
 import Meal from '@/models/Meal';
+import { getAuth } from '@clerk/nextjs/server';
 
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const userId = searchParams.get('userId');
-  const date = searchParams.get('date');
-
-  if (!userId || !date) {
-    console.error('Missing userId or date parameter');
-    return NextResponse.json({ message: 'Missing userId or date parameter' }, { status: 400 });
-  }
-
-  await connectMongoDB();
-
   try {
+    const { userId } = getAuth(req);
+    const { searchParams } = new URL(req.url);
+    const date = searchParams.get('date');
+
+    if (!userId || !date) {
+      console.error('Missing userId or date parameter');
+      return NextResponse.json({ message: 'Missing userId or date parameter' }, { status: 400 });
+    }
+
+    await connectMongoDB();
+
     const meals = await Meal.findOne({ userId });
 
     if (!meals) {
       console.log(`No meals found for userId: ${userId}`);
-      return NextResponse.json({ message: 'No meals found for the specified user' }, { status: 404 });
+      return NextResponse.json({
+        breakfast: [],
+        lunch: [],
+        dinner: [],
+        snacks: [],
+      }, { status: 200 });
     }
 
     const dateObj = new Date(date).toISOString().split('T')[0];
@@ -30,10 +38,14 @@ export async function GET(req: NextRequest) {
 
     if (!dailyMeal) {
       console.log(`No meals found for date: ${date}`);
-      return NextResponse.json({ message: 'No meals found for the specified date' }, { status: 404 });
+      return NextResponse.json({
+        breakfast: [],
+        lunch: [],
+        dinner: [],
+        snacks: [],
+      }, { status: 200 });
     }
 
-    // Convert the document to a plain JavaScript object and adjust the format
     const responseData = JSON.parse(JSON.stringify(dailyMeal, (key, value) => {
       if (key === '_id' || key === 'userId') {
         return value.toString();
