@@ -20,7 +20,9 @@ export const useCurrentUserInformation = () => {
     return {
         isLoaded,
         user: {
-            email: user.primaryEmailAddress.emailAddress,
+            email: user.primaryEmailAddress
+                ? user.primaryEmailAddress.emailAddress
+                : null,
             username: user.username,
             userId: user.id,
         },
