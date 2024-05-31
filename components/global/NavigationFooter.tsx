@@ -34,7 +34,7 @@ export default function NavigationFooter() {
 
   return (
     <div
-      className={`grid grid-flow-col justify-around fixed inset-x-0 bottom-0 h-20 bg-beige text-center transition-transform duration-300 ${
+      className={`grid grid-flow-col justify-around fixed inset-x-0 bottom-0 h-20 bg-beige text-center transition-transform duration-300 border-t ${
         isVisible ? "translate-y-0" : "translate-y-full"
       }`}
     >
