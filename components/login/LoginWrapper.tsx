@@ -37,7 +37,7 @@ export default function LoginWrapper() {
                                     </Link>
                                 </p>
                             </div>
-                            <div className="w-full flex-1 mt-3">
+                            <div className="w-full flex-1">
                                 <LoginForm />
                                 <Link
                                     href="/forgot-password"
