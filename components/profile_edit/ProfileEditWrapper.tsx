@@ -7,6 +7,13 @@ import LoadingAnimation from "../global/LoadingAnimation";
 import toast, { Toaster } from "react-hot-toast";
 
 const ProfileEditWrapper: React.FC = () => {
+  const maxAge = 150;
+  const minAge = 1;
+  const maxWeight = 500;
+  const minWeight = 10;
+  const maxHeight = 300;
+  const minHeight = 50;
+
   const { userId } = useAuth();
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -43,8 +50,29 @@ const ProfileEditWrapper: React.FC = () => {
     }));
   };
 
+  const validateInputs = () => {
+    const age = Number(formData.age);
+    const height = Number(formData.height);
+    const weight = Number(formData.weight);
+
+    if (age < minAge || age > maxAge) {
+      toast.error(`Age must be between ${minAge} and ${maxAge}`);
+      return false;
+    }
+    if (height < minHeight || height > maxHeight) {
+      toast.error(`Height must be between ${minHeight} cm and ${maxHeight} cm`);
+      return false;
+    }
+    if (weight < minWeight || weight > maxWeight) {
+      toast.error(`Weight must be between ${minWeight} kg and ${maxWeight} kg`);
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateInputs()) return;
     setSubmitting(true);
     try {
       const res = await axios.post(`/api/profile`, formData);
@@ -59,7 +87,7 @@ const ProfileEditWrapper: React.FC = () => {
       setSubmitting(false);
       toast.error("Error updating profile data");
       console.error("Error updating profile data:", error);
-    } 
+    }
   };
 
   if (loading) {
