@@ -16,6 +16,7 @@ import { calculateKcalForWorkout } from "@/app/_helper/workout";
 import { handleDateSelect } from "@/app/_helper/handleDate";
 import LoadingAnimation from "@/components/global/LoadingAnimation";
 import { Toaster, toast } from "react-hot-toast"; 
+import { calculateBmr, factorByActivityLevel, calculateEnergyRequirementsPerDay } from "@/app/_helper/calorie";
 
 const WorkoutHomeWrapper: React.FC = () => {
     const [achievedWorkoutData, setAchievedWorkoutData] = useState<any[]>([]);
@@ -29,6 +30,7 @@ const WorkoutHomeWrapper: React.FC = () => {
     const [generatedWorkoutMenus, setGeneratedWorkoutMenus] = useState<any[][]>(
         []
     );
+    const [totalCalories, setTotalCalories] = useState<number>(0);
 
     const parseWorkoutMenu = (data: string) => {
         const dayRegExp = /Day \d+:/g;
@@ -188,6 +190,43 @@ const WorkoutHomeWrapper: React.FC = () => {
         fetchWorkoutData();
     }, [selectedDate]);
 
+    useEffect(() => {
+        const fetchTotalCalories = async () => {
+            try {
+                const [profileResponse, targetResponse] = await Promise.all([
+                    axios.get("/api/profile"),
+                    axios.get("/api/targets")
+                ]);
+
+                const profile = profileResponse.data;
+                if (!profile) {
+                    throw new Error("Profile not found");
+                }
+                const { age, gender, height, weight, activityLevel } = profile;
+
+                const target = targetResponse.data;
+                if (!target) {
+                    throw new Error("Target not found");
+                }
+                const { targetCaloriesBurn } = target;
+
+                const bmr = calculateBmr(age, height, weight, gender);
+                const activityFactor = factorByActivityLevel(age, activityLevel);
+                const energyRequirements = calculateEnergyRequirementsPerDay(bmr, activityFactor);
+
+                if (targetCaloriesBurn < energyRequirements) {
+                    setTotalCalories(0);
+                } else {
+                    setTotalCalories(Math.round(targetCaloriesBurn - energyRequirements));
+                }
+            } catch (error) {
+                console.error("Error calculating total calories:", error);
+                throw error;
+            }
+            };
+        fetchTotalCalories();
+    }, []);
+
     const handleEditForAchieved = (index: number) => {
         // Handle edit logic here
     };
@@ -261,10 +300,7 @@ const WorkoutHomeWrapper: React.FC = () => {
             console.error("Error updating achievement status:", error);
         }
     };
-
-    const totalCalories =
-        calculateKcalForWorkout(achievedWorkoutData) +
-        calculateKcalForWorkout(onGoingWorkoutData);
+    
     return (
         <>
         <Toaster />
@@ -278,10 +314,7 @@ const WorkoutHomeWrapper: React.FC = () => {
                     }
                     subtitle={"/ " + totalCalories + " kcal"}
                     percent={
-                        ((totalCalories -
-                            calculateKcalForWorkout(onGoingWorkoutData)) /
-                            totalCalories) *
-                        100
+                        calculateKcalForWorkout(achievedWorkoutData) / totalCalories * 100
                     }
                 />
             </div>
