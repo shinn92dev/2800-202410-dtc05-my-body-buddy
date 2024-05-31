@@ -16,10 +16,10 @@ export default function LoginWrapper() {
                             <Image
                                 src="/images/logo/my_body_buddy_logo.png"
                                 alt="My Body Buddy Logo"
-                                width={32}
-                                height={32}
+                                width={100}
+                                height={100}
                                 quality={100}
-                                className="w-32 mx-auto"
+                                className="mx-auto"
                             />
                         </div>
                         <div className="mt-12 flex flex-col items-center">
