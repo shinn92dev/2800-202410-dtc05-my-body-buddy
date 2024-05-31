@@ -9,6 +9,7 @@ import toast, { Toaster } from "react-hot-toast";
 const ProfileEditWrapper: React.FC = () => {
   const { userId } = useAuth();
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     age: "",
     gender: "",
@@ -44,6 +45,7 @@ const ProfileEditWrapper: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitting(true);
     try {
       const res = await axios.post(`/api/profile`, formData);
       if (res.status !== 200) {
@@ -54,9 +56,10 @@ const ProfileEditWrapper: React.FC = () => {
         window.location.href = "/profile";
       }, 2000);
     } catch (error) {
+      setSubmitting(false);
       toast.error("Error updating profile data");
       console.error("Error updating profile data:", error);
-    }
+    } 
   };
 
   if (loading) {
@@ -152,7 +155,8 @@ const ProfileEditWrapper: React.FC = () => {
         <div className="flex justify-center">
           <button
             type="submit"
-            className="bg-dark-blue text-white px-4 py-2 rounded hover:bg-dark-blue-light"
+            className={`bg-dark-blue text-white px-4 py-2 rounded ${submitting ? "opacity-50 cursor-not-allowed" : "hover:bg-dark-blue-light"}`}
+            disabled={submitting}
           >
             Save
           </button>
