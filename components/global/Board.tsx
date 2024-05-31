@@ -1,16 +1,11 @@
 import React from "react";
 import BoardContent from "./BoardContent";
 import { calculateKcalForWorkout } from "@/app/_helper/workout";
-
+import { WorkoutDetail } from "@/config/types";
 interface BoardProps {
     icon: React.ReactNode;
     title: string;
-    items: {
-        name: string;
-        quantity?: number;
-        unit?: string;
-        calories: number;
-    }[];
+    items: WorkoutDetail[];
     onEdit: (index: number) => void;
     onDelete: (index: number) => void;
     onAdd: () => void;
