@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import TagsWithAddingField from '@/components/global/TagsWithAddingField'; // Import the TagsWithAddingField component
+import { toast, Toaster } from 'react-hot-toast';
 
 type PreferencesFormProps = {
     onSubmit: (preferences: any) => void;
@@ -16,6 +17,16 @@ const defaultPreferences = [
 ];
 
 const PreferencesForm: React.FC<PreferencesFormProps> = ({ onSubmit }) => {
+    const maxQuantityLength = 13; // inclusive
+    const minQuantityLength = 1; // inclusive
+    const maxNameLength = 25; // inclusive
+    const minNameLength = 1; // inclusive
+    const maxPreferenceLength = 42; // inclusive
+    const minPreferenceLength = 1; // inclusive
+    const maxCustomServings = 30; // inclusive
+    const minCustomServings = 0.01; // inclusive
+    const maxNumberOfChosenPreferences = 10; // inclusive
+
     const [servings, setServings] = useState<string>('1');
     const [customServings, setCustomServings] = useState<string>('5');
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
@@ -25,7 +36,19 @@ const PreferencesForm: React.FC<PreferencesFormProps> = ({ onSubmit }) => {
     const [customServingsError, setCustomServingsError] = useState<string>('');
     const [isCustomSelected, setIsCustomSelected] = useState<boolean>(false);
 
+    const showToast = (message: string) => {
+        toast.error(message);
+    };
+
     const handleAddIngredient = () => {
+        if (currentIngredient.length < minNameLength || currentIngredient.length > maxNameLength) {
+            showToast(`Ingredient name must be between ${minNameLength} and ${maxNameLength} characters.`);
+            return;
+        }
+        if (currentQuantity.length < minQuantityLength || currentQuantity.length > maxQuantityLength) {
+            showToast(`Quantity must be between ${minQuantityLength} and ${maxQuantityLength} characters.`);
+            return;
+        }
         if (currentIngredient) {
             const newIngredient: Ingredient = { name: currentIngredient };
             if (currentQuantity) newIngredient.quantity = currentQuantity;
@@ -37,23 +60,40 @@ const PreferencesForm: React.FC<PreferencesFormProps> = ({ onSubmit }) => {
 
     const handleCustomServingsChange = (value: string) => {
         setCustomServings(value);
-        if (/^\d+$/.test(value) && parseInt(value) > 0) {
-            setServings(value);
-            setCustomServingsError('');
-        } else {
-            setCustomServingsError('Please enter a positive integer');
-        }
     };
 
     const handleTogglePreference = (preference: string) => {
-        setSelectedPreferences(prev =>
-            prev.includes(preference)
-                ? prev.filter(p => p !== preference)
-                : [...prev, preference]
-        );
+        if (selectedPreferences.includes(preference)) {
+            setSelectedPreferences(prev => prev.filter(p => p !== preference));
+        } else if (selectedPreferences.length < maxNumberOfChosenPreferences) {
+            setSelectedPreferences(prev => [...prev, preference]);
+        } else {
+            showToast(`You can select up to ${maxNumberOfChosenPreferences} preferences.`);
+        }
+    };
+
+    const validateInputs = () => {
+        let valid = true;
+
+        const numValue = parseFloat(customServings);
+        if (isNaN(numValue) || numValue < minCustomServings || numValue > maxCustomServings) {
+            showToast(`Please enter a number between ${minCustomServings} and ${maxCustomServings}`);
+            valid = false;
+        }
+
+        if (selectedPreferences.length > maxNumberOfChosenPreferences) {
+            showToast(`You can select up to ${maxNumberOfChosenPreferences} preferences.`);
+            valid = false;
+        }
+
+        return valid;
     };
 
     const handleSubmit = () => {
+        if (!validateInputs()) {
+            return;
+        }
+
         const newIngredients = [...ingredients];
         if (currentIngredient) {
             const newIngredient: Ingredient = { name: currentIngredient };
@@ -69,6 +109,7 @@ const PreferencesForm: React.FC<PreferencesFormProps> = ({ onSubmit }) => {
 
     return (
         <div className="p-4 rounded-lg w-full max-w-lg mt-2 bg-beige">
+            <Toaster />
             <div className="mb-4">
                 <h2 className="text-lg font-bold py-1 mt-1">How Many Servings?</h2>
                 <div className="mb-2">
@@ -115,12 +156,12 @@ const PreferencesForm: React.FC<PreferencesFormProps> = ({ onSubmit }) => {
                             className="mr-2"
                         />
                         Custom: <input
-                        type="text"
-                        className={`border ml-2 p-1 ${isCustomSelected ? '' : 'bg-gray-200'}`}
-                        value={customServings}
-                        onChange={(e) => handleCustomServingsChange(e.target.value)}
-                        disabled={!isCustomSelected}
-                    />
+                            type="text"
+                            className={`border ml-2 p-1 ${isCustomSelected ? '' : 'bg-gray-200'}`}
+                            value={customServings}
+                            onChange={(e) => handleCustomServingsChange(e.target.value)}
+                            disabled={!isCustomSelected}
+                        />
                     </label>
                     {customServingsError && <p className="text-red-500">{customServingsError}</p>}
                 </div>
@@ -134,6 +175,7 @@ const PreferencesForm: React.FC<PreferencesFormProps> = ({ onSubmit }) => {
                         value={currentIngredient}
                         onChange={(e) => setCurrentIngredient(e.target.value)}
                         className="border p-2 flex-grow mr-2 w-32"
+                        maxLength={maxNameLength}
                     />
                     <input
                         type="text"
@@ -141,6 +183,7 @@ const PreferencesForm: React.FC<PreferencesFormProps> = ({ onSubmit }) => {
                         value={currentQuantity}
                         onChange={(e) => setCurrentQuantity(e.target.value)}
                         className="border p-2 flex-grow mr-2 w-24"
+                        maxLength={maxQuantityLength}
                     />
                     <button
                         onClick={handleAddIngredient}
