@@ -36,7 +36,6 @@ export async function POST(req: any) {
             (workout: Workout) =>
                 workout.date.getTime() === formattedDate.getTime()
         );
-        console.log(workouts, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         if (!workoutsForDate) {
             const newWorkouts: Workout[] = [];
             for (let i = 0; i < 7; i++) {
