@@ -10,6 +10,9 @@ export default function NavigationBeforeAuth() {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const toggleHBGmenu = () => setIsOpen(!isOpen);
     const handleLinkClick = () => setIsOpen(false);
+    useEffect(() => {
+        setIsOpen(false);
+    }, [path]);
     return (
         <nav className="fixed top-0 w-full h-16 flex items-center justify-between px-4 z-50 bg-white shadow-sm">
             <div className="w-1/3"></div>

@@ -13,7 +13,7 @@ export default function Navigation() {
     // for hamburger menu
     const [isOpen, setIsOpen] = useState(false);
     const toggleHBGmenu = () => setIsOpen(!isOpen);
-
+    const handleLinkClick = () => setIsOpen(false);
     // for logo animation
     const [isHide, setIsHide] = useState(false);
     const [isDance, setIsDance] = useState(false);
@@ -35,7 +35,9 @@ export default function Navigation() {
             setIsLoading(false);
         }
     }, [isLoaded, isSignedIn, user]);
-
+    useEffect(() => {
+        setIsOpen(false);
+    }, [path]);
     const handleLogoClick = () => {
         clickCountRef.current += 1;
 
@@ -71,7 +73,7 @@ export default function Navigation() {
                     isOpen ? "blur-sm" : ""
                 } relative z-40`}
             >
-                <Link href="/summary/diet">
+                <Link href="/summary/diet" onClick={handleLinkClick}>
                     <Image
                         src="/my_body_buddy_logo_transparent.png"
                         alt="logo"
@@ -80,7 +82,7 @@ export default function Navigation() {
                         height="80"
                         className={`mx-auto ${isHide ? "hidden" : ""}`}
                     />
-                    <Image
+                    {/* <Image
                         src="/spin_person_only_transparent.png"
                         alt="person only logo"
                         onClick={handleLogoClick}
@@ -89,7 +91,7 @@ export default function Navigation() {
                         className={`mx-auto ${isHide ? "block" : "hidden"} ${
                             isDance ? "animate-spin" : ""
                         } ${isBounce ? "animate-bounce" : ""}`}
-                    />
+                    /> */}
                 </Link>
             </div>
             <div className="w-1/3 flex justify-end">
@@ -137,7 +139,7 @@ export default function Navigation() {
                         />
                     </li>
                     <li className="flex justify-center items-center w-2/5">
-                        <Link href="/profile" className="">
+                        <Link href="/profile" onClick={handleLinkClick}>
                             <button
                                 className="w-100 text-beige font-bold text-center py-1 px-3 rounded-full 
         m-2 bg-gray-500 hover:bg-gray-700 flex justify-center items-center"
