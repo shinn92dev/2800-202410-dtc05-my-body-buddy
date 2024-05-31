@@ -75,11 +75,6 @@ export default function SignupWrapper() {
                     </div>
                 </div>
             </div>
-            <Modal
-                title="Term of Policy"
-                modalContent={<PolicyContent />}
-                showModal={showModal}
-            />
         </div>
     );
 }

@@ -8,6 +8,9 @@ import * as yup from "yup";
 import { useSignUp } from "@clerk/nextjs";
 import axios from "axios";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
+import Modal from "@/components/global/Modal";
+
+import PolicyContent from "@/components/global/PolicyContent";
 
 const createNewUser = async (userData: any, retries = 3): Promise<any> => {
     try {
@@ -67,7 +70,11 @@ export default function SignupForm() {
     const { signUp } = useSignUp();
     const [loading, setLoading] = useState(true);
     const [signUpErrors, setSignUpErrors] = useState<string | null>(null);
+    const [showModal, setShowModal] = useState(false);
 
+    const onClick = () => {
+        setShowModal((curr) => !curr);
+    };
     const {
         register,
         handleSubmit,
@@ -216,7 +223,11 @@ export default function SignupForm() {
                     id="password"
                     {...register("password", { required: true })}
                 />
-
+                {errors.password && (
+                    <span className="text-red-500 text-sm">
+                        {errors.password.message}
+                    </span>
+                )}
                 <div className="text-dark-blue pt-2 pb-2 text-sm">
                     Password should be:
                     <br />
@@ -225,12 +236,6 @@ export default function SignupForm() {
                     <li>not consecutive characters (abcde) </li>
                     <li>not contain same characters with email or username </li>
                 </div>
-
-                {errors.password && (
-                    <span className="text-red-500 text-sm">
-                        {errors.password.message}
-                    </span>
-                )}
             </div>
 
             {signUpErrors && (
@@ -240,6 +245,28 @@ export default function SignupForm() {
                     ))}
                 </div>
             )}
+            <p className="text-gray-400">
+                By clicking the &quot;Sign Up&quot; button, you agree to
+                our&nbsp;
+                <span
+                    className="hover:underline cursor-pointer font-bold"
+                    onClick={onClick}
+                >
+                    Privacy Policy
+                </span>
+                .
+            </p>
+            <div
+                className={`${
+                    showModal ? "" : "hidden"
+                } overflow-x-hidden overflow-y-scroll fixed h-modal md:h-full w-screen top-4 left-0 right-0 md:inset-0 z-50 items-center flex justify-center`}
+            >
+                <Modal
+                    title="Term of Policy"
+                    modalContent={<PolicyContent />}
+                    setShowModal={onClick}
+                />
+            </div>
 
             <button
                 className="mt-2 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
