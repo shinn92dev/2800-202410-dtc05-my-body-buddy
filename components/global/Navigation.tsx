@@ -66,10 +66,10 @@ export default function Navigation() {
     };
 
     return (
-        <nav className="fixed top-0 w-full h-16 flex items-center justify-between px-4 z-50 bg-white shadow-sm">
+        <nav className="fixed top-0 w-full h-16 flex items-center justify-between px-4 z-50 bg-white shadow-sm py-2">
             <div className="w-1/3"></div>
             <div
-                className={`text-center w-1/3${
+                className={`text-center w-1/3 ${
                     isOpen ? "blur-sm" : ""
                 } relative z-40`}
             >
