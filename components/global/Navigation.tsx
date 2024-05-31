@@ -65,41 +65,12 @@ export default function Navigation() {
 
     return (
         <nav className="fixed top-0 w-full h-16 flex items-center justify-between px-4 z-50 bg-white shadow-sm">
-            <button
-                className="block ml-4"
-                onClick={toggleHBGmenu}
-                aria-label="Toggle menu"
-            >
-                <svg
-                    className="h-10 w-10 fill-current text-logo-pumpkin"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        fillRule="evenodd"
-                        d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"
-                        clipRule="evenodd"
-                    />
-                </svg>
-            </button>
-
-            <div
+            {/* <div
                 className={`fixed top-0 left-0 h-full w-1/3 bg-white border-r border-logo-pumpkin shadow-lg transform transition-transform ${
                     isOpen ? "translate-x-0" : "-translate-x-full"
                 } z-50 slide-out-menu`}
             >
-                <button onClick={toggleHBGmenu}>
-                    <svg
-                        className="mt-3 h-10 w-10 fill-current text-logo-pumpkin"
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="24px"
-                        viewBox="0 -960 960 960"
-                        width="24px"
-                        fill="#e8eaed"
-                    >
-                        <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
-                    </svg>
-                </button>
+                
 
                 <ul className="mt-16">
                     {!isLoading && loggedUsername ? (
@@ -123,10 +94,10 @@ export default function Navigation() {
                         <SignOutButton />
                     </li>
                 </ul>
-            </div>
-
+            </div> */}
+            <div className="w-1/3"></div>
             <div
-                className={`flex-grow text-center ${
+                className={`text-center w-1/3${
                     isOpen ? "blur-sm" : ""
                 } relative z-40`}
             >
@@ -150,6 +121,70 @@ export default function Navigation() {
                         } ${isBounce ? "animate-bounce" : ""}`}
                     />
                 </Link>
+            </div>
+            <div className="w-1/3 flex justify-end">
+                <button
+                    className="block ml-4 pr-2"
+                    // onClick={toggleHBGmenu}
+                    aria-label="Toggle menu"
+                    onClick={toggleHBGmenu}
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 1024 1024"
+                        width="30"
+                        height="30"
+                    >
+                        <circle
+                            cx="512"
+                            cy="512"
+                            r="472"
+                            stroke="#FF6C1A"
+                            stroke-width="80"
+                            fill="none"
+                        />
+                        <circle cx="512" cy="384" r="128" fill="#FF6C1A" />
+                        <path
+                            d="M512,640c-106.1,0-208,53.3-208,106.7v85.3H720v-85.3C720,693.3,618.1,640,512,640Z"
+                            fill="#FF6C1A"
+                        />
+                    </svg>
+                </button>
+            </div>
+            <div
+                className={`w-full fixed top-0 left-0  border-logo-pumpkin transform transition-transform h-16 bg-white shadow-sm ${
+                    isOpen ? "translate-y-0" : "-translate-y-full"
+                } z-50 slide-out-menu`}
+            >
+                <ul className="flex justify-center px-4 h-16">
+                    <Link href="/profile" className="w-1/3">
+                        <li className="flex justify-center px-4 mt-1.5">
+                            <button
+                                className="text-beige font-bold text-center py-1 px-3 rounded-full 
+        m-2 bg-gray-500 hover:bg-gray-700 flex justify-center items-center"
+                            >
+                                Profile
+                            </button>
+                        </li>
+                    </Link>
+                    <li className="w-1/3 h-16 flex items-center">
+                        <SignOutButton />
+                    </li>
+                    <li className="w-1/3 flex justify-end items-center pr-2 h-16">
+                        <button onClick={toggleHBGmenu}>
+                            <svg
+                                className="mt-3 h-10 w-10 fill-current text-logo-pumpkin"
+                                xmlns="http://www.w3.org/2000/svg"
+                                height="20px"
+                                viewBox="0 -960 960 960"
+                                width="20px"
+                                fill="#e8eaed"
+                            >
+                                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+                            </svg>
+                        </button>
+                    </li>
+                </ul>
             </div>
         </nav>
     );
