@@ -8,11 +8,13 @@ import { fetchMeals } from "@/app/_helper/fetchMeals";
 import { handleDateSelect } from "@/app/_helper/handleDate";
 import { format } from "date-fns";
 import axios from "axios";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 
 const Board = dynamic(() => import("@/components/global/Board"));
 const AskAiButton = dynamic(() => import("@/components/global/AskAiButton"));
-const CalorieDistributionChart = dynamic(() => import("@/components/global/CalorieDistributionChart"));
+const CalorieDistributionChart = dynamic(
+    () => import("@/components/global/CalorieDistributionChart")
+);
 const TopCalendar = dynamic(() => import("@/components/global/TopCalendar"));
 
 interface Meal {
@@ -22,28 +24,47 @@ interface Meal {
     calories: number;
 }
 
-type MealType = 'breakfast' | 'lunch' | 'dinner' | 'snacks';
+type MealType = "breakfast" | "lunch" | "dinner" | "snacks";
 
 const DietHomeWrapper: React.FC = () => {
     const [meals, setMeals] = useState<Record<MealType, Meal[]>>({
         breakfast: [],
         lunch: [],
         dinner: [],
-        snacks: []
+        snacks: [],
     });
     const [userId, setUserId] = useState<string>("");
     const [totalTargetCalories, setTotalTargetCalories] = useState<number>(0);
-    const [selectedDate, setSelectedDate] = useState<Date>(new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())));
-    const localDate = useMemo(() => new Date(selectedDate.getUTCFullYear(), selectedDate.getUTCMonth(), selectedDate.getUTCDate()), [selectedDate]);
+    const [selectedDate, setSelectedDate] = useState<Date>(
+        new Date(
+            Date.UTC(
+                new Date().getFullYear(),
+                new Date().getMonth(),
+                new Date().getDate()
+            )
+        )
+    );
+    const localDate = useMemo(
+        () =>
+            new Date(
+                selectedDate.getUTCFullYear(),
+                selectedDate.getUTCMonth(),
+                selectedDate.getUTCDate()
+            ),
+        [selectedDate]
+    );
 
-    const icon = useMemo(() => (
-        <Image
-            src="/my_boddy_buddy_support_ai_logo_white.png"
-            alt="support AI logo"
-            width={30}
-            height={30}
-        />
-    ), []);
+    const icon = useMemo(
+        () => (
+            <Image
+                src="/my_boddy_buddy_support_ai_logo_white.png"
+                alt="support AI logo"
+                width={30}
+                height={30}
+            />
+        ),
+        []
+    );
 
     useEffect(() => {
         const getUserId = async () => {
@@ -64,17 +85,19 @@ const DietHomeWrapper: React.FC = () => {
             try {
                 const [mealData, targetResponse] = await Promise.all([
                     fetchMeals(userId, selectedDate),
-                    axios.get("/api/targets")
+                    axios.get("/api/targets"),
                 ]);
 
                 setMeals({
                     breakfast: mealData.breakfast,
                     lunch: mealData.lunch,
                     dinner: mealData.dinner,
-                    snacks: mealData.snacks
+                    snacks: mealData.snacks,
                 });
 
-                setTotalTargetCalories(targetResponse.data.targetCaloriesIntake);
+                setTotalTargetCalories(
+                    targetResponse.data.targetCaloriesIntake
+                );
             } catch (error) {
                 console.error("Error fetching data:", error);
                 setMeals({ breakfast: [], lunch: [], dinner: [], snacks: [] });
@@ -88,33 +111,44 @@ const DietHomeWrapper: React.FC = () => {
         // Handle edit logic here
     }, []);
 
-    const handleDelete = useCallback(async (mealType: MealType, index: number) => {
-        try {
+    const handleDelete = useCallback(
+        async (mealType: MealType, index: number) => {
+            try {
+                const date = format(localDate, "yyyy-MM-dd");
+                await axios.delete("/api/delete-meal", {
+                    data: {
+                        userId,
+                        date,
+                        mealType,
+                        mealIndex: index,
+                    },
+                });
+
+                setMeals((prevMeals) => ({
+                    ...prevMeals,
+                    [mealType]: prevMeals[mealType].filter(
+                        (_, i) => i !== index
+                    ),
+                }));
+
+                toast.success("Meal item deleted successfully");
+            } catch (error) {
+                console.error(
+                    "Error deleting meal item:",
+                    (error as Error).message
+                );
+            }
+        },
+        [localDate, userId]
+    );
+
+    const handleAdd = useCallback(
+        (mealType: MealType) => {
             const date = format(localDate, "yyyy-MM-dd");
-            await axios.delete("/api/delete-meal", {
-                data: {
-                    userId,
-                    date,
-                    mealType,
-                    mealIndex: index,
-                },
-            });
-
-            setMeals((prevMeals) => ({
-                ...prevMeals,
-                [mealType]: prevMeals[mealType].filter((_, i) => i !== index)
-            }));
-
-            toast.success("Meal item deleted successfully");
-        } catch (error) {
-            console.error("Error deleting meal item:", (error as Error).message);
-        }
-    }, [localDate, userId]);
-
-    const handleAdd = useCallback((mealType: MealType) => {
-        const date = format(localDate, "yyyy-MM-dd");
-        window.location.href = `/diet/add-meals?mealType=${mealType}&date=${date}`;
-    }, [localDate]);
+            window.location.href = `/diet/add-meals?mealType=${mealType}&date=${date}`;
+        },
+        [localDate]
+    );
 
     const handleOnClick = useCallback(() => {
         window.location.href = "/diet/ai-support";
@@ -122,11 +156,22 @@ const DietHomeWrapper: React.FC = () => {
 
     const onDateSelect = useCallback((date: Date) => {
         handleDateSelect(date, (formattedDate: string) => {
-            setSelectedDate(new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())));
+            setSelectedDate(
+                new Date(
+                    Date.UTC(
+                        date.getFullYear(),
+                        date.getMonth(),
+                        date.getDate()
+                    )
+                )
+            );
         });
     }, []);
 
-    const totalCalories = useCallback((meals: Meal[]) => meals.reduce((sum, meal) => sum + meal.calories, 0), []);
+    const totalCalories = useCallback(
+        (meals: Meal[]) => meals.reduce((sum, meal) => sum + meal.calories, 0),
+        []
+    );
 
     return (
         <>
@@ -154,7 +199,7 @@ const DietHomeWrapper: React.FC = () => {
                 </div>
                 <div className="p-2">
                     <Board
-                        icon={<span>🌅</span>}
+                        icon={<span>🍳</span>}
                         title="Breakfast"
                         items={meals.breakfast}
                         onEdit={(index) => handleEdit("breakfast", index)}
@@ -174,7 +219,7 @@ const DietHomeWrapper: React.FC = () => {
                 </div>
                 <div className="p-2">
                     <Board
-                        icon={<span>🍲</span>}
+                        icon={<span>🍛</span>}
                         title="Dinner"
                         items={meals.dinner}
                         onEdit={(index) => handleEdit("dinner", index)}
