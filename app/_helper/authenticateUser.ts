@@ -12,9 +12,9 @@ const authenticateUser = async () => {
 
     await connectMongoDB();
 
-    const user = await Profile.findOne({ userId });
+    const profile = await Profile.findOne({ userId });
 
-    if (!user) {
+    if (!profile) {
         redirect("/profile/edit");
     }
 
@@ -25,4 +25,14 @@ const authenticateUser = async () => {
     }
 };
 
+const authenticateUserAfterLogin = async () => {
+    const { userId } = auth();
+
+    if (userId) {
+        redirect("/");
+    }
+}
+
 export default authenticateUser;
+
+export { authenticateUserAfterLogin };
