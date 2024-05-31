@@ -64,10 +64,28 @@ export default function Navigation() {
     };
 
     return (
-        <nav className="relative flex items-center justify-between px-4">
-            {/* <div
-                className={`fixed top-0 left-0 w-full bg-white border-b border-logo-pumpkin shadow-lg transform transition-transform ${
-                    isOpen ? "translate-y-0" : "-translate-y-full"
+        <nav className="fixed top-0 w-full h-16 flex items-center justify-between px-4 z-50 bg-white shadow-sm">
+            <button
+                className="block ml-4"
+                onClick={toggleHBGmenu}
+                aria-label="Toggle menu"
+            >
+                <svg
+                    className="h-10 w-10 fill-current text-logo-pumpkin"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        fillRule="evenodd"
+                        d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"
+                        clipRule="evenodd"
+                    />
+                </svg>
+            </button>
+
+            <div
+                className={`fixed top-0 left-0 h-full w-1/3 bg-white border-r border-logo-pumpkin shadow-lg transform transition-transform ${
+                    isOpen ? "translate-x-0" : "-translate-x-full"
                 } z-50 slide-out-menu`}
             >
                 <button onClick={toggleHBGmenu}>
@@ -82,13 +100,14 @@ export default function Navigation() {
                         <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
                     </svg>
                 </button>
-                <ul className="mt-2 flex justify-center">
+
+                <ul className="mt-16">
                     {!isLoading && loggedUsername ? (
-                        <li className="m-2">
+                        <li>
                             <Link
                                 href={`/profile`}
                                 onClick={toggleHBGmenu}
-                                className={`text-beige text-center font-bold py-1 px-3 rounded-full ${
+                                className={`text-beige text-center font-bold py-2 px-4 rounded-full m-2 ${
                                     path === `/profile`
                                         ? "bg-dark-blue hover:bg-dark-blue"
                                         : "bg-gray-500 hover:bg-gray-700"
@@ -104,7 +123,7 @@ export default function Navigation() {
                         <SignOutButton />
                     </li>
                 </ul>
-            </div> */}
+            </div>
 
             <div
                 className={`flex-grow text-center ${
@@ -112,7 +131,7 @@ export default function Navigation() {
                 } relative z-40`}
             >
                 <Link href="/summary/diet">
-                    <img
+                    <Image
                         src="/my_body_buddy_logo_transparent.png"
                         alt="logo"
                         onClick={handleLogoClick}
@@ -132,23 +151,6 @@ export default function Navigation() {
                     />
                 </Link>
             </div>
-            <button
-                className="block ml-4"
-                onClick={toggleHBGmenu}
-                aria-label="Toggle menu"
-            >
-                <svg
-                    className="h-10 w-10 fill-current text-logo-pumpkin"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        fillRule="evenodd"
-                        d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"
-                        clipRule="evenodd"
-                    />
-                </svg>
-            </button>
         </nav>
     );
 }

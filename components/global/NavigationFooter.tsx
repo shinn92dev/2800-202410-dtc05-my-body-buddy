@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function NavigationFooter() {
   const path = usePathname();
+  const [isVisible, setIsVisible] = useState(true);
 
   const getButtonClasses = (buttonPath: string): string => {
     return path?.startsWith(buttonPath)
@@ -12,8 +14,30 @@ export default function NavigationFooter() {
       : "text-gray-600 font-bold";
   };
 
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
+    const handleScroll = () => {
+      clearTimeout(timeoutId);
+      setIsVisible(false);
+      timeoutId = setTimeout(() => {
+        setIsVisible(true);
+      }, 200);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
   return (
-    <div className="grid grid-flow-col justify-around fixed inset-x-0 bottom-0 h-20 bg-beige text-center">
+    <div
+      className={`grid grid-flow-col justify-around fixed inset-x-0 bottom-0 h-20 bg-beige text-center transition-transform duration-300 border-t ${
+        isVisible ? "translate-y-0" : "translate-y-full"
+      }`}
+    >
       <Link
         className={`flex flex-col justify-center items-center ${getButtonClasses(
           "/diet"
