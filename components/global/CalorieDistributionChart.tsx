@@ -55,8 +55,8 @@ const CalorieDistributionChart: React.FC<CalorieDistributionChartProps> = ({
                 ],
                 hoverBackgroundColor: [
                     "#3B4CC0",
-                    "#FF8C00",
                     "#CC5F23",
+                    "#FF8C00",
                     "#D85D00",
                     "#FFF6F4",
                 ],
