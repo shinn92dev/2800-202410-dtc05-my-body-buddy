@@ -64,7 +64,7 @@ export default function Navigation() {
   };
 
   return (
-    <nav className="relative flex items-center justify-between px-4">
+    <nav className="fixed top-0 w-full h-16 flex items-center justify-between px-4 z-50 bg-white shadow-sm">
       <button
         className="block ml-4"
         onClick={toggleHBGmenu}
@@ -131,7 +131,7 @@ export default function Navigation() {
         } relative z-40`}
       >
         <Link href="/summary/diet">
-          <img
+          <Image
             src="/my_body_buddy_logo_transparent.png"
             alt="logo"
             onClick={handleLogoClick}

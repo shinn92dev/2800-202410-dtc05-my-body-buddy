@@ -32,7 +32,7 @@ export default function RootLayout({
             </SignedIn>
           </header>
 
-          <main className="pb-20">{children}</main>
+          <main className="py-20">{children}</main>
 
           <SignedIn>
             <NavigationFooter />

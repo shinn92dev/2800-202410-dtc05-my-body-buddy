@@ -68,7 +68,7 @@ const ProfileEditWrapper: React.FC = () => {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center">
       <Toaster position="top-center" reverseOrder={false} />
       <form className="bg-white p-6 rounded-lg shadow-md w-full max-w-md" onSubmit={handleSubmit}>
         <h2 className="text-2xl font-bold mb-4 text-center">Edit Profile</h2>

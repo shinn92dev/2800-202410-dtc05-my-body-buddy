@@ -81,7 +81,7 @@ const Profile: React.FC<ProfileProps> = ({ user, profile, target }) => {
           </div>
         </div>
       )}
-      <div className="flex space-x-4">
+      <div className="flex space-x-4 pb-6">
         <Link href="/profile/edit">
           <button className="bg-dark-blue text-white p-2 rounded hover:bg-dark-blue-light">Edit Profile</button>
         </Link>
