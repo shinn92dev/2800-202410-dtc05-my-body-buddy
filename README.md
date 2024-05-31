@@ -16,6 +16,9 @@ Our project, DTC-5, is developing an innovative personal health and fitness appl
     <img src="https://img.shields.io/badge/Next.js-^14.2.3-000000?logo=Next.js"/>
     <img src="https://img.shields.io/badge/Tailwind CSS-^3.4.1-06B6D4?logo=tailwindcss"/>
     <img src="https://img.shields.io/badge/TypeScript-^5.4.5-3178C6?logo=TypeScript"/>
+    <img src="https://img.shields.io/badge/clerk/nextjs-%5E5.0.12-6C47FF?logo=clerk" />
+    <img src="https://img.shields.io/badge/chart.js-%5E4.4.3-FF6384?logo=chartdotjs"/>
+    <img src="https://img.shields.io/badge/mongodb-%5E6.6.2-47A248?logo=mongodb"/>
 </div>
 
 ## 🔧Project installation and execution requirements
