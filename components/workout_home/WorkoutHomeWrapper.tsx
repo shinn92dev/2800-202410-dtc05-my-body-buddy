@@ -265,8 +265,9 @@ const WorkoutHomeWrapper: React.FC = () => {
         calculateKcalForWorkout(achievedWorkoutData) +
         calculateKcalForWorkout(onGoingWorkoutData);
     return (
+        <>
+        <TopCalendar onDateSelect={onDateSelect} />
         <div className="p-4 items-center bg-white">
-            <TopCalendar onDateSelect={onDateSelect} />
             <h1 className="text-center text-2xl font-bold">Your Progress</h1>
             <div className="flex justify-center mt-4">
                 <CircleBar
@@ -282,7 +283,7 @@ const WorkoutHomeWrapper: React.FC = () => {
                     }
                 />
             </div>
-            <div className={"mt-4"}>
+            <div className={"p-2"}>
                 <Board
                     icon={<span>🕺</span>}
                     title={"Achieved"}
@@ -292,7 +293,7 @@ const WorkoutHomeWrapper: React.FC = () => {
                     onAdd={handleAddForAchieved}
                 />
             </div>
-            <div className="mt-4">
+            <div className="p-2">
                 <div className="p-4 bg-beige rounded-lg shadow-md">
                     <div className="flex justify-between items-center mb-4">
                         <div className="flex items-center">
@@ -400,6 +401,7 @@ const WorkoutHomeWrapper: React.FC = () => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
 

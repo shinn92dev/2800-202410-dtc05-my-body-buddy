@@ -139,9 +139,10 @@ const DietHomeWrapper: React.FC = () => {
     const totalCalories = (meals: Meal[]) => meals.reduce((sum, meal) => sum + meal.calories, 0);
 
     return (
+        <>
+        <Toaster />
+        <TopCalendar onDateSelect={onDateSelect} />
         <div className="bg-white min-h-screen p-4">
-            <Toaster />
-            <TopCalendar onDateSelect={onDateSelect} />
             <h1 className="text-3xl font-bold flex flex-col items-center p-2 m-2">
                 Diet Log for {format(localDate, "MMMM d, yyyy")}
             </h1>
@@ -161,7 +162,7 @@ const DietHomeWrapper: React.FC = () => {
                     onClick={handleOnClick}
                 />
             </div>
-            <div className="p-4">
+            <div className="p-2">
                 <Board
                     icon={<span>🌅</span>}
                     title="Breakfast"
@@ -171,7 +172,7 @@ const DietHomeWrapper: React.FC = () => {
                     onAdd={() => handleAdd("breakfast")}
                 />
             </div>
-            <div className="p-4">
+            <div className="p-2">
                 <Board
                     icon={<span>🍱</span>}
                     title="Lunch"
@@ -181,7 +182,7 @@ const DietHomeWrapper: React.FC = () => {
                     onAdd={() => handleAdd("lunch")}
                 />
             </div>
-            <div className="p-4">
+            <div className="p-2">
                 <Board
                     icon={<span>🍲</span>}
                     title="Dinner"
@@ -191,7 +192,7 @@ const DietHomeWrapper: React.FC = () => {
                     onAdd={() => handleAdd("dinner")}
                 />
             </div>
-            <div className="p-4">
+            <div className="p-2">
                 <Board
                     icon={<span>🍪</span>}
                     title="Snacks"
@@ -202,6 +203,7 @@ const DietHomeWrapper: React.FC = () => {
                 />
             </div>
         </div>
+        </>
     );
 };
 
