@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import WorkoutModel from "@/models/Workout";
 import { auth } from "@clerk/nextjs/server";
 import { connectMongoDB } from "@/config/db";
-import { fetchWorkoutForSpecificDate } from "@/app/_helper/workout";
-import { Workout, WorkoutDetail } from "@/config/types";
+import { filterWorkoutForSpecificDate } from "@/app/_helper/workout";
+import { Workout } from "@/config/types";
 
 export async function POST(req: any) {
     await connectMongoDB();
@@ -112,7 +112,7 @@ export async function POST(req: any) {
                 targetUserWorkout.workouts.push(...newWorkouts);
                 await targetUserWorkout.save();
                 workoutsForDate = newWorkouts[0];
-                const filteredWorkout = fetchWorkoutForSpecificDate(
+                const filteredWorkout = filterWorkoutForSpecificDate(
                     targetUserWorkout,
                     date
                 );

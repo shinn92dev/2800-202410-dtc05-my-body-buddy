@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import WorkoutModel from "../../../models/Workout";
 import { connectMongoDB } from "@/config/db";
 import { getAuth } from "@clerk/nextjs/server";
-import { fetchWorkoutForSpecificDate } from "@/app/_helper/workout";
+import { filterWorkoutForSpecificDate } from "@/app/_helper/workout";
 
 export async function GET(req: NextRequest) {
     await connectMongoDB();
@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
         }
 
         const dateObj = new Date(date).toISOString().split("T")[0];
-        const filteredWorkout = fetchWorkoutForSpecificDate(
+        const filteredWorkout = filterWorkoutForSpecificDate(
             workoutsForCurrentUser,
             dateObj
         );
