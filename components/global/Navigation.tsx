@@ -140,7 +140,7 @@ export default function Navigation() {
                             cy="512"
                             r="472"
                             stroke="#FF6C1A"
-                            stroke-width="80"
+                            strokeWidth="80"
                             fill="none"
                         />
                         <circle cx="512" cy="384" r="128" fill="#FF6C1A" />
@@ -157,20 +157,31 @@ export default function Navigation() {
                 } z-50 slide-out-menu`}
             >
                 <ul className="flex justify-center px-4 h-16">
-                    <Link href="/profile" className="w-1/3">
-                        <li className="flex justify-center px-4 mt-1.5">
+                    <li className="w-1/10 flex justify-start items-center pl-2">
+                        <Image
+                            src="/my_body_buddy_logo_transparent.png"
+                            alt="logo"
+                            onClick={handleLogoClick}
+                            width="35"
+                            height="35"
+                            className={`mx-auto ${isHide ? "hidden" : ""}`}
+                        />
+                    </li>
+                    <li className="flex justify-center items-center w-2/5">
+                        <Link href="/profile" className="">
                             <button
-                                className="text-beige font-bold text-center py-1 px-3 rounded-full 
+                                className="w-100 text-beige font-bold text-center py-1 px-3 rounded-full 
         m-2 bg-gray-500 hover:bg-gray-700 flex justify-center items-center"
                             >
                                 Profile
                             </button>
-                        </li>
-                    </Link>
-                    <li className="w-1/3 h-16 flex items-center">
+                        </Link>
+                    </li>
+
+                    <li className="w-2/5 h-16 flex items-center">
                         <SignOutButton />
                     </li>
-                    <li className="w-1/3 flex justify-end items-center pr-2 h-16">
+                    <li className="w-1/10 flex justify-end items-center pr-2 h-16">
                         <button onClick={toggleHBGmenu}>
                             <svg
                                 className="mt-3 h-10 w-10 fill-current text-logo-pumpkin"
