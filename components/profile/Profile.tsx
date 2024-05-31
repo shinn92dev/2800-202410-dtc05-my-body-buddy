@@ -65,7 +65,7 @@ const Profile: React.FC<ProfileProps> = ({ user, profile, target }) => {
           <div><span className="font-bold">Weight:</span> {profile.weight} kg</div>
           <div><span className="font-bold">Healthy Weight:</span> {healthyWeight} kg</div>
           <div><span className="font-bold">BMI:</span> {bmi}</div>
-          <div><span className="font-bold">Activity Level:</span> {activityLevelToBeDisplayed}</div>
+          <div><span className="font-bold">Daily Activity Level:</span> {activityLevelToBeDisplayed}</div>
           <div><span className="font-bold">Preference:</span> {preferenceToBeDisplayed}</div>
           <div><span className="font-bold">BMR:</span> {bmr} kcal/day</div>
         </div>

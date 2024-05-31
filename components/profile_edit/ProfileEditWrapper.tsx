@@ -121,7 +121,7 @@ const ProfileEditWrapper: React.FC = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700">Activity Level</label>
+          <label className="block text-gray-700">Daily Activity Level</label>
           <select
             name="activityLevel"
             value={formData.activityLevel}
