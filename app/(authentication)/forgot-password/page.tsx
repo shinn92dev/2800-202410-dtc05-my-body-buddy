@@ -1,10 +1,11 @@
-"use client";
 import React from "react";
 import type { NextPage } from "next";
 
 import ForgotPasswordWrapper from "./ForgotPasswordWrapper";
+import { authenticateUserAfterLogin } from "@/app/_helper/authenticateUser";
 
-const ForgotPasswordPage: NextPage = () => {
+const ForgotPasswordPage: NextPage = async () => {
+    await authenticateUserAfterLogin();
     return (
         <div>
             <ForgotPasswordWrapper />
