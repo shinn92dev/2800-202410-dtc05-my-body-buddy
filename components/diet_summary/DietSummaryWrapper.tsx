@@ -32,6 +32,7 @@ export default function DietSummaryWrapper() {
     const [errorStatus, setErrorStatus] = useState<number | null>(null); 
     const [weeklyMeals, setWeeklyMeals] = useState<MealsData[]>([]);
     const [weekRange, setWeekRange] = useState<string>("");
+    const [targetCalories, setTargetCalories] = useState<number>(0);
 
     useEffect(() => {
         // Fetch user ID from the API
@@ -75,6 +76,19 @@ export default function DietSummaryWrapper() {
             fetchMeals();
         }
     }, [userId, date]);
+
+    useEffect(() => {
+        const fetchTargetCalories = async () => {
+            try {
+                const response = await axios.get("/api/targets");
+                setTargetCalories(response.data.targetCaloriesIntake);
+                console.log("Target Calories:", response.data.targetCaloriesIntake);
+            } catch (error) {
+                console.error("Error fetching target calories:", error);
+            }
+        };
+        fetchTargetCalories();
+    }, []);
 
     useEffect(() => {
         if (userId) {
@@ -190,7 +204,11 @@ export default function DietSummaryWrapper() {
     const averageLunchCalories = calculateAverageCalories("lunch");
     const averageDinnerCalories = calculateAverageCalories("dinner");
     const averageSnackCalories = calculateAverageCalories("snacks");
-    const maxCalories = 3000;
+    const dailyMaxCalories = Math.round(targetCalories * 1.2);
+    const breakfastMaxCalories = Math.round(dailyMaxCalories * 0.3);
+    const lunchMaxCalories = Math.round(dailyMaxCalories * 0.3);
+    const dinnerMaxCalories = Math.round(dailyMaxCalories * 0.3);
+    const snackMaxCalories = Math.round(dailyMaxCalories * 0.1);
 
     return (
         <div>
@@ -211,27 +229,27 @@ export default function DietSummaryWrapper() {
                 <BarGraph
                     label="Daily Average"
                     value={averageDailyCalories}
-                    maxValue={maxCalories}
+                    maxValue={dailyMaxCalories}
                 />
                 <BarGraph
                     label="Breakfast Average"
                     value={averageBreakfastCalories}
-                    maxValue={maxCalories}
+                    maxValue={breakfastMaxCalories}
                 />
                 <BarGraph
                     label="Lunch Average"
                     value={averageLunchCalories}
-                    maxValue={maxCalories}
+                    maxValue={lunchMaxCalories}
                 />
                 <BarGraph
                     label="Dinner Average"
                     value={averageDinnerCalories}
-                    maxValue={maxCalories}
+                    maxValue={dinnerMaxCalories}
                 />
                 <BarGraph
                     label="Snacks Average"
                     value={averageSnackCalories}
-                    maxValue={maxCalories}
+                    maxValue={snackMaxCalories}
                 />
             </div>
         </div>
