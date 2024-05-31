@@ -243,7 +243,7 @@ How did you use AI? Tell us exactly what AI services and products you used and h
     </tr>
     <tr>
       <td align="center" width="150px"><a href="https://github.com/TatsunoriMarumo"><img src="/public/images/our_team/tatsunori.jpg" width="100px" alt=""/><br /><sub><b>Developer: <br />Tatsunori Marumo</b></sub></a><br /></td>
-      <td>Add your introduction here!</td>
+      <td>Hi👋 I'm Tatsunori from Japan, currently living in Vancouver. I'm a CST student at BCIT 🧑🏻‍💻. When I'm not coding, I enjoy exploring Vancouver's natural beauty. I'm excited to be a part of the My Body Buddy project and look forward to creating impactful health and fitness solutions with my team! Feel free to reach out if you'd like to connect or collaborate 🚀</td>
     </tr>
     <tr>
       <td align="center" width="150px"><a href="https://github.com/yoshidont-mind"><img src="/public/images/our_team/tatsuya.png" width="100px" alt=""/><br /><sub><b>Developer: <br />Tatsuya Yoshida</b></sub></a><br /></td>
