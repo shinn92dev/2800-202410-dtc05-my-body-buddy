@@ -88,7 +88,7 @@ const ForgotPasswordPage: NextPage = () => {
             >
                 {!successfulCreation && (
                     <>
-                        <label htmlFor="email">
+                        <label htmlFor="email" className="font-bold">
                             Please provide your email address
                         </label>
                         <input
@@ -130,16 +130,17 @@ const ForgotPasswordPage: NextPage = () => {
 
                 {successfulCreation && (
                     <>
-                        <label htmlFor="password">
+                        <label htmlFor="password" className="font-bold">
                             Enter your new password
                         </label>
                         <input
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            className="w-full p-2 pl-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                         />
 
-                        <label htmlFor="password">
+                        <label htmlFor="password" className="font-bold">
                             Enter the password reset code that was sent to your
                             email
                         </label>
@@ -147,9 +148,12 @@ const ForgotPasswordPage: NextPage = () => {
                             type="text"
                             value={code}
                             onChange={(e) => setCode(e.target.value)}
+                            className="w-full p-2 pl-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                         />
 
-                        <button>Reset</button>
+                        <button className="text-beige font-bold text-center py-1 px-3 rounded-full m-2 bg-gray-500 hover:bg-gray-700">
+                            Reset
+                        </button>
                         {error && <p>{error}</p>}
                     </>
                 )}
