@@ -94,29 +94,26 @@ export async function POST(req: NextRequest) {
 
     await updateProfile(user.id, { age, gender, height, weight, activityLevel, preference });
 
-    let targetCaloriesIntake = energyRequirements;
-    let targetCaloriesBurn = energyRequirements;
-
     const target = await getTarget(user.id);
 
     if (target) {
+
+      let targetCaloriesIntake = energyRequirements;
+      let targetCaloriesBurn = energyRequirements;
+      
       const { targetWeight, targetDate } = target;
       if (targetWeight && targetDate) {
         const numberOfDaysLeft = calculateNumberOfDaysLeft(targetDate);
         const weightGap = weight - targetWeight;
 
-        if (numberOfDaysLeft > 0 && !isNaN(weightGap)) {
+        if (numberOfDaysLeft > 0) {
           const result = calculateCaloriesPerDay(energyRequirements, numberOfDaysLeft, weightGap, preference);
           targetCaloriesIntake = result.targetCaloriesIntake;
           targetCaloriesBurn = result.targetCaloriesBurn;
         }
       }
+      await updateTarget(user.id, { targetCaloriesIntake, targetCaloriesBurn });
     }
-
-    targetCaloriesIntake = Math.round(targetCaloriesIntake);
-    targetCaloriesBurn = Math.round(targetCaloriesBurn);
-
-    await updateTarget(user.id, { targetCaloriesIntake, targetCaloriesBurn });
 
     return NextResponse.json({ message: "Profile updated successfully" }, { status: 200 });
   } catch (error) {

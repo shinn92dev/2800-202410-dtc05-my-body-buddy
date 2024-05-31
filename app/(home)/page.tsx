@@ -7,7 +7,7 @@ import { auth } from "@clerk/nextjs/server";
 const authenticateUser = () => {
     const { userId } = auth();
     if (userId) {
-        redirect("/profile");
+        redirect("/summary/diet");
     }
 }
 
