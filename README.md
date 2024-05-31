@@ -24,19 +24,127 @@ Our project, DTC-5, is developing an innovative personal health and fitness appl
 
 ## 🔧Project installation and execution requirements
 
-**_!! This list is copied and pasted from the instruction. Don't forget to update !!_**
+**_NOT DONE YET!!_**
 
-1. What does the developer need to install (don’t leave anything out!) like:
-    - language(s)
-    - IDEs
-    - Database(s)
-    - Other software
-2. Which 3rd party APIs and frameworks does the developer need to download?
-3. Do they need any API keys?
-4. In which order should they install things? Does installation location matter?
-5. Include detailed configuration instructions.
-6. Include a link to the testing plan you have completed so the new developer can see your testing history and maybe contribute to a minor bugfix!
-7. **_In a separate plaintext file called passwords.txt that has NOT been added to your repo, provide us with any admin/user/server login IDs and passwords. Don’t add this to your repo, especially if your repo is public! Upload this plaintext file to the 05d Dropbox in D2L._**
+### What Does the Developer Need to Install?
+
+**Ensure you have the following software installed:**
+
+#### languages:
+
+**JavaScript/TypeScript**(The project is primarily written in TypeScript)
+
+#### IDEs:
+
+**Visual Studio Code**: Recommended for its extensive support for JavaScript/TypeScript and a variety of useful extensions.
+
+#### Database:
+
+**MongoDB** (local or cloud instance)
+
+#### Others
+
+-   **Node.js** (v16 or higher recommended)
+-   **npm** (comes with Node.js)
+-   **Git**
+
+### Which 3rd Party APIs and Frameworks Does the Developer Need to Download?
+
+-   **Next.js**: React framework for server-side rendering.
+-   **React**: JavaScript library for building user interfaces.
+-   **@clerk/nextjs**: For authentication.
+-   **axios**: For making HTTP requests.
+-   **date-fns**: For date manipulation.
+-   **mongoose**: For MongoDB object modeling.
+-   **chart.js**: For rendering charts.
+-   **sass**: For styling.
+-   **OpenAI API**: For AI support in generating diet plans and workout menus.
+-   For more APIs and Frameworks, check [package.json](./package.json) or execute the command below
+    ````sh
+    npm install```
+    ````
+
+### Do They Need Any API Keys?
+
+-   **OpenAI API Key**: Required for accessing OpenAI services.
+-   **MongoDB Connection String**: Required for connecting to the MongoDB database.
+-   **Clerk API Keys**: Required for authentication services.
+
+### In Which Order Should They Install Things? Does Installation Location Matter?
+
+1. **Install Node.js and npm**
+
+    - Download and install Node.js from [nodejs.org](https://nodejs.org/). This will also install npm.
+
+2. **Install Git**
+
+    - Download and install Git from [git-scm.com](https://git-scm.com/).
+
+3. **Clone the Repository**
+
+    ```sh
+    git clone https://github.com/your-username/2800-202410-DTC05-MY-BODY-BUDDY.git
+    cd 2800-202410-DTC05-MY-BODY-BUDDY
+    ```
+
+4. **Install MongoDB**
+
+    - Follow the instructions on the [MongoDB website](https://docs.mongodb.com/manual/installation/) to install MongoDB locally or set up a cloud instance with MongoDB Atlas.
+
+5. **Install Dependencies**
+
+    ```sh
+    npm install
+    ```
+
+    For a complete list of dependencies, please refer to the [`package.json`](./package.json) file in the root of the project.
+
+6. **Run the Project**
+
+    ```sh
+    npm run dev
+    ```
+
+7. **Access the Application** Open your browser and go to `http://localhost:3000` or the port you choose.
+
+### Detailed Configuration Instructions
+
+1. **Configure Environment Variables**
+
+    - Create a
+
+        ```
+        .env.local
+        ```
+
+        file in the root of the project and add the following environment variables:
+
+        ```env
+        OPENAI_API_KEY=your_openai_api_key
+        MONGODB_URI=your_mongodb_connection_string
+        MONGODB_USERNAME=your_mongodb_username
+        MONGODB_PASSWORD=your_mongodb_password
+        NEXT_PUBLIC_CLERK_FRONTEND_API=your_clerk_frontend_api
+        CLERK_API_KEY=your_clerk_api_key
+        NEXT_PUBLIC_CLERK_SIGN_IN_URL=/login
+        NEXT_PUBLIC_CLERK_SIGN_UP_URL=/signup
+        ```
+
+2. **Set Up Clerk**
+
+    - Follow the instructions on Clerk's website to set up Clerk for authentication. Ensure your environment variables are correctly configured.
+
+3. **Run the Development Server**
+
+    ```sh
+    npm run dev
+    ```
+
+4. **Access the Application**
+
+    - Open your browser and go to `http://localhost:3000` to see the application in action.9. Include a link to the testing plan you have completed so the new developer can see your testing history and maybe contribute to a minor bugfix!
+
+**_In a separate plaintext file called passwords.txt that has NOT been added to your repo, provide us with any admin/user/server login IDs and passwords. Don’t add this to your repo, especially if your repo is public! Upload this plaintext file to the 05d Dropbox in D2L._**
 
 ## 💡Product usage and features
 
