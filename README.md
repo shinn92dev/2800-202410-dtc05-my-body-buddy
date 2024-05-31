@@ -19,6 +19,7 @@ Our project, DTC-5, is developing an innovative personal health and fitness appl
     <img src="https://img.shields.io/badge/clerk/nextjs-%5E5.0.12-6C47FF?logo=clerk" />
     <img src="https://img.shields.io/badge/chart.js-%5E4.4.3-FF6384?logo=chartdotjs"/>
     <img src="https://img.shields.io/badge/mongodb-%5E6.6.2-47A248?logo=mongodb"/>
+    <img src="https://img.shields.io/badge/openai-%5E4.47.1-412991?logo=openai"/>
 </div>
 
 ## 🔧Project installation and execution requirements
@@ -61,7 +62,39 @@ Follow the steps to enjoy our app:
 
 ## 🔎Credits, References, and Licenses
 
-TBA
+### Credits
+
+-   Team Members: Check our team member [here](#our-team-contact-information)
+
+### References
+
+-   **Documentation and Tutorials:**
+    -   <a href="https://nextjs.org/docs" target="_blank">Next.js Documentation</a>
+    -   <a href="https://legacy.reactjs.org/docs/getting-started.html" target="_blank">React Documentation</a>
+    -   <a href="https://www.mongodb.com/docs/" target="_blank">MongoDB Documentation</a>
+    -   <a href="https://mongoosejs.com/docs/" target="_blank">Mongoose Documentation</a>
+    -   <a href="https://platform.openai.com/docs/overview" target="_blank">OpenAI API Documentation</a>
+-   **Libraries and Tools:**
+    -   Next.js: Framework for building server-rendered React applications.
+    -   React: Library for building user interfaces.
+    -   Mongoose: MongoDB object modeling tool.
+    -   axios: HTTP client for making requests.
+    -   date-fns: Library for manipulating dates.
+    -   chart.js: Library for creating charts.
+    -   Sass: CSS preprocessor for writing more maintainable styles.
+
+### Licenses
+
+-   **Project License**:
+    -   This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
+-   **Third-Party Licenses**:
+    -   <a href="https://github.com/vercel/next.js/blob/canary/license.md" target="_blank">Next.js License</a>
+    -   <a href="https://github.com/facebook/react/blob/main/LICENSE" target="_blank">React License</a>
+    -   <a href="https://github.com/Automattic/mongoose/blob/master/LICENSE.md" target="_blank">Mongoose License</a>
+    -   <a href="https://github.com/axios/axios/blob/master/LICENSE" target="_blank">axios License</a>
+    -   <a href="https://github.com/date-fns/date-fns/blob/master/LICENSE" target="_blank">date-fns License</a>
+    -   <a href="https://github.com/chartjs/Chart.js/blob/master/LICENSE.md" target="_blank">chart.js License</a>
+    -   <a href="https://github.com/sass/sass/blob/main/LICENSE" target="_blank">Sass License</a>
 
 ## 🤖Usage of AI
 
