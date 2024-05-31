@@ -247,7 +247,7 @@ How did you use AI? Tell us exactly what AI services and products you used and h
     </tr>
     <tr>
       <td align="center" width="150px"><a href=""><img src="/public/images/our_team/tatsuya.png" width="100px" alt=""/><br /><sub><b>Developer: <br />Tatsuya Yoshida</b></sub></a><br /></td>
-      <td>Add your introduction here!</td>
+      <td>Hi, I'm Tatsuya Yoshida from Nara, Japan🍣. I am very interested in incorporating generative AI🧠 into applications, such as using OpenAI's API. I'm eager to create software that can help people. Stay tuned to see what we can achieve with this project!🥳</td>
     </tr>
   </tbody>
 </table>
