@@ -3,6 +3,7 @@ import WorkoutModel from "@/models/Workout";
 import { auth } from "@clerk/nextjs/server";
 import { connectMongoDB } from "@/config/db";
 import { fetchWorkoutForSpecificDate } from "@/app/_helper/workout";
+import { Workout, WorkoutDetail } from "@/config/types";
 
 export async function POST(req: any) {
     await connectMongoDB();
@@ -32,11 +33,12 @@ export async function POST(req: any) {
         }
         console.log(type, "!!!!!!!!!!!!!!!");
         let workoutsForDate = targetUserWorkout.workouts.find(
-            (workout) => workout.date.getTime() === formattedDate.getTime()
+            (workout: Workout) =>
+                workout.date.getTime() === formattedDate.getTime()
         );
         console.log(workouts, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         if (!workoutsForDate) {
-            const newWorkouts = [];
+            const newWorkouts: Workout[] = [];
             for (let i = 0; i < 7; i++) {
                 const newDate = new Date(formattedDate);
                 newDate.setUTCDate(formattedDate.getUTCDate() + i);
@@ -46,8 +48,6 @@ export async function POST(req: any) {
                 });
                 if (type === "seven-days-workout") {
                     for (const workout of workouts[i]) {
-                        console.log(workout);
-
                         newWorkouts[i].workoutDetail.push(workout);
                     }
                 } else {
