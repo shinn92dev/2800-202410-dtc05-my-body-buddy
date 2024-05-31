@@ -238,15 +238,15 @@ How did you use AI? Tell us exactly what AI services and products you used and h
       <td>Hi👋 I am CST student at BCIT🧑🏻‍💻 To have energy to make fun toy projects, I'm swimming and weight training these days 🏊🏻 Let's get some advice from My Body Buddy and get healthy living tips! 🍱</td>
     </tr>
     <tr>
-      <td align="center" width="150px"><a href=""><img src="/public/images/our_team/momo.jpeg" width="100px" alt=""/><br /><sub><b>Developer: <br />Momona Wada</b></sub></a><br /></td>
+      <td align="center" width="150px"><a href="https://github.com/Momona-Wada"><img src="/public/images/our_team/momo.jpeg" width="100px" alt=""/><br /><sub><b>Developer: <br />Momona Wada</b></sub></a><br /></td>
       <td>Hi🙌I'm Momona from Japan, now living in Vancouver. Recently, I lost 5kg due to some stressful time... BUT now I'm ready to start a healthier journey☘️ Want to join with me My Body Buddy? Let's get fit and healthy together!</td>
     </tr>
     <tr>
-      <td align="center" width="150px"><a href=""><img src="/public/images/our_team/tatsunori.jpg" width="100px" alt=""/><br /><sub><b>Developer: <br />Tatsunori Marumo</b></sub></a><br /></td>
+      <td align="center" width="150px"><a href="https://github.com/TatsunoriMarumo"><img src="/public/images/our_team/tatsunori.jpg" width="100px" alt=""/><br /><sub><b>Developer: <br />Tatsunori Marumo</b></sub></a><br /></td>
       <td>Add your introduction here!</td>
     </tr>
     <tr>
-      <td align="center" width="150px"><a href=""><img src="/public/images/our_team/tatsuya.png" width="100px" alt=""/><br /><sub><b>Developer: <br />Tatsuya Yoshida</b></sub></a><br /></td>
+      <td align="center" width="150px"><a href="https://github.com/yoshidont-mind"><img src="/public/images/our_team/tatsuya.png" width="100px" alt=""/><br /><sub><b>Developer: <br />Tatsuya Yoshida</b></sub></a><br /></td>
       <td>Hi, I'm Tatsuya Yoshida from Nara, Japan🍣. I am very interested in incorporating generative AI🧠 into applications, such as using OpenAI's API. I'm eager to create software that can help people. Stay tuned to see what we can achieve with this project!🥳
 </td>
     </tr>
