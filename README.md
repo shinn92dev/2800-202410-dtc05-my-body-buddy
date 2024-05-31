@@ -150,6 +150,8 @@ Our project, DTC-5, is developing an innovative personal health and fitness appl
 
 ## 💡Product usage and features
 
+> We recommend you to follow the steps in mobile environment.
+
 Follow the steps to enjoy our app:
 
 1. Sign up or log in.
