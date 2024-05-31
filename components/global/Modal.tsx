@@ -10,7 +10,7 @@ export default function Modal({
     setShowModal: () => void;
 }) {
     return (
-        <div className="relative w-full max-w-5xl px-4 h-4/5 lg:m-5">
+        <div className="relative w-full max-w-5xl px-4 pr-0 h-4/5 lg:m-5 overflow-y-auto">
             {/* Modal content */}
             <div className="bg-white rounded-lg shadow relative dark:bg-gray-700">
                 {/* Modal header */}
@@ -39,9 +39,7 @@ export default function Modal({
                     </button>
                 </div>
                 {/* Modal body */}
-                <div className="p-6 space-y-6 overflow-y-scroll">
-                    {modalContent}
-                </div>
+                <div className="p-6 space-y-6">{modalContent}</div>
                 {/* Modal footer */}
                 {/* <div className="flex space-x-2 items-center p-6 border-t border-gray-200 rounded-b dark:border-gray-600 justify-end">
                     <button

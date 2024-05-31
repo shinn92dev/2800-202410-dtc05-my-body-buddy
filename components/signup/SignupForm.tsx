@@ -256,10 +256,11 @@ export default function SignupForm() {
                 </span>
                 .
             </p>
+
             <div
                 className={`${
                     showModal ? "" : "hidden"
-                } overflow-x-hidden overflow-y-scroll fixed h-modal md:h-full w-screen top-4 left-0 right-0 md:inset-0 z-50 items-center flex justify-center`}
+                } fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto`}
             >
                 <Modal
                     title="Term of Policy"
