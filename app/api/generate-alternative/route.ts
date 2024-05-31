@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { generateAlternativeWorkout } from "@/lib/openai";
+import { generateAlternativeWorkout } from "@/config/openai";
 
 export async function POST(req: NextRequest) {
     try {
