@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import TagsWithAddingField from "@/components/global/TagsWithAddingField";
 import axios from "axios";
+import { toast, Toaster } from "react-hot-toast";
 
 type WorkoutAiSupportInputProps = {
     onGenerateAlternative: (
@@ -35,14 +36,33 @@ export default function WorkoutAiSupportInput({
     onGenerateAlternative,
     onGenerateItems,
 }: WorkoutAiSupportInputProps) {
+    const maxNumberOfSelectedTags = 10; // inclusive
+    const maxTagLength = 40; // inclusive
+    const minTagLength = 1; // inclusive
+
     const [selectedItemTitles, setSelectedItemTitles] = useState<string[]>([]); // State to track selected item titles
     const [selectedTagTitles, setSelectedTagTitles] = useState<string[]>([]); // State to track selected tag titles
     const [generated, setGenerated] = useState(false); // State to track if suggestions are generated
     const [onGoingWorkoutData, setOnGoingWorkoutData] = useState<WorkoutItem[]>([]);
-    // Handle click event for generating alternative suggestions
+    
+    const showToast = (message: string) => {
+        toast.error(message);
+    };
 
     const handleGenerateAlternative = async () => {
-        console.log(onGoingWorkoutData);
+        // Validation for selected tags
+        if (selectedTagTitles.length > maxNumberOfSelectedTags) {
+            showToast(`You can select up to ${maxNumberOfSelectedTags} reasons.`);
+            return;
+        }
+
+        for (const tag of selectedTagTitles) {
+            if (tag.length < minTagLength || tag.length > maxTagLength) {
+                showToast(`Each reason must be between ${minTagLength} and ${maxTagLength} characters.`);
+                return;
+            }
+        }
+
         const selectedItems = onGoingWorkoutData.filter((item) =>
             selectedItemTitles.includes(item.name)
         );
@@ -51,7 +71,6 @@ export default function WorkoutAiSupportInput({
         );
         onGenerateAlternative(selectedItems, selectedTags);
         setGenerated(true);
-        console.log(generated);
 
         // Create the prompt and fetch AI response
         const prompt = `Please consider alternative options for the workout menu below, taking into account the reasons provided.\n\nWorkout menu to replace:\n${selectedItems
@@ -76,7 +95,6 @@ export default function WorkoutAiSupportInput({
                 body: JSON.stringify({ prompt }),
             });
             const data = await response.json();
-            console.log("CLIENT GENERATED ITEM:", data.result);
             onGenerateItems(data.result);
         } catch (error) {
             console.error("Error generating alternative:", error);
@@ -99,9 +117,14 @@ export default function WorkoutAiSupportInput({
         if (selectedTagTitles.includes(tag)) {
             setSelectedTagTitles(selectedTagTitles.filter((t) => t !== tag));
         } else {
+            if (selectedTagTitles.length >= maxNumberOfSelectedTags) {
+                showToast(`You can select up to ${maxNumberOfSelectedTags} reasons.`);
+                return;
+            }
             setSelectedTagTitles([...selectedTagTitles, tag]);
         }
     };
+
     const fetchWorkoutData = async () => {
         try {
             const res = await axios.get("/api/get-user-id");
@@ -117,17 +140,18 @@ export default function WorkoutAiSupportInput({
             });
             const data = dataRes.data;
             setOnGoingWorkoutData(data.onGoing);
-            console.log(data.onGoing);
         } catch (error) {
             console.error("Error fetching workout data:", error);
         }
     };
+
     useEffect(() => {
         fetchWorkoutData();
     }, []);
 
     return (
         <div className="flex flex-col items-center p-2">
+            <Toaster />
             <div className="relative speech-bubble-user bg-beige rounded-lg">
                 <h2 className="text-lg font-bold">
                     {generated ? "Items to replace" : "Which items to replace?"}

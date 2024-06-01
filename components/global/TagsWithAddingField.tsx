@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 
 type TagsWithAddingFieldProps = {
     defaultTags: string[];
@@ -12,12 +13,15 @@ type TagsWithAddingFieldProps = {
 export default function TagsWithAddingField({ defaultTags, inputFieldPlaceHolder, selectedTags, onToggleTag }: TagsWithAddingFieldProps) {
     const [tags, setTags] = useState(defaultTags);
     const [newTag, setNewTag] = useState("");
+    const maxTagLength = 40; // inclusive
 
     const addTag = () => {
-        if (newTag && !tags.includes(newTag)) {
+        if (newTag && !tags.includes(newTag) && newTag.length <= maxTagLength) {
             setTags([...tags, newTag]);
             onToggleTag(newTag);
             setNewTag("");
+        } else if (newTag.length > maxTagLength) {
+            toast.error(`Tag length should not exceed ${maxTagLength} characters.`);
         }
     };
 
